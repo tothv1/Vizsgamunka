@@ -30,7 +30,7 @@ export default class SimpleGame extends PureComponent {
           //-- and a renderer property (optional). If no renderer
           //-- is supplied with the entity - it won't get displayed.
           wall: { x: 0, y: 0, renderer: <Wall map={rawMap}/>},
-          box1: { x: 200,  y: 200, renderer: <Box />}
+          box1: { x: 200,  y: 200, windowWidth:940, windowHeight:590, renderer: <Box  />}
         }}>
 
       </GameEngine>

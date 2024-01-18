@@ -16,6 +16,28 @@ class Box extends PureComponent {
     const size = 100;
     const x = this.props.x - size / 2;
     const y = this.props.y - size / 2;
+
+    var charX = x
+    var windowX = this.props.windowWidth;
+    var charY = y;
+    var windowY = this.props.windowHeight;
+    
+    if (charX <= windowX && windowX >= charX && charY <= windowY && windowY >= charY) {
+      console.log("inside");
+    } else {
+      console.log("outside");
+    }
+    console.log("Karakter: " + x, y);
+    console.log("Pálya mérete:" + this.props.windowHeight, this.props.windowWidth);
+
+      /*if(Xmin <= x <= Xmax && Ymin <= y <= Ymax) {
+        console.log("inside");
+      } else {
+        console.log("outside");
+      }*/
+
+      //console.log(Xmin, Xmax, Ymin, Ymax);
+
     return (
     <img src={karakter} style={{ position: "absolute", width: size, height: size, left: x, top: y }} />
     );
