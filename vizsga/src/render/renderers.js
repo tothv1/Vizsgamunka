@@ -13,7 +13,7 @@ class Element {
 
 class Box extends PureComponent {
   render() {
-    const size = 100;
+    const size = 128;
     const x = this.props.x - size / 2;
     const y = this.props.y - size / 2;
 
@@ -46,7 +46,7 @@ class Box extends PureComponent {
 
 class Wall extends PureComponent {
   render() {
-    const size = 50;
+    const size = 64;
     const map = [];
     const mapProps = this.props.renderer.props.map;
 

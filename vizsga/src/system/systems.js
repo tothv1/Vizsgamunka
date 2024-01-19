@@ -1,3 +1,5 @@
+import { GameLoop } from "react-game-engine";
+
 const MoveBox = (entities, { input }) => {
     //-- I'm choosing to update the game state (entities) directly for the sake of brevity and simplicity.
     //-- There's nothing stopping you from treating the game state as immutable and returning a copy..
@@ -6,6 +8,10 @@ const MoveBox = (entities, { input }) => {
   
     const { payload } = input.find(x => x.name === "onMouseDown") || {};
   
+  if(GameLoop.onUpdate){
+    console.log("update");
+  }
+
     if (payload) {
       const box1 = entities["box1"];
       
