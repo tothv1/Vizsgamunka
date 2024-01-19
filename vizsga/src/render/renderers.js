@@ -28,7 +28,7 @@ class Box extends PureComponent {
       console.log("outside");
     }
     console.log("Karakter: " + x, y);
-    console.log("Pálya mérete:" + this.props.windowHeight, this.props.windowWidth);
+    //console.log("Pálya mérete:" + this.props.windowHeight, this.props.windowWidth);
 
       /*if(Xmin <= x <= Xmax && Ymin <= y <= Ymax) {
         console.log("inside");
