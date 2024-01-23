@@ -40,6 +40,8 @@ const Canvas = props => {
             clrCanvas(context)
 
             const map = entities.wall;
+            const slime = entities.slime;
+
             const rawmap = map.rawMap;
 
             for (let i = 0; i < rawmap.length; i++) {
@@ -47,6 +49,15 @@ const Canvas = props => {
                   if (rawmap[i][j] === 1) {
                     const obj = {
                         render:map.render,
+                        x:j*64,
+                        y:i*64,
+                        w:map.w,
+                        h:map.h
+                    }
+                    draw(context,obj)
+                  } else if(rawmap[i][j] === 2){
+                    const obj = {
+                        render:slime.render,
                         x:j*64,
                         y:i*64,
                         w:map.w,

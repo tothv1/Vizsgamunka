@@ -6,6 +6,7 @@ import Canvas from "./render/canvas";
 
 import wall from "./Assets/map/wall.png"
 import karakter from "./Assets/characters/hatternelkuli.png"
+import slime from "./Assets/characters/slime.png";
 
 export default class SimpleGame extends PureComponent {
   render() {
@@ -15,12 +16,12 @@ export default class SimpleGame extends PureComponent {
       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
       [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -36,7 +37,8 @@ export default class SimpleGame extends PureComponent {
           //-- and a renderer property (optional). If no renderer
           //-- is supplied with the entity - it won't get displayed.
           wall: {render: wall, x: 0, y: 0, w:64, h:64, rawMap:rawMap},
-          player: {render:karakter, x: 200,  y: 200, w:64, h:64 }
+          player: {render:karakter, x: 200,  y: 200, w:64, h:64 },
+          slime: {render:slime, x: 200,  y: 200, w:64, h:64 }
         }}/>
       </div>
 
