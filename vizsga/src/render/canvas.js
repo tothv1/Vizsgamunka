@@ -1,5 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 
+
+
+
 const Canvas = props => {
 
     const entities = props.entities;
@@ -18,7 +21,7 @@ const Canvas = props => {
 
     const draw = (ctx, object) => {
 
-        console.log(object)
+        //console.log(object)
 
         let drawing = new Image();
         drawing.src = object.render;
@@ -35,42 +38,54 @@ const Canvas = props => {
 
         let animationFrameId = 0
 
+        let Runtime = 0;
+        let lastUpdateTime = 0;
+
         //Our draw came here
         const render = () => {
-            clrCanvas(context)
+            clrCanvas(context);
+            Runtime=window.performance.now();
 
-            const map = entities.wall;
-            const slime = entities.slime;
+            let deltaTime = (Runtime-lastUpdateTime)/1000
+
+            
+
+            console.log(deltaTime)
+
+
+
+
+            const map = entities.terrain;
+            //const slime = entities.slime;
 
             const rawmap = map.rawMap;
-
+            
             for (let i = 0; i < rawmap.length; i++) {
                 for (let j = 0; j < rawmap[i].length; j++) {
                   if (rawmap[i][j] === 1) {
-                    const obj = {
-                        render:map.render,
-                        x:j*64,
-                        y:i*64,
-                        w:map.w,
-                        h:map.h
-                    }
+
+                    let obj = entities.terrain.update();
+                    obj.x=j*64;
+                    obj.y=i*64;
+
                     draw(context,obj)
-                  } else if(rawmap[i][j] === 2){
-                    const obj = {
-                        render:slime.render,
-                        x:j*64,
-                        y:i*64,
-                        w:map.w,
-                        h:map.h
-                    }
+                  } 
+                  if (rawmap[i][j] === 2) {
+
+                    let obj = entities.slime.update();
+                    obj.x=j*64;
+                    obj.y=i*64;
+
                     draw(context,obj)
-                  }
+                  } 
                 }
               }
 
 
-            
+              draw(context,entities.player.update(deltaTime));
 
+
+              lastUpdateTime=window.performance.now();
             frameCount++
             animationFrameId = window.requestAnimationFrame(render)
         }

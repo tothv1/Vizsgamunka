@@ -1,5 +1,16 @@
 import { GameLoop } from "react-game-engine";
 import { useState } from "react";
+import render from "../Assets/characters/hatternelkuli.png"
+
+const ID = 0;
+
+let x=0;
+let y=0;
+
+const width = 128;
+const height = 128;
+
+const speed = 300;
 
 let UpState = false;
 let DownState = false;
@@ -11,25 +22,23 @@ document.addEventListener("keyup",keyhandler);
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e){
-  if(e.type=="keydown"){
-      if (e.key=="w") UpState=true;
-      if (e.key=="s") DownState=true;
-      if (e.key=="a") LeftState=true;
-      if (e.key=="d" ) RightState=true;
+  if(e.type==="keydown"){
+      if (e.key==="w") UpState=true;
+      if (e.key==="s") DownState=true;
+      if (e.key==="a") LeftState=true;
+      if (e.key==="d" ) RightState=true;
   }
-  if(e.type=="keyup"){
-      if (e.key=="w" ) UpState=false;
-      if (e.key=="s" ) DownState=false;
-      if (e.key=="a" ) LeftState=false;
-      if (e.key=="d") RightState=false;
+  if(e.type==="keyup"){
+      if (e.key==="w" ) UpState=false;
+      if (e.key==="s" ) DownState=false;
+      if (e.key==="a" ) LeftState=false;
+      if (e.key==="d") RightState=false;
   }
 }
 
 
-function MoveBox  (entities, { input, time }) {
-  const deltaTime = time.delta / 1000;
+function Update (deltaTime) {
 
-  const speed = 300;
 
   
   
@@ -37,25 +46,30 @@ function MoveBox  (entities, { input, time }) {
   //-- There's nothing stopping you from treating the game state as immutable and returning a copy..
   //-- Example: return { ...entities, t.id: { UPDATED COMPONENTS }};
   //-- That said, it's probably worth considering performance implications in either case.
-  const box1 = entities["box1"];
-  const { payload } = input.find(x => x.name) || {};
 
   if(UpState){
-    box1.y-=speed*deltaTime;
+    y-=speed*deltaTime;
   }
   if(DownState){
-    box1.y+=speed*deltaTime;
+    y+=speed*deltaTime;
   }
   if(RightState){
-    box1.x+=speed*deltaTime;
+    x+=speed*deltaTime;
   }
   if(LeftState){
-    box1.x-=speed*deltaTime;
+    x-=speed*deltaTime;
   }
 
-  
+  let obj ={
+    charID:ID,
+    render:render,
+    x:x,
+    y:y,
+    w:width,
+    h:height
+  }
 
-  return entities;
+  return obj;
 };
 
-export { MoveBox };
+export { Update };
