@@ -34,21 +34,13 @@ const Canvas = props => {
         let drawing = new Image();
         drawing.src = object.render;
 
-        //96 x 64 ha a 100 nemjó
-        //100 x 64
-        const x = object.x;
-        const y = object.y;
-        const CANVAS_WIDTH = ctx.canvas.width;
-        const CANVAS_HEIGHT = ctx.canvas.height;
         const playerHeight = 64;
         const playerWidth = 96;
-
-        //frameX = frameCount % 7; 
         frameCount=Math.floor(frameCount);
 
-        ctx.drawImage(drawing, frameX * playerWidth, 0 , playerWidth, playerHeight, 0,0, playerWidth*4, playerHeight*4);
+        ctx.drawImage(drawing, frameX * playerWidth, 0 , playerWidth, playerHeight, object.x,object.y, playerWidth*4, playerHeight*4);
 
-        if(frameCount % 5 === 0){
+        if(frameCount % 10 === 0){
             frameX++;
         } 
         if(frameX >= 7) {
@@ -63,7 +55,7 @@ const Canvas = props => {
         const canvas = canvasRef.current
         const context = canvas.getContext('2d')
 
-        console.log(entities)
+        //console.log(entities)
 
         let animationFrameId = 0
 
@@ -77,12 +69,8 @@ const Canvas = props => {
 
             let deltaTime = (Runtime-lastUpdateTime)/1000
 
-            
 
-            console.log(deltaTime)
-
-
-
+            //console.log(deltaTime)
 
             const map = entities.terrain;
             //const slime = entities.slime;
@@ -110,13 +98,12 @@ const Canvas = props => {
                 }
               }
 
-
-              draw(context,entities.player.update(deltaTime));
-
+              //draw(context,entities.player.update(deltaTime));
+              drawAnimatedPlayer(context, entities.player.update(deltaTime),frameCount);
 
               lastUpdateTime=window.performance.now();
-            frameCount++
-            animationFrameId = window.requestAnimationFrame(render)
+              frameCount++
+              animationFrameId = window.requestAnimationFrame(render)
         }
         render()
 
