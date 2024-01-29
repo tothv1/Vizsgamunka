@@ -1,6 +1,7 @@
 import { GameLoop } from "react-game-engine";
 import { useState } from "react";
-import render from "../Assets/characters/noBKG_KnightRun_strip.png"
+import right from "../Assets/characters/noBKG_KnightRun_strip.png"
+import left from "../Assets/characters/noBKG_KnightRun_strip_left.png"
 
 const ID = 0;
 
@@ -59,10 +60,10 @@ function Update (deltaTime) {
 
   let obj ={
     charID:ID,
-    render:render,
+    render: RightState ? right : left,
     x:x,
     y:y,
-    w:LeftState === true ? -width : width,
+    w:width,
     h:height
   }
 
