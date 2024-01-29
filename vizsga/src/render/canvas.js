@@ -29,6 +29,35 @@ const Canvas = props => {
         ctx.drawImage(drawing,object.x,object.y,object.w,object.h);
     }
 
+    let frameX = 0;
+    const drawAnimatedPlayer = (ctx, object,frameCount) => {
+        let drawing = new Image();
+        drawing.src = object.render;
+
+        //96 x 64 ha a 100 nemjó
+        //100 x 64
+        const x = object.x;
+        const y = object.y;
+        const CANVAS_WIDTH = ctx.canvas.width;
+        const CANVAS_HEIGHT = ctx.canvas.height;
+        const playerHeight = 64;
+        const playerWidth = 96;
+
+        //frameX = frameCount % 7; 
+        frameCount=Math.floor(frameCount);
+
+        ctx.drawImage(drawing, frameX * playerWidth, 0 , playerWidth, playerHeight, 0,0, playerWidth*4, playerHeight*4);
+
+        if(frameCount % 5 === 0){
+            frameX++;
+        } 
+        if(frameX >= 7) {
+            frameX = 0
+        }
+        //console.log(frameX);
+        //requestAnimationFrame(() => drawAnimatedPlayer(ctx, object,frameCount));
+    }
+
     useEffect(() => {
 
         const canvas = canvasRef.current
