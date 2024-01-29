@@ -1,14 +1,14 @@
 import { GameLoop } from "react-game-engine";
 import { useState } from "react";
-import render from "../Assets/characters/hatternelkuli.png"
+import render from "../Assets/characters/noBKG_KnightRun_strip.png"
 
 const ID = 0;
 
 let x=0;
 let y=0;
 
-const width = 128;
-const height = 128;
+const width = 96;
+const height = 64;
 
 const speed = 300;
 
@@ -38,9 +38,6 @@ function keyhandler(e){
 
 
 function Update (deltaTime) {
-
-
-  
   
   //-- I'm choosing to update the game state (entities) directly for the sake of brevity and simplicity.
   //-- There's nothing stopping you from treating the game state as immutable and returning a copy..
@@ -65,7 +62,7 @@ function Update (deltaTime) {
     render:render,
     x:x,
     y:y,
-    w:width,
+    w:LeftState === true ? -width : width,
     h:height
   }
 
