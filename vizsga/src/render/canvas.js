@@ -19,36 +19,22 @@ const Canvas = props => {
 
     }
 
-    const draw = (ctx, object) => {
+
+
+    const draw = async (ctx, object) => {
 
         //console.log(object)
 
-        let drawing = new Image();
-        drawing.src = object.render;
+        
 
-        ctx.drawImage(drawing,object.x,object.y,object.w,object.h);
-    }
+            ctx.drawImage(object.render, object.frame, 0, object.w, object.h,   object.x, object.y, object.w, object.h);
 
-    let frameX = 0;
-    const drawAnimatedPlayer = (ctx, object,frameCount) => {
-        let drawing = new Image();
-        drawing.src = object.render;
+        
 
-        const playerHeight = 64;
-        const playerWidth = 96;
-        frameCount=Math.floor(frameCount);
 
-        ctx.drawImage(drawing, frameX * playerWidth, 0 , playerWidth, playerHeight, object.x,object.y, playerWidth*4, playerHeight*4);
 
-        if(frameCount % 10 === 0){
-            frameX++;
-        } 
-        if(frameX >= 7) {
-            frameX = 0
-        }
-        //console.log(frameX);
-        //requestAnimationFrame(() => drawAnimatedPlayer(ctx, object,frameCount));
-    }
+
+    }    
 
     useEffect(() => {
 
@@ -98,8 +84,7 @@ const Canvas = props => {
                 }
               }
 
-              //draw(context,entities.player.update(deltaTime));
-              drawAnimatedPlayer(context, entities.player.update(deltaTime),frameCount);
+              draw(context,entities.player.update(deltaTime,frameCount));
 
               lastUpdateTime=window.performance.now();
               frameCount++

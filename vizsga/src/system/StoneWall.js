@@ -1,9 +1,13 @@
 import { GameLoop } from "react-game-engine";
 import { useState } from "react";
-import render from "../Assets/map/tiles/row-4-column-6.png"
+import render from "../Assets/map/tiles/ezegyfal.jpg"
 
 let ID = 1;
 let state = "sleep"
+
+let frameDelay = 10; //every x updates, the sprite turns over to the next frame
+let frameLength = 1; // frames in the spritesheet
+let mirror = false;
 
 let x=0;
 let y=0;
@@ -11,15 +15,34 @@ let y=0;
 const width = 64;
 const height = 64;
 
-function UpdateT (deltaTime) {
+let frame = 0;
 
 
-  let obj ={
-    render:render,
-    x:x,
-    y:y,
-    w:width,
-    h:height
+let drawing = new Image();
+drawing.src = render;
+
+function UpdateT (deltaTime, frameCount) {
+
+  frameLength=drawing.width/width;
+
+
+  if (frameLength > 1) {
+    if (frameCount % frameDelay === 0) {
+      frame++;
+    }
+    if (frame >= frameLength) {
+      frame = 0
+    }
+  } 
+
+  let obj = {
+    charID: ID,
+    frame: frame * width,
+    render: drawing,
+    x: x,
+    y: y,
+    w: width,
+    h: height
   }
 
   return obj;
