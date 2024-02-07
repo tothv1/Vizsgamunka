@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useState } from "react";
 import { GameEngine } from "react-game-engine";
 import Canvas from "./render/canvas";
 
@@ -10,8 +10,8 @@ import { Update } from "./system/Player";
 import { UpdateT } from "./system/StoneWall";
 import { UpdateSl } from "./system/Slime";
 
-export default class SimpleGame extends PureComponent {
-  render() {
+export default function App() {
+  
     //EZT RAKD FEL
     //npm install --save react-game-engine
     const rawMap = [
@@ -30,16 +30,18 @@ export default class SimpleGame extends PureComponent {
       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ];
 
+    const [renderOffset, setRenderOffset] = useState([]);
+
     return (
       <div>
         <Canvas style={{width:window.innerWidth, height:window.innerHeight, backgroundColor: "lightblue" }}
-        
+        offset={{renderOffset,setRenderOffset}}
         entities={{
           //-- Notice that each entity has a unique id (required)
           //-- and a renderer property (optional). If no renderer
           //-- is supplied with the entity - it won't get displayed.
           terrain: {update:UpdateT, rawMap:rawMap},
-          player: {update:Update },
+          player: {update:Update},
           slime: {update:UpdateSl }
         }}/>
       </div>
@@ -59,5 +61,4 @@ export default class SimpleGame extends PureComponent {
 
       </GameEngine>*/
     );
-  }
 }

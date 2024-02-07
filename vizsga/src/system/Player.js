@@ -51,8 +51,6 @@ function Update(deltaTime, frameCount) {
 
   let tempRender;
 
-
-
   if (state==="moving"){
     if (mirror){
       drawing.src=left;
@@ -66,11 +64,7 @@ function Update(deltaTime, frameCount) {
     width=64;
   }
 
-
   frameLength=drawing.width/width;
-
-
-
 
   if (!UpState && !DownState && !LeftState && !RightState) {
 
@@ -79,8 +73,6 @@ function Update(deltaTime, frameCount) {
   } else {
     state = "moving";
   }
-
-  
 
   if (UpState) {
     y -= speed * deltaTime;
@@ -97,7 +89,6 @@ function Update(deltaTime, frameCount) {
     mirror = true;
   }
 
-
   if (frameLength > 1) {
     if (frameCount % frameDelay === 0) {
       frame++;
@@ -106,7 +97,6 @@ function Update(deltaTime, frameCount) {
       frame = 0
     }
   }
-
 
   let obj = {
     charID: ID,
@@ -120,6 +110,5 @@ function Update(deltaTime, frameCount) {
 
   return obj;
 };
-
 
 export { Update };

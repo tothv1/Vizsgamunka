@@ -5,7 +5,6 @@ import leftIdle from "../Assets/characters/slime.png"
 
 const ID = 1;
 
-
 let frameDelay = 10; //every x updates, the sprite turns over to the next frame
 let frameLength = 8; // frames in the spritesheet
 let state = "idle";
@@ -25,7 +24,6 @@ let drawing = new Image();
 drawing.src = rightIdle;
 
 function UpdateSl (deltaTime,frameCount) {
-
 
   frameLength=drawing.width/width;
 
