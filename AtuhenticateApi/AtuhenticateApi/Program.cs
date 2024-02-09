@@ -11,6 +11,8 @@ namespace AtuhenticateApi
 {
     public class Program
     {
+        private static string CorsEnabled = "All";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,17 @@ namespace AtuhenticateApi
 
             // Add services to the container.
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(CorsEnabled,
+                policy =>
+                {
+                    policy.WithOrigins("*")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
+
             builder.Services.AddControllers();
 
             builder.Services.AddScoped<IAuth, AuthService>();
@@ -40,11 +53,9 @@ namespace AtuhenticateApi
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
+           
 
             app.UseHttpsRedirection();
 
