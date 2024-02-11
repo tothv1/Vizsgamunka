@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtuhenticateApi", "AtuhenticateApi\AtuhenticateApi.csproj", "{EF47A475-0B6D-4966-9128-D2CB92D018AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxBackEnd", "WeatherForecast\SyntaxBackEnd.csproj", "{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxBackEnd", "SyntaxBackend\SyntaxBackEnd.csproj", "{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

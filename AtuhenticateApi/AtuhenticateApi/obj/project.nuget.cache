@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0+b6RxuC1XR1ojfXIcTrLvjIWwKn00tVIMRJ06zxLlHE/US9by2puvLHZJ4PbSbYdYmRuL0OhfItmIYGt3NavA==",
+  "dgSpecHash": "XEKaZ3YLJxJYlC436XhNyxQJ3OyqzQOiATFQ50MTuRLv2ofk1dLm69Eg7iV3kwKx/p69+TdAH35L1VuafUnHbg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Viktor\\Downloads\\AtuhenticateApi\\AtuhenticateApi\\AtuhenticateApi\\AtuhenticateApi.csproj",
+  "projectFilePath": "E:\\GitRepok\\Vizsgamunka\\AtuhenticateApi\\AtuhenticateApi\\AtuhenticateApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Viktor\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.1\\microsoft.aspnetcore.authentication.jwtbearer.8.0.1.nupkg.sha512",
@@ -41,6 +41,7 @@
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.1.2\\microsoft.identitymodel.protocols.openidconnect.7.1.2.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.1.2\\microsoft.identitymodel.tokens.7.1.2.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Viktor\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.5\\microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\mysqlconnector\\2.3.1\\mysqlconnector.2.3.1.nupkg.sha512",
     "C:\\Users\\Viktor\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\8.0.0-beta.2\\pomelo.entityframeworkcore.mysql.8.0.0-beta.2.nupkg.sha512",
