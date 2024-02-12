@@ -14,7 +14,6 @@ public partial class Userstat
 
     public int Timesplayed { get; set; }
 
-
     [JsonIgnore]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

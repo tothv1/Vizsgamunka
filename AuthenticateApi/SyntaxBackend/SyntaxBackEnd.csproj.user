@@ -2,6 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ActiveDebugProfile>Debug</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\Properties\PublishProfiles\SyntaxBackEnd - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>E:\GitRepok\Vizsgamunka\AuthenticateApi\SyntaxBackend\Properties\PublishProfiles\SyntaxBackEnd - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

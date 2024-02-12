@@ -1,7 +1,10 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Certificates;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -25,6 +28,7 @@ namespace WeatherForecast
             var secret = settingsSection.GetValue<string>("Secret");
             var issuer = settingsSection.GetValue<string>("Issuer");
             var auidience = settingsSection.GetValue<string>("Audience");
+      
 
             var key = Encoding.ASCII.GetBytes(secret!);
 
