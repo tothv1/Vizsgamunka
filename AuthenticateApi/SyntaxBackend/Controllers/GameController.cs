@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SyntaxBackEnd.Models;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace GameController.Controllers
 {
@@ -17,8 +19,8 @@ namespace GameController.Controllers
         {
             try
             {
-                using var userlist = new SyntaxgameContext();
-                var users = userlist.Users.Include(u => u.Permission);
+                using var userlist = new GameContext();
+                var users = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.UserAchievements);
 
                 return Ok(users.ToList());
             }

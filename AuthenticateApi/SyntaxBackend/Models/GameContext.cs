@@ -26,7 +26,6 @@ public partial class GameContext : DbContext
 
     public virtual DbSet<Userstat> Userstats { get; set; }
 
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -84,6 +83,10 @@ public partial class GameContext : DbContext
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
+            entity.HasIndex(e => e.UserAchievementsId, "user_achievements_id");
+
+            entity.HasIndex(e => e.UserStatsId, "user_stats_id");
+
             entity.HasIndex(e => e.Username, "username").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
@@ -98,6 +101,8 @@ public partial class GameContext : DbContext
             entity.Property(e => e.Regdate)
                 .HasColumnType("datetime")
                 .HasColumnName("regdate");
+            entity.Property(e => e.UserAchievementsId).HasColumnName("user_achievements_id");
+            entity.Property(e => e.UserStatsId).HasColumnName("user_stats_id");
             entity.Property(e => e.Username)
                 .HasMaxLength(32)
                 .IsFixedLength()
@@ -107,54 +112,46 @@ public partial class GameContext : DbContext
                 .HasForeignKey(d => d.PermissionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("User_fk0");
+
+            entity.HasOne(d => d.UserAchievements).WithMany(p => p.Users)
+                .HasForeignKey(d => d.UserAchievementsId)
+                .HasConstraintName("user_ibfk_2");
+
+            entity.HasOne(d => d.UserStats).WithMany(p => p.Users)
+                .HasForeignKey(d => d.UserStatsId)
+                .HasConstraintName("user_ibfk_1");
         });
 
         modelBuilder.Entity<Userachievement>(entity =>
         {
-            entity.HasKey(e => e.MyRowId).HasName("PRIMARY");
+            entity.HasKey(e => e.UserId).HasName("PRIMARY");
 
             entity.ToTable("userachievements");
 
             entity.HasIndex(e => e.AchievementId, "UserAchievements_fk0");
 
-            entity.HasIndex(e => e.UserId, "UserAchievements_fk1");
-
-            entity.Property(e => e.MyRowId).HasColumnName("my_row_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.AchievementDate)
                 .HasColumnType("datetime")
                 .HasColumnName("achievement_date");
             entity.Property(e => e.AchievementId).HasColumnName("achievement_id");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Achievement).WithMany(p => p.Userachievements)
                 .HasForeignKey(d => d.AchievementId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("UserAchievements_fk0");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Userachievements)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("UserAchievements_fk1");
         });
 
         modelBuilder.Entity<Userstat>(entity =>
         {
-            entity.HasKey(e => e.MyRowId).HasName("PRIMARY");
+            entity.HasKey(e => e.UserId).HasName("PRIMARY");
 
             entity.ToTable("userstats");
 
-            entity.HasIndex(e => e.UserId, "UserStats_fk0");
-
-            entity.Property(e => e.MyRowId).HasColumnName("my_row_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Deaths).HasColumnName("deaths");
             entity.Property(e => e.Kills).HasColumnName("kills");
             entity.Property(e => e.Timesplayed).HasColumnName("timesplayed");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Userstats)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("UserStats_fk0");
         });
 
         OnModelCreatingPartial(modelBuilder);

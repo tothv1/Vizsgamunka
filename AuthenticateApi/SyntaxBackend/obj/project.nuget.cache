@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "nXgxyPpC5diOG8pVrio0UbEaRVcGYkLWG5kmgW6iaNkgMAd8lG8tPtFB/ADWa2EGLIqGOyUneyzDlysfxHrpBg==",
+  "dgSpecHash": "aM3YdS0dnQLYXUyxBCx5K29xrTJISBIkZ39XByWuG2W3cu0XOtYZPlheOMOx0/TZB87DK1Wul8zhtGEpyYdkDA==",
   "success": true,
   "projectFilePath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
   "expectedPackageFiles": [
@@ -39,6 +39,7 @@
     "C:\\Users\\tviktor\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.5\\microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512",
     "C:\\Users\\tviktor\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\tviktor\\.nuget\\packages\\mysqlconnector\\2.3.1\\mysqlconnector.2.3.1.nupkg.sha512",
+    "C:\\Users\\tviktor\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\tviktor\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\8.0.0-beta.2\\pomelo.entityframeworkcore.mysql.8.0.0-beta.2.nupkg.sha512",
     "C:\\Users\\tviktor\\.nuget\\packages\\scrutor\\3.3.0\\scrutor.3.3.0.nupkg.sha512",
     "C:\\Users\\tviktor\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",

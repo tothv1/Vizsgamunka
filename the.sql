@@ -5,6 +5,8 @@ CREATE TABLE `User` (
 	`regdate` DATETIME NOT NULL,
 	`lastlogin` DATETIME NOT NULL,
 	`permission_id` INT NOT NULL,
+	`user_achievements_id` INT NOT NULL,
+	`user_stats_id` INT NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
@@ -15,16 +17,18 @@ CREATE TABLE `Permission` (
 );
 
 CREATE TABLE `UserAchievements` (
+	`user_id` INT NOT NULL AUTO_INCREMENT,
 	`achievement_id` INT NOT NULL,
-	`user_id` INT NOT NULL,
-	`achievement_date` DATETIME NOT NULL
+	`achievement_date` DATETIME NOT NULL,
+	PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE `UserStats` (
-	`user_id` INT NOT NULL,
+  `user_id` INT NOT NULL AUTO_INCREMENT,
   `kills` INT NOT NULL,
   `deaths` INT NOT NULL,
-  `timesplayed` INT NOT NULL
+  `timesplayed` INT NOT NULL,
+  PRIMARY KEY (`user_id`)
 );
 
 CREATE TABLE `Achievements` (
@@ -37,6 +41,6 @@ ALTER TABLE `User` ADD CONSTRAINT `User_fk0` FOREIGN KEY (`permission_id`) REFER
 
 ALTER TABLE `UserAchievements` ADD CONSTRAINT `UserAchievements_fk0` FOREIGN KEY (`achievement_id`) REFERENCES `Achievements`(`id`);
 
-ALTER TABLE `UserAchievements` ADD CONSTRAINT `UserAchievements_fk1` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`);
+ALTER TABLE `UserAchievements` ADD CONSTRAINT `UserAchievements_fk1` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;;
 
-ALTER TABLE `UserStats` ADD CONSTRAINT `UserStats_fk0` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`);
+ALTER TABLE `UserStats` ADD CONSTRAINT `UserStats_fk0` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

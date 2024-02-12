@@ -6,14 +6,14 @@ namespace SyntaxBackEnd.Models;
 
 public partial class Userachievement
 {
-    public int AchievementId { get; set; }
-
     public int UserId { get; set; }
+
+    public int AchievementId { get; set; }
 
     public DateTime AchievementDate { get; set; }
 
-    public virtual Achievement Achievement { get; set; } = null!;
-
     [JsonIgnore]
-    public virtual User User { get; set; } = null!;
+    public virtual Achievement Achievement { get; set; } = null!;
+    [JsonIgnore]
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

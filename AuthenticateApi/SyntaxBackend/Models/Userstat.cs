@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SyntaxBackEnd.Models;
 
 public partial class Userstat
 {
-    public ulong MyRowId { get; set; }
-
     public int UserId { get; set; }
 
     public int Kills { get; set; }
@@ -15,5 +14,7 @@ public partial class Userstat
 
     public int Timesplayed { get; set; }
 
-    public virtual User User { get; set; } = null!;
+
+    [JsonIgnore]
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
