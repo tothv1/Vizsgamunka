@@ -15,7 +15,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AtuhenticateApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< Updated upstream
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fa2774ca4d50e5d59385d6fa08500bf98fb373f")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1dadbedb39313ae736c1b500baaaa339113e540")]
+>>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("AtuhenticateApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AtuhenticateApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
