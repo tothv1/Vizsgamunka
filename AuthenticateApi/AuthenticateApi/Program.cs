@@ -25,8 +25,8 @@ namespace AtuhenticateApi
 
             builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            /*builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();*/
 
             // Add services to the container.
 
