@@ -6,6 +6,7 @@ namespace SyntaxBackEnd.Models;
 
 public partial class Userstat
 {
+    [JsonIgnore]
     public int UserId { get; set; }
 
     public int Kills { get; set; }

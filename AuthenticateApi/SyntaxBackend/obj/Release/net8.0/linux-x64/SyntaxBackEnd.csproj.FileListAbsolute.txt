@@ -352,3 +352,10 @@ E:\GitRepok\Vizsgamunka\AuthenticateApi\SyntaxBackend\obj\Release\net8.0\linux-x
 E:\GitRepok\Vizsgamunka\AuthenticateApi\SyntaxBackend\obj\Release\net8.0\linux-x64\SyntaxBackEnd.pdb
 E:\GitRepok\Vizsgamunka\AuthenticateApi\SyntaxBackend\obj\Release\net8.0\linux-x64\SyntaxBackEnd.genruntimeconfig.cache
 E:\GitRepok\Vizsgamunka\AuthenticateApi\SyntaxBackend\obj\Release\net8.0\linux-x64\ref\SyntaxBackEnd.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\Azure.Core.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\Azure.Identity.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\Azure.Security.KeyVault.Certificates.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\Microsoft.Identity.Client.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\System.Memory.Data.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\SyntaxBackend\bin\Release\net8.0\linux-x64\System.Security.Cryptography.ProtectedData.dll

@@ -113,10 +113,6 @@ public partial class GameContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("User_fk0");
 
-            entity.HasOne(d => d.UserAchievements).WithMany(p => p.Users)
-                .HasForeignKey(d => d.UserAchievementsId)
-                .HasConstraintName("user_ibfk_2");
-
             entity.HasOne(d => d.UserStats).WithMany(p => p.Users)
                 .HasForeignKey(d => d.UserStatsId)
                 .HasConstraintName("user_ibfk_1");
@@ -124,22 +120,30 @@ public partial class GameContext : DbContext
 
         modelBuilder.Entity<Userachievement>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+            entity.HasKey(e => e.UserAchievementId).HasName("PRIMARY");
 
             entity.ToTable("userachievements");
 
-            entity.HasIndex(e => e.AchievementId, "UserAchievements_fk0");
+            entity.HasIndex(e => e.AchievementId, "achievement_id");
 
-            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.HasIndex(e => e.UserId, "user_id");
+
+            entity.Property(e => e.UserAchievementId)
+                .ValueGeneratedNever()
+                .HasColumnName("user_achievement_id");
             entity.Property(e => e.AchievementDate)
                 .HasColumnType("datetime")
                 .HasColumnName("achievement_date");
             entity.Property(e => e.AchievementId).HasColumnName("achievement_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Achievement).WithMany(p => p.Userachievements)
                 .HasForeignKey(d => d.AchievementId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("UserAchievements_fk0");
+                .HasConstraintName("userachievements_ibfk_1");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Userachievements)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("userachievements_ibfk_2");
         });
 
         modelBuilder.Entity<Userstat>(entity =>

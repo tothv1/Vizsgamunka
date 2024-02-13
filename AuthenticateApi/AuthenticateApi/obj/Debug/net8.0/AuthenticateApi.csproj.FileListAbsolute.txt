@@ -358,3 +358,6 @@ E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthenticateApi\obj\Debug\net8.0\ref\Aut
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\Azure.Core.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\Azure.Security.KeyVault.Certificates.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\Azure.Security.KeyVault.Certificates.dll
+C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthenticateApi\bin\Debug\net8.0\System.Memory.Data.dll

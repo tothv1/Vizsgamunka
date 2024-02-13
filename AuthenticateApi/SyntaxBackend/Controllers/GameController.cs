@@ -21,7 +21,7 @@ namespace GameController.Controllers
             try
             {
                 using var userlist = new GameContext();
-                var users = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.UserAchievements);
+                var users = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.Userachievements);
 
                 return Ok(users.ToList());
             }
@@ -39,7 +39,7 @@ namespace GameController.Controllers
             try
             {
                 using var userlist = new GameContext();
-                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.UserAchievements).First(s => s.Id == id);
+                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.Userachievements).First(s => s.Id == id);
 
                 if (user == null)
                 {
@@ -55,74 +55,35 @@ namespace GameController.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost("addAchievement/{userid}/{achiId}")]
-        public ActionResult AddAchievementToUser(int userid, int achiId)
+        [HttpPost("addUser")]
+        public ActionResult AddUser(UserDTO userDTO)
         {
             try
             {
-                using var context = new GameContext();
 
-                var user = context.Users.FirstOrDefault(u => u.Id == userid);
-
-                var achievement = context.Achievements.FirstOrDefault(a => a.Id == achiId);
-
-                if (user == null)
+                var context = new GameContext();
+                var user = new User
                 {
-                    return Ok("A kért felhasználó nem található.");
-                }
+                    Username = userDTO.Username,
+                    Email = userDTO.Email,
+                    Regdate = DateTime.UtcNow,
+                    Permission = context.Permissions.First(s => s.PermissionName == "User"),
+                    UserStats = userDTO.UserStats,
+                    Userachievements = []
 
-                if (achievement == null)
-                {
-                    return Ok("Az kért teljesítmény nem található.");
-                }
+                };
 
-                context.Userachievements.Add(new Userachievement
-                {
-                    UserId = userid,
-                    AchievementId = achiId,
-                    Achievement = achievement
-                });
+                context.Users.Add(user);
+
                 context.SaveChanges();
 
-                return Ok("Teljesítmény sikeresen hozzáadva a kért felhasználóhoz.");
+                return Ok("Felhasználó létrehozva.");
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
-
+                return BadRequest(ex.Message);
+                throw;
             }
-
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("createAchievement")]
-        public ActionResult AddAchievementToUser(AchievementDTO achievement)
-        {
-            try
-            {
-                using var context = new GameContext();
-
-
-                if (context.Achievements.Contains(context.Achievements.FirstOrDefault(a => a.AchievementName == achievement.AchievementName)))
-                {
-                    return BadRequest("Már létezik ilyen nevû teljesítmény");
-                }
-
-                context.Add(new Achievement
-                {
-                    AchievementName = achievement.AchievementName
-                });
-                context.SaveChanges();
-
-                return Ok(achievement.AchievementName +" teljesítmény sikeresen létrehozva.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
-
-            }
-
         }
 
     }
