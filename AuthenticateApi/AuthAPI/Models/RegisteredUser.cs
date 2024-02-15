@@ -15,9 +15,13 @@ public partial class RegisteredUser
 
     public string Hash { get; set; } = null!;
 
-    public DateOnly Regdate { get; set; }
+    public DateTime Regdate { get; set; }
 
     public int? Roleid { get; set; }
+
+    public int? ConfirmationKeyid { get; set; }
+
+    public virtual ConfirmationKey? ConfirmationKey { get; set; }
 
     public virtual UserRole? UserRole { get; set; }
 }

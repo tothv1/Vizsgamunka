@@ -1,9 +1,9 @@
-
-using AtuhenticateApi.Services.IServices;
+using AuthAPI.Services.IServices;
 using AuthAPI.Models;
-using AuthAPI.Service;
 using AuthAPI.Services;
+using AuthAPI.Services.TokenGenerators;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace AuthAPI
 {
@@ -15,13 +15,13 @@ namespace AuthAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
+
             builder.Services.AddDbContext<AuthContext>(option =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("MySql");
                 option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
-
-            builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
 
             builder.Services.AddCors(options =>
             {

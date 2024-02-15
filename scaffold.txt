@@ -1,19 +1,18 @@
 Scaffold-DbContext "Server=syntax.mysql.database.azure.com; User ID=syntaxerror; Password=404error@; Database=game" Pomelo.EntityFrameworkCore.MySql -o Models -f --no-onconfiguring
 
-Scaffold-DbContext "Server=localhost; User ID=root; Password=; Database=game" Pomelo.EntityFrameworkCore.MySql -o Models -f
+Scaffold-DbContext "Server=localhost; User ID=root; Password=; Database=auth" Pomelo.EntityFrameworkCore.MySql -o Models -f
 
 
 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 {
     if (!optionsBuilder.IsConfigured)
     {
+        
         IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json")
             .Build();
-
-        string connectionString = configuration.GetConnectionString("MySql")!;
-
-        optionsBuilder.UseMySql(connectionString, ServerVersion.Parse("10.4.32-mariadb"));
+        string connectionString = configuration.GetConnectionString("Connection")!;
+        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 }

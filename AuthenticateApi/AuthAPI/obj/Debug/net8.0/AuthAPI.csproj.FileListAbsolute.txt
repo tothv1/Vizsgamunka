@@ -120,7 +120,6 @@ E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\staticwebassets
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.AuthAPI.props
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\staticwebassets.pack.json
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\scopedcss\bundle\AuthAPI.styles.css
-E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\AuthAPI.csproj.CopyComplete
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\AuthAPI.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\refint\AuthAPI.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\AuthAPI.pdb
@@ -134,3 +133,5 @@ E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.Ident
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\BCrypt.Net-Next.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\AuthAPI.csproj.Up2Date
