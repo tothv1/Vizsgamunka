@@ -15,9 +15,9 @@ public partial class Registry
 
     public string TempHash { get; set; } = null!;
 
-    public DateOnly TempRegdate { get; set; }
+    public DateTime TempRegdate { get; set; }
 
     public int TempRoleid { get; set; }
 
-    public string ConfirmationKey { get; set; } = null!;
+    public string TempConfirmationKey { get; set; } = null!;
 }

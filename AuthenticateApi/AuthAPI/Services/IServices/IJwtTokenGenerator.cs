@@ -1,9 +1,9 @@
 ﻿using AuthAPI.Models;
 
-namespace AtuhenticateApi.Services.IServices
+namespace AuthAPI.Services.IServices
 {
     public interface IJwtTokenGenerator
     {
-        string GenerateToken(RegisteredUser registeredUser, IEnumerable<string> roles);
+        string GenerateToken(RegisteredUser registeredUser);
     }
 }
