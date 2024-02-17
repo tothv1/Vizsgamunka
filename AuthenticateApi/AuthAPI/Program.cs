@@ -1,9 +1,13 @@
 using AuthAPI.Services.IServices;
 using AuthAPI.Models;
 using AuthAPI.Services;
-using AuthAPI.Services.TokenGenerators;
 using Microsoft.EntityFrameworkCore;
 using System;
+using AuthAPI.Services.AuthServices;
+using AuthAPI.Services.ConfirmationKeyGenerators;
+using AuthAPI.Services.PasswordStrengthChecker;
+using AuthAPI.Services.SendEmailService;
+using AuthAPI.Services.TokenManager;
 
 namespace AuthAPI
 {
@@ -17,11 +21,17 @@ namespace AuthAPI
 
             builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
 
-            builder.Services.AddDbContext<AuthContext>(option =>
+            builder.Services.AddScoped<IAuth, AuthService>();
+            builder.Services.AddScoped<IConfirmationKeyGenerate, ConfirmationKeyGenerator>();
+            builder.Services.AddScoped<IPasswordStrengthChecker, PasswordStrengthChecker>();
+            builder.Services.AddScoped<IEmailSenderService, FropsiEmailSender>();
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
+
+            /*builder.Services.AddDbContext<AuthContext>(option =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("MySql");
                 option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
+            });*/
 
             builder.Services.AddCors(options =>
             {
@@ -36,7 +46,6 @@ namespace AuthAPI
             
 
             builder.Services.AddControllers();
-            builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

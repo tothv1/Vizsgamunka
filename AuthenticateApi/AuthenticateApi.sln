@@ -7,10 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxBackEnd", "SyntaxBack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthAPI", "AuthAPI\AuthAPI.csproj", "{7D3B089F-BAE1-419A-9E40-833E7790C500}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mivan", "C:\Users\Viktor\source\repos\Mivan\Mivan\Mivan.csproj", "{0F4D3C59-5669-48DA-A1B2-4CCFC654E6AD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{500C47B4-B5D9-450C-9326-7A2BF7709428}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{7D3B089F-BAE1-419A-9E40-833E7790C500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D3B089F-BAE1-419A-9E40-833E7790C500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D3B089F-BAE1-419A-9E40-833E7790C500}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F4D3C59-5669-48DA-A1B2-4CCFC654E6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F4D3C59-5669-48DA-A1B2-4CCFC654E6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F4D3C59-5669-48DA-A1B2-4CCFC654E6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F4D3C59-5669-48DA-A1B2-4CCFC654E6AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{500C47B4-B5D9-450C-9326-7A2BF7709428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{500C47B4-B5D9-450C-9326-7A2BF7709428}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{500C47B4-B5D9-450C-9326-7A2BF7709428}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{500C47B4-B5D9-450C-9326-7A2BF7709428}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,6 +16,8 @@ public partial class AuthContext : DbContext
     {
     }
 
+    public virtual DbSet<BlacklistedToken> BlacklistedTokens { get; set; }
+
     public virtual DbSet<ConfirmationKey> ConfirmationKeys { get; set; }
 
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
@@ -24,7 +26,7 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<UserRole> UserRoles { get; set; }
+    public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -45,6 +47,25 @@ public partial class AuthContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_hungarian_ci")
             .HasCharSet("utf8mb4");
+
+        modelBuilder.Entity<BlacklistedToken>(entity =>
+        {
+            entity.HasKey(e => e.TokenId).HasName("PRIMARY");
+
+            entity.ToTable("blacklisted_tokens");
+
+            entity.HasIndex(e => e.Token, "token").IsUnique();
+
+            entity.Property(e => e.TokenId)
+                .HasMaxLength(254)
+                .HasColumnName("token_id");
+            entity.Property(e => e.BlacklistedStatusExpires)
+                .HasColumnType("datetime")
+                .HasColumnName("blacklisted_status_expires");
+            entity.Property(e => e.Token)
+                .HasColumnType("text")
+                .HasColumnName("token");
+        });
 
         modelBuilder.Entity<ConfirmationKey>(entity =>
         {
@@ -78,7 +99,7 @@ public partial class AuthContext : DbContext
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
-            entity.HasIndex(e => e.Roleid, "roleid").IsUnique();
+            entity.HasIndex(e => e.Roleid, "roleid");
 
             entity.HasIndex(e => e.Username, "username").IsUnique();
 
@@ -109,7 +130,7 @@ public partial class AuthContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("regdate");
             entity.Property(e => e.Roleid)
-                .IsRequired()
+                .HasDefaultValueSql("'2'")
                 .HasColumnType("int(11)")
                 .HasColumnName("roleid");
             entity.Property(e => e.Username)
@@ -122,6 +143,11 @@ public partial class AuthContext : DbContext
                 .HasForeignKey(d => d.ConfirmationKeyid)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("registered_users_ibfk_1");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.RegisteredUsers)
+                .HasForeignKey(d => d.Roleid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("registered_users_ibfk_2");
         });
 
         modelBuilder.Entity<Registry>(entity =>
@@ -131,6 +157,8 @@ public partial class AuthContext : DbContext
             entity.ToTable("registry");
 
             entity.HasIndex(e => e.TempEmail, "temp_email").IsUnique();
+
+            entity.HasIndex(e => e.TempRoleid, "temp_roleid");
 
             entity.HasIndex(e => e.TempUsername, "temp_username").IsUnique();
 
@@ -166,6 +194,10 @@ public partial class AuthContext : DbContext
                 .HasColumnName("temp_username")
                 .UseCollation("utf8_hungarian_ci")
                 .HasCharSet("utf8");
+
+            entity.HasOne(d => d.TempRole).WithMany(p => p.Registries)
+                .HasForeignKey(d => d.TempRoleid)
+                .HasConstraintName("registry_ibfk_1");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -184,30 +216,18 @@ public partial class AuthContext : DbContext
                 .HasColumnName("role_name");
         });
 
-        modelBuilder.Entity<UserRole>(entity =>
+        modelBuilder.Entity<TempRole>(entity =>
         {
-            entity.HasKey(e => e.UserRoleId).HasName("PRIMARY");
+            entity.HasKey(e => e.TempRoleId).HasName("PRIMARY");
 
-            entity.ToTable("user_roles");
+            entity.ToTable("temp_roles");
 
-            entity.HasIndex(e => e.Roleid, "roleid");
-
-            entity.Property(e => e.UserRoleId)
-                .ValueGeneratedNever()
+            entity.Property(e => e.TempRoleId)
                 .HasColumnType("int(11)")
-                .HasColumnName("user_role_id");
-            entity.Property(e => e.Roleid)
-                .HasColumnType("int(11)")
-                .HasColumnName("roleid");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
-                .HasForeignKey(d => d.Roleid)
-                .HasConstraintName("user_roles_ibfk_1");
-
-            entity.HasOne(d => d.UserRoleNavigation).WithOne(p => p.UserRole)
-                .HasPrincipalKey<RegisteredUser>(p => p.Roleid)
-                .HasForeignKey<UserRole>(d => d.UserRoleId)
-                .HasConstraintName("user_roles_ibfk_2");
+                .HasColumnName("temp_role_id");
+            entity.Property(e => e.RoleName)
+                .HasMaxLength(16)
+                .HasColumnName("role_name");
         });
 
         OnModelCreatingPartial(modelBuilder);

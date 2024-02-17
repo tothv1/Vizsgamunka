@@ -135,3 +135,4 @@ E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.Ident
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\BCrypt.Net-Next.dll
 E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\obj\Debug\net8.0\AuthAPI.csproj.Up2Date
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
