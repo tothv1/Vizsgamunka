@@ -1,12 +1,15 @@
 ﻿using AuthAPI.DTOs;
 using AuthAPI.Models;
 using AuthAPI.Services;
+using AuthAPI.Services.AuthServices;
 using AuthAPI.Services.ConfirmationKeyGenerators;
+using AuthAPI.Services.IServices;
 using AuthAPI.Services.PasswordStrengthChecker;
 using AuthAPI.Services.SendEmailService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Crypto.Generators;
 
@@ -16,74 +19,65 @@ namespace AuthAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private ConfirmationKeyGenerator _confirmationKeyGenerator = new ConfirmationKeyGenerator();
-        private PasswordStrengthChecker _passwordStrengthChecker = new PasswordStrengthChecker();
-        private FropsiEmailSender _emailSender = new FropsiEmailSender();
+        private readonly IAuth authService;
+
+        public AuthController(IAuth authService) 
+        { 
+            this.authService = authService;
+        }
 
         [HttpPost("register")]
-        public ActionResult<ResponseObject> Register(RegisterDTO register)
+        public async Task<ActionResult> Register([FromBody] RegisterDTO register)
         {
             try
             {
-                var context = new AuthContext();
+                var response = await authService.Register(register);
 
-                if (!_passwordStrengthChecker.CheckPassword(register.Password))
-                {
-                    return BadRequest("A jelszavad nem elég erős!");
-                }
-
-                if(context.RegisteredUsers.FirstOrDefault(user => user.Username == register.Username) != null)
-                {
-                    return BadRequest("Ez a felhasználónév már foglalt!");
-                }
-                if(context.RegisteredUsers.FirstOrDefault(user => user.Email == register.Email) != null)
-                {
-                    return BadRequest("Ez az email cím már foglalt!");
-                }
-
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);
-                string userId = Guid.NewGuid().ToString();
-
-                var registry = new Registry
-                {
-                    TempUserid = userId,
-                    TempUsername = register.Username,
-                    TempFullname = register.Fullname,
-                    TempEmail = register.Email,
-                    TempHash = passwordHash,
-                    TempRegdate = DateTime.UtcNow,
-                    TempRoleid = 3,
-                    TempConfirmationKey = _confirmationKeyGenerator.GenerateConfirmationKey(register.Email, passwordHash)
-                };
-
-                context.Add(registry);
-                context.SaveChanges();
-
-                _emailSender.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email",
-                    "A fiókját megerősítheti a következő linken:\n" +
-                    $"http://localhost:5159/Auth/confirmAccount?confirmKey={registry.TempConfirmationKey}");
-
-                return Ok(new ResponseObject
-                {
-                    responseMessage = "Sikeres regisztráció",
-                    responseObject = registry,
-                    status = 200,
-
-                });
+                return Ok(response);
             }
             catch (Exception ex)
             {
-
-                return BadRequest(new ResponseObject
-                {
-                    responseMessage = ex.Message,
-                    responseObject = "error",
-                    status = 400,
-                });
+                return BadRequest(ex.Message);
             }
         }
-        [HttpGet("confirmAccount")]
-        public ActionResult<ResponseObject> ConfirmEmailAccount([FromQuery] string confirmKey)
+
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginUser([FromBody] LoginDTO loginDto)
+        {
+            try
+            {
+                var response = await authService.Login(loginDto);
+
+                var jsonResponse = JsonConvert.SerializeObject(response);
+
+                return Ok(jsonResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("logout")]
+        public async Task<ActionResult> LogoutUser([FromBody] string token)
+        {
+            try
+            {
+                var response = await authService.Logout(token);
+
+                var jsonResponse = JsonConvert.SerializeObject(response);
+
+                return Ok(jsonResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost("confirmAccount")]
+        public async Task<ActionResult> ConfirmEmailAccount([FromQuery] string confirmKey)
         {
             try
             {
@@ -113,8 +107,8 @@ namespace AuthAPI.Controllers
 
                 context.Registries.Remove(keyCheck);
                 context.SaveChanges();
-
-                return Ok(RegisteredUser);
+                var jsonResponse = JsonConvert.SerializeObject(RegisteredUser);
+                return Ok(jsonResponse);
 
             }
             catch (Exception ex)
@@ -123,8 +117,9 @@ namespace AuthAPI.Controllers
             }
         }
 
+
         [HttpGet("tempusers")]
-        public ActionResult<ResponseObject> GetTempResult()
+        public async Task<ActionResult> GetTempResult()
         {
             try
             {

@@ -9,7 +9,7 @@ public partial class UserRole
 
     public int Roleid { get; set; }
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual ICollection<RegisteredUser> RegisteredUsers { get; set; } = new List<RegisteredUser>();
 
-    public virtual RegisteredUser UserRoleNavigation { get; set; } = null!;
+    public virtual Role Role { get; set; } = null!;
 }

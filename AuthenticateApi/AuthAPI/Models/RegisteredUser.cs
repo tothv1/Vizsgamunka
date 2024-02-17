@@ -17,11 +17,11 @@ public partial class RegisteredUser
 
     public DateTime Regdate { get; set; }
 
-    public int? Roleid { get; set; }
+    public int Roleid { get; set; }
 
     public int? ConfirmationKeyid { get; set; }
 
     public virtual ConfirmationKey? ConfirmationKey { get; set; }
 
-    public virtual UserRole? UserRole { get; set; }
+    public virtual Role Role { get; set; } = null!;
 }
