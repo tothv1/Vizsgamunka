@@ -50,7 +50,6 @@ namespace AuthAPI.Services.AuthServices
             }
             catch (Exception ex)
             {
-
                 return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", ex.Message, 400);
             }
         }
@@ -60,7 +59,7 @@ namespace AuthAPI.Services.AuthServices
             try
             {
                 _tokenManager.blackListToken(token);
-                return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", "Sikeresen kijelentkeztél!", 400);
+                return ResponseObject.create("Sikeresen kijelentkeztél!", null!, 200);
             }
             catch (Exception ex)
             {
@@ -78,9 +77,21 @@ namespace AuthAPI.Services.AuthServices
                 {
                     return ResponseObject.create("Nem elég erős a jelszó!", "null pass", 400);
                 }
+                if (context.Registries.FirstOrDefault(user => user.TempUsername == register.Username) != null)
+                {
+                    return ResponseObject.create("Ez a felhasználónév már foglalt!", "null user", 400);
+                }
                 if (context.RegisteredUsers.FirstOrDefault(user => user.Username == register.Username) != null)
                 {
                     return ResponseObject.create("Ez a felhasználónév már foglalt!", "null user", 400);
+                }
+                if (!_emailSenderService.isValidEmail(register.Email))
+                {
+                    return ResponseObject.create("Érvényes emailt adj meg!", "null email", 400);
+                }
+                if (context.Registries.FirstOrDefault(user => user.TempEmail == register.Email) != null)
+                {
+                    return ResponseObject.create("Ez az email cím már foglalt!", "null email", 400);
                 }
                 if (context.RegisteredUsers.FirstOrDefault(user => user.Email == register.Email) != null)
                 {
@@ -88,6 +99,8 @@ namespace AuthAPI.Services.AuthServices
                 }
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);
                 string userId = Guid.NewGuid().ToString();
+
+                DateTime expireDate = DateTime.UtcNow;
 
                 var registry = new Registry
                 {
@@ -98,15 +111,19 @@ namespace AuthAPI.Services.AuthServices
                     TempHash = passwordHash,
                     TempRegdate = DateTime.UtcNow,
                     TempRoleid = 1,
+                    TempUserExpire = expireDate.AddDays(7),
                     TempConfirmationKey = _confirmationKeyGenerate.GenerateConfirmationKey(register.Email, passwordHash)
                 };
 
+
+                string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:5159/Auth/confirmAccount?confirmKey={registry.TempConfirmationKey}";
+
+                if (!_emailSenderService.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email", message)) {
+                    return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", "null email", 400);
+                }
+
                 context.Add(registry);
                 context.SaveChanges();
-
-                _emailSenderService.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email",
-                    "A fiókját megerősítheti a következő linken:\n" +
-                    $"http://localhost:5159/Auth/confirmAccount?confirmKey={registry.TempConfirmationKey}");
 
                 return ResponseObject.create("Sikeres regisztráció", registry, 200);
             }

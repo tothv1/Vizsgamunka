@@ -27,11 +27,6 @@ namespace AuthAPI
             builder.Services.AddScoped<IEmailSenderService, FropsiEmailSender>();
             builder.Services.AddScoped<ITokenManager, TokenManager>();
 
-            /*builder.Services.AddDbContext<AuthContext>(option =>
-            {
-                var connectionString = builder.Configuration.GetConnectionString("MySql");
-                option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });*/
 
             builder.Services.AddCors(options =>
             {
