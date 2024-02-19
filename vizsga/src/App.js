@@ -9,26 +9,14 @@ import slime from "./Assets/characters/slime.png";
 import { Update } from "./system/Player";
 import { UpdateT } from "./system/StoneWall";
 import { UpdateSl } from "./system/Slime";
+import { rawMaps } from "./Assets/map/maps";
+
+
 
 export default function App() {
   
     //EZT RAKD FEL
     //npm install --save react-game-engine
-    const rawMap = [
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    ];
 
     const [renderOffset, setRenderOffset] = useState([]);
 
@@ -40,7 +28,7 @@ export default function App() {
           //-- Notice that each entity has a unique id (required)
           //-- and a renderer property (optional). If no renderer
           //-- is supplied with the entity - it won't get displayed.
-          terrain: {update:UpdateT, rawMap:rawMap},
+          terrain: {update:UpdateT, rawMap:rawMaps},
           player: {update:Update},
           slime: {update:UpdateSl }
         }}/>

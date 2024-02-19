@@ -17,6 +17,7 @@ const width = 64;
 const height = 64;
 
 const speed = 300;
+let health = 100;
 
 let frame = 0;
 

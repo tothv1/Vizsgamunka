@@ -1,13 +1,35 @@
 import React, { useRef, useEffect } from 'react'
+import { rawMaps } from '../Assets/map/maps';
 
+import { UpdateSl } from '../system/Slime';
+import { UpdateT } from '../system/StoneWall';
+import { Update } from '../system/Player';
+import '../system/Math';
+import { Clamp, Normalise } from '../system/Math';
 
 let renderOffset = [0,0]
 
 const Canvas = props => {
 
-  const entities = props.entities;
 
-  console.log(props)
+
+  let entities = {};
+
+  entities.terrain={
+    rawmap:rawMaps,
+    update:UpdateT
+  }
+
+  entities.player={
+    update:Update
+  }
+
+  entities.slime={
+    update:UpdateSl
+  }
+
+
+  console.log(entities)
 
   const canvasRef = useRef(null)
   let frameCount = 0
@@ -16,10 +38,7 @@ const Canvas = props => {
   const clrCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-
   }
-
-
 
   const draw = async (ctx, object,offset) => {
 
@@ -44,24 +63,23 @@ const Canvas = props => {
     const render = () => {
       clrCanvas(context);
       Runtime = window.performance.now();
-
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-
-
-
-      //console.log(deltaTime)
-
       const map = entities.terrain;
+      let player = entities.player.update(deltaTime,frameCount)
+
       //const slime = entities.slime;
 
-      const rawmap = map.rawMap;
+      const rawmap = map.rawmap[0];
+
+      console.log(`x: ${player.x}\ny: ${player.y}`)
+    
 
       for (let i = 0; i < rawmap.length; i++) {
         for (let j = 0; j < rawmap[i].length; j++) {
           if (rawmap[i][j] === 1) {
 
-            let obj = entities.terrain.update();
+            let obj = UpdateT(deltaTime,frameCount);
             obj.x = j * 64;
             obj.y = i * 64;
             obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
@@ -70,7 +88,7 @@ const Canvas = props => {
           }
           if (rawmap[i][j] === 2) {
 
-            let obj = entities.slime.update();
+            let obj = UpdateSl();
             obj.x = j * 64;
             obj.y = i * 64;
             obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
@@ -80,13 +98,21 @@ const Canvas = props => {
         }
       }
 
-      let player = entities.player.update(deltaTime,frameCount)
+
 
       renderOffset=[-player.x,-player.y]
+
+      renderOffset[0] = Clamp(renderOffset[0],0,5000)
+      renderOffset[1] = Clamp(renderOffset[1],0,5000)
+
+      console.log(Normalise(renderOffset))
+
+      
+
       draw(context, player,[window.innerWidth/2,window.innerHeight/2]);
 
 
-
+      
       
 
       lastUpdateTime = window.performance.now();
