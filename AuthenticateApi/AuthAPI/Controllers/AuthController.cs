@@ -33,7 +33,9 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Register(register);
 
-                return Ok(response);
+                var jsonResponse = JsonConvert.SerializeObject(response);
+
+                return Ok(jsonResponse);
             }
             catch (Exception ex)
             {
@@ -108,6 +110,7 @@ namespace AuthAPI.Controllers
                 context.Registries.Remove(keyCheck);
                 context.SaveChanges();
                 var jsonResponse = JsonConvert.SerializeObject(RegisteredUser);
+
                 return Ok(jsonResponse);
 
             }
@@ -129,7 +132,6 @@ namespace AuthAPI.Controllers
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }

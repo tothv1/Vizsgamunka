@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AuthAPI.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
@@ -20,6 +21,8 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<ConfirmationKey> ConfirmationKeys { get; set; }
 
+    public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
+
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
 
     public virtual DbSet<Registry> Registries { get; set; }
@@ -29,30 +32,22 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
-            string connectionString = configuration.GetConnectionString("Connection")!;
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_hungarian_ci")
+            .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
         modelBuilder.Entity<BlacklistedToken>(entity =>
         {
             entity.HasKey(e => e.TokenId).HasName("PRIMARY");
 
-            entity.ToTable("blacklisted_tokens");
+            entity
+                .ToTable("blacklisted_tokens")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.Token, "token").IsUnique();
 
@@ -71,7 +66,9 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.Keyid).HasName("PRIMARY");
 
-            entity.ToTable("confirmation_keys");
+            entity
+                .ToTable("confirmation_keys")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.Userid, "userid");
 
@@ -89,11 +86,23 @@ public partial class AuthContext : DbContext
                 .HasColumnName("userid");
         });
 
+        modelBuilder.Entity<Efmigrationshistory>(entity =>
+        {
+            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
+
+            entity.ToTable("__efmigrationshistory");
+
+            entity.Property(e => e.MigrationId).HasMaxLength(150);
+            entity.Property(e => e.ProductVersion).HasMaxLength(32);
+        });
+
         modelBuilder.Entity<RegisteredUser>(entity =>
         {
             entity.HasKey(e => e.Userid).HasName("PRIMARY");
 
-            entity.ToTable("registered_users");
+            entity
+                .ToTable("registered_users")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.ConfirmationKeyid, "confirmation_keyid");
 
@@ -154,7 +163,9 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.TempUserid).HasName("PRIMARY");
 
-            entity.ToTable("registry");
+            entity
+                .ToTable("registry")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.TempEmail, "temp_email").IsUnique();
 
@@ -189,6 +200,9 @@ public partial class AuthContext : DbContext
             entity.Property(e => e.TempRoleid)
                 .HasColumnType("int(11)")
                 .HasColumnName("temp_roleid");
+            entity.Property(e => e.TempUserExpire)
+                .HasColumnType("datetime")
+                .HasColumnName("temp_user_expire");
             entity.Property(e => e.TempUsername)
                 .HasMaxLength(64)
                 .HasColumnName("temp_username")
@@ -204,7 +218,9 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.Roleid).HasName("PRIMARY");
 
-            entity.ToTable("roles");
+            entity
+                .ToTable("roles")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.RoleName, "role_name").IsUnique();
 
@@ -220,7 +236,9 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.TempRoleId).HasName("PRIMARY");
 
-            entity.ToTable("temp_roles");
+            entity
+                .ToTable("temp_roles")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.Property(e => e.TempRoleId)
                 .HasColumnType("int(11)")

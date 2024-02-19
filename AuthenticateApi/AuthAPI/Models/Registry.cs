@@ -19,6 +19,8 @@ public partial class Registry
 
     public int? TempRoleid { get; set; }
 
+    public DateTime TempUserExpire { get; set; }
+
     public string TempConfirmationKey { get; set; } = null!;
 
     public virtual TempRole? TempRole { get; set; }
