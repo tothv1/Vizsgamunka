@@ -22,7 +22,7 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
-    public virtual DbSet<LoggedinUser> LoggedinUsers { get; set; }
+    public virtual DbSet<LoggedInUser> LoggedInUsers { get; set; }
 
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
 
@@ -33,18 +33,8 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
-            string connectionString = configuration.GetConnectionString("Connection")!;
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -107,11 +97,11 @@ public partial class AuthContext : DbContext
             entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
-        modelBuilder.Entity<LoggedinUser>(entity =>
+        modelBuilder.Entity<LoggedInUser>(entity =>
         {
             entity.HasKey(e => e.Userid).HasName("PRIMARY");
 
-            entity.ToTable("loggedin_users");
+            entity.ToTable("logged_in_users");
 
             entity.Property(e => e.Userid)
                 .HasMaxLength(254)

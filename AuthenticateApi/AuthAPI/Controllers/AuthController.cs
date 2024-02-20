@@ -104,11 +104,11 @@ namespace AuthAPI.Controllers
                     ConfirmationKeyid = null
                 };
 
-                context.Add(RegisteredUser);
-                context.SaveChanges();
+                await context.AddAsync(RegisteredUser);
+                await context.SaveChangesAsync();
 
                 context.Registries.Remove(keyCheck);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 var jsonResponse = JsonConvert.SerializeObject(RegisteredUser);
 
                 return Ok(jsonResponse);
@@ -126,7 +126,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                await using var context = new AuthContext();
 
                 return Ok(context.Registries.ToList());
             }
