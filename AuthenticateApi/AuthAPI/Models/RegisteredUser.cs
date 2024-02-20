@@ -15,6 +15,8 @@ public partial class RegisteredUser
 
     public string Hash { get; set; } = null!;
 
+    public bool IsLoggedIn { get; set; }
+
     public DateTime Regdate { get; set; }
 
     public int Roleid { get; set; }

@@ -1,5 +1,6 @@
 ﻿using AuthAPI.Models;
 using AuthAPI.Services.IServices;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -70,6 +71,12 @@ namespace AuthAPI.Services.TokenManager
                 BlacklistedStatusExpires = tokenData.ValidTo
             });
             context.SaveChanges();
+        }
+
+        public void RefreshToken(string token)
+        {
+            var tokenData = JwtDecode(token);
+
         }
     }
 }

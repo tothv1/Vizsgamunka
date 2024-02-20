@@ -24,6 +24,7 @@ namespace AuthAPI.Services.AuthServices
             this._emailSenderService = emailSenderService;
         }
 
+        //Bejelentkezés logika
         public async Task<Object> Login(LoginDTO loginDto)
         {
             try
@@ -39,11 +40,31 @@ namespace AuthAPI.Services.AuthServices
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
 
+                    if (user!.IsLoggedIn)
+                    {
+
+                        await Logout(context.LoggedinUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
+
+                        return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
+                    }
+
                     if (user.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
+
                     token = _tokenManager.GenerateToken(user);
+
+                    user.IsLoggedIn = true;
+                    context.Update(user);
+
+                    await context.AddAsync(new LoggedinUser()
+                    {
+                        Userid = user.Userid,
+                        Token = token
+                    });
+                    await context.SaveChangesAsync();
+
                 }
 
                 return ResponseObject.create("Sikeres bejelentkezés", token, 200);
@@ -54,11 +75,36 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+
+        //Kijelentkezés logika
         public async Task<object> Logout(string token)
         {
             try
             {
                 _tokenManager.blackListToken(token);
+
+                await using (var context = new AuthContext())
+                {
+                    var loggedInUser = context.LoggedinUsers.FirstOrDefault(user => user.Token == token);
+
+                    if (loggedInUser == null)
+                    {
+                        return ResponseObject.create("Nem vagy bejelentkezve!", null!, 400);
+                    }
+                    var currentUser = context.RegisteredUsers.FirstOrDefault(user => user.Userid == loggedInUser.Userid);
+
+                    if(currentUser == null)
+                    {
+                        return ResponseObject.create("Nem vagy bejelentkezve!", null!, 400);
+                    }
+                    currentUser!.IsLoggedIn = false;
+                    context.Update(currentUser);
+
+                    context.Remove(loggedInUser);
+                    await context.SaveChangesAsync();
+
+                }
+
                 return ResponseObject.create("Sikeresen kijelentkeztél!", null!, 200);
             }
             catch (Exception ex)
@@ -67,6 +113,7 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+        //Regisztrációs logika
         public async Task<Object> Register(RegisterDTO register)
         {
             try
@@ -122,8 +169,8 @@ namespace AuthAPI.Services.AuthServices
                     return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", "null email", 400);
                 }
 
-                context.Add(registry);
-                context.SaveChanges();
+                await context.AddAsync(registry);
+                await context.SaveChangesAsync();
 
                 return ResponseObject.create("Sikeres regisztráció", registry, 200);
             }
