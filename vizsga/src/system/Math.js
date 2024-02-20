@@ -1,6 +1,7 @@
 export function Clamp(num, min, max) {
     if (num < min) return min;
     if (num > max) return max;
+    if (min > max) return min;
     return num;
 }
 
