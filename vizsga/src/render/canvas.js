@@ -12,7 +12,6 @@ let renderOffset = [0,0]
 const Canvas = props => {
 
 
-
   let entities = {};
 
   entities.terrain={
@@ -43,7 +42,14 @@ const Canvas = props => {
   const draw = async (ctx, object,offset) => {
 
     //console.log(object)
+
+    ctx.globalCompositeOperation =     "source-over"
+
     ctx.drawImage(object.render, object.frame, 0, object.w, object.h, offset[0], offset[1], object.w, object.h);
+
+
+
+    
 
   }
 

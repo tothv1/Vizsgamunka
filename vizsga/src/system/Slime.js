@@ -39,7 +39,7 @@ function UpdateSl (deltaTime,frameCount) {
 
 
   let obj = {
-    charID: ID,
+    ID: ID,
     frame: frame * width,
     render: drawing,
     x: x,
