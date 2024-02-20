@@ -19,6 +19,8 @@ let mirror = false;
 let x = 0;
 let y = 0;
 
+let mapsize = [];
+
 let width = 96;
 const height = 64;
 
@@ -103,8 +105,8 @@ function Update(deltaTime, frameCount) {
     x -= speed * deltaTime;
     mirror = true;
   }
-  x=Clamp(x,0,window.innerWidth);
-  y=Clamp(y,0,window.innerHeight);
+  x=Clamp(x,0,mapsize[0]);
+  y=Clamp(y,0,mapsize[1]);
 
   if (frameLength > 1) {
     if (frameCount % frameDelay === 0) {

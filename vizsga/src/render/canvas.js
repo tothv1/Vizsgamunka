@@ -67,11 +67,13 @@ const Canvas = props => {
 
       const map = entities.terrain;
       let player = entities.player.update(deltaTime,frameCount)
+      
 
       //const slime = entities.slime;
 
       const rawmap = map.rawmap[0];
 
+      player.mapsize=[rawmap[0].length*64,rawmap.length*64];
     
 
       for (let i = 0; i < rawmap.length; i++) {
@@ -99,13 +101,13 @@ const Canvas = props => {
 
       
 
-      renderOffset=[Clamp(player.x,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y,0,(rawmap.length*64)-window.innerHeight)]
+      renderOffset=[Clamp(player.x-window.innerWidth/2,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y-window.innerHeight/2,0,(rawmap.length*64)-window.innerHeight)]
       renderOffset=[-renderOffset[0],-renderOffset[1]]
 
       console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
       console.log(`player\nx: ${player.x}\ny: ${player.y}`)
 
-      let playerrenderpos = [window.innerWidth/2+player.x+renderOffset[0],window.innerHeight/2+player.y+renderOffset[1]]
+      let playerrenderpos = [player.x+renderOffset[0],player.y+renderOffset[1]]
 
       console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
 
