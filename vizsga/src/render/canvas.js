@@ -72,7 +72,6 @@ const Canvas = props => {
 
       const rawmap = map.rawmap[0];
 
-      console.log(`x: ${player.x}\ny: ${player.y}`)
     
 
       for (let i = 0; i < rawmap.length; i++) {
@@ -98,22 +97,19 @@ const Canvas = props => {
         }
       }
 
-
-
-      renderOffset=[-player.x,-player.y]
-
-      renderOffset[0] = Clamp(renderOffset[0],0,5000)
-      renderOffset[1] = Clamp(renderOffset[1],0,5000)
-
-      console.log(Normalise(renderOffset))
-
       
 
-      draw(context, player,[window.innerWidth/2,window.innerHeight/2]);
+      renderOffset=[Clamp(player.x,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y,0,(rawmap.length*64)-window.innerHeight)]
+      renderOffset=[-renderOffset[0],-renderOffset[1]]
 
+      console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
+      console.log(`player\nx: ${player.x}\ny: ${player.y}`)
 
-      
-      
+      let playerrenderpos = [window.innerWidth/2+player.x+renderOffset[0],window.innerHeight/2+player.y+renderOffset[1]]
+
+      console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
+
+      draw(context, player,[playerrenderpos[0],playerrenderpos[1]]);
 
       lastUpdateTime = window.performance.now();
       frameCount++

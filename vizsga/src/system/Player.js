@@ -3,6 +3,10 @@ import { useState } from "react";
 import right from "../Assets/characters/noBKG_KnightRun_strip.png"
 import left from "../Assets/characters/noBKG_KnightRun_strip_left.png"
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
+import "../system/Math";
+import { Clamp } from "../system/Math";
+
+
 
 const ID = 0;
 
@@ -59,6 +63,8 @@ function Update(deltaTime, frameCount) {
 
   let tempRender;
 
+
+
   if (state==="moving"){
     if (direction==="left"){
       drawing.src=left;
@@ -97,6 +103,8 @@ function Update(deltaTime, frameCount) {
     x -= speed * deltaTime;
     mirror = true;
   }
+  x=Clamp(x,0,window.innerWidth);
+  y=Clamp(y,0,window.innerHeight);
 
   if (frameLength > 1) {
     if (frameCount % frameDelay === 0) {
