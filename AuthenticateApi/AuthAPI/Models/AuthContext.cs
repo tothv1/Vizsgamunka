@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AuthAPI.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
@@ -23,6 +22,8 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
+    public virtual DbSet<LoggedinUser> LoggedinUsers { get; set; }
+
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
 
     public virtual DbSet<Registry> Registries { get; set; }
@@ -32,8 +33,18 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            string connectionString = configuration.GetConnectionString("Connection")!;
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -96,6 +107,20 @@ public partial class AuthContext : DbContext
             entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
+        modelBuilder.Entity<LoggedinUser>(entity =>
+        {
+            entity.HasKey(e => e.Userid).HasName("PRIMARY");
+
+            entity.ToTable("loggedin_users");
+
+            entity.Property(e => e.Userid)
+                .HasMaxLength(254)
+                .HasColumnName("userid");
+            entity.Property(e => e.Token)
+                .HasColumnType("text")
+                .HasColumnName("token");
+        });
+
         modelBuilder.Entity<RegisteredUser>(entity =>
         {
             entity.HasKey(e => e.Userid).HasName("PRIMARY");
@@ -135,6 +160,7 @@ public partial class AuthContext : DbContext
                 .HasColumnName("hash")
                 .UseCollation("utf8_hungarian_ci")
                 .HasCharSet("utf8");
+            entity.Property(e => e.IsLoggedIn).HasColumnName("is_logged_in");
             entity.Property(e => e.Regdate)
                 .HasColumnType("datetime")
                 .HasColumnName("regdate");
