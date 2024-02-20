@@ -31,14 +31,14 @@ namespace AuthAPI.Services.TokenManager
 
             var claimList = new List<Claim>
             {
-                //Mi legyen benne a Token-ben
+                //Token tartalma
                 new Claim("userId",registeredUser.Userid),
                 new Claim("username",registeredUser.Username),
                 new Claim("userRole",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
                 new Claim("userRegdate",registeredUser.Regdate.ToString())
             };
 
-            var tokenDescription = new SecurityTokenDescriptor //Token beállításai
+            var tokenDescription = new SecurityTokenDescriptor
             {
                 Audience = jwtOptions.Audience,
                 Issuer = jwtOptions.Issuer,

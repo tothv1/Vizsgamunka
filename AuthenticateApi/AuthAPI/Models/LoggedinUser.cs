@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AuthAPI.Models;
 
-public partial class LoggedinUser
+public partial class LoggedInUser
 {
     public string Userid { get; set; } = null!;
 

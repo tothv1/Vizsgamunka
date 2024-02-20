@@ -43,7 +43,7 @@ namespace AuthAPI.Services.AuthServices
                     if (user!.IsLoggedIn)
                     {
 
-                        await Logout(context.LoggedinUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
+                        await Logout(context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
 
                         return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
                     }
@@ -58,7 +58,7 @@ namespace AuthAPI.Services.AuthServices
                     user.IsLoggedIn = true;
                     context.Update(user);
 
-                    await context.AddAsync(new LoggedinUser()
+                    await context.AddAsync(new LoggedInUser()
                     {
                         Userid = user.Userid,
                         Token = token
@@ -85,7 +85,7 @@ namespace AuthAPI.Services.AuthServices
 
                 await using (var context = new AuthContext())
                 {
-                    var loggedInUser = context.LoggedinUsers.FirstOrDefault(user => user.Token == token);
+                    var loggedInUser = context.LoggedInUsers.FirstOrDefault(user => user.Token == token);
 
                     if (loggedInUser == null)
                     {
@@ -124,11 +124,7 @@ namespace AuthAPI.Services.AuthServices
                 {
                     return ResponseObject.create("Nem elég erős a jelszó!", "null pass", 400);
                 }
-                if (context.Registries.FirstOrDefault(user => user.TempUsername == register.Username) != null)
-                {
-                    return ResponseObject.create("Ez a felhasználónév már foglalt!", "null user", 400);
-                }
-                if (context.RegisteredUsers.FirstOrDefault(user => user.Username == register.Username) != null)
+                if (context.Registries.FirstOrDefault(user => user.TempUsername == register.Username) != null || context.RegisteredUsers.FirstOrDefault(user => user.Username == register.Username) != null)
                 {
                     return ResponseObject.create("Ez a felhasználónév már foglalt!", "null user", 400);
                 }
@@ -136,11 +132,7 @@ namespace AuthAPI.Services.AuthServices
                 {
                     return ResponseObject.create("Érvényes emailt adj meg!", "null email", 400);
                 }
-                if (context.Registries.FirstOrDefault(user => user.TempEmail == register.Email) != null)
-                {
-                    return ResponseObject.create("Ez az email cím már foglalt!", "null email", 400);
-                }
-                if (context.RegisteredUsers.FirstOrDefault(user => user.Email == register.Email) != null)
+                if (context.Registries.FirstOrDefault(user => user.TempEmail == register.Email) != null || context.RegisteredUsers.FirstOrDefault(user => user.Email == register.Email) != null)
                 {
                     return ResponseObject.create("Ez az email cím már foglalt!", "null email", 400);
                 }
@@ -158,7 +150,7 @@ namespace AuthAPI.Services.AuthServices
                     TempHash = passwordHash,
                     TempRegdate = DateTime.UtcNow,
                     TempRoleid = 1,
-                    TempUserExpire = expireDate.AddDays(7),
+                    TempUserExpire = expireDate.AddHours(24),
                     TempConfirmationKey = _confirmationKeyGenerate.GenerateConfirmationKey(register.Email, passwordHash)
                 };
 
