@@ -33,9 +33,7 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Register(register);
 
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -50,9 +48,7 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Login(loginDto);
 
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -67,9 +63,7 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Logout(token);
 
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {

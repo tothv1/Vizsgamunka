@@ -26,6 +26,27 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("users/user")]
+        public async Task<ActionResult> GetUserById([FromQuery] string id)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var selectedUser = await context.RegisteredUsers.Include(u => u.Role).FirstOrDefaultAsync(user => user.Userid == id);
+
+                return Ok(selectedUser);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
         [HttpGet("users/status")]
         public async Task<ActionResult> GetAllActiveOrInactive([FromQuery]bool isActive)
         {
