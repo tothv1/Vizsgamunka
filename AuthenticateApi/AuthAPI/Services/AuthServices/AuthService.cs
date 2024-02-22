@@ -24,6 +24,46 @@ namespace AuthAPI.Services.AuthServices
             this._emailSenderService = emailSenderService;
         }
 
+        public async Task<Object> ConfirmAccount(string confirmKey)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
+
+                if (keyCheck == null)
+                {
+                    return ResponseObject.create("Hibás kulcs, vagy nem létező fiók!", 400);
+                }
+
+                var RegisteredUser = new RegisteredUser
+                {
+                    Userid = keyCheck!.TempUserid,
+                    Email = keyCheck.TempEmail,
+                    Username = keyCheck.TempUsername,
+                    Fullname = keyCheck.TempFullname,
+                    Hash = keyCheck.TempHash,
+                    Regdate = keyCheck.TempRegdate,
+                    Roleid = 2,
+                    ConfirmationKeyid = null
+                };
+
+                await context.AddAsync(RegisteredUser);
+                await context.SaveChangesAsync();
+
+                context.Registries.Remove(keyCheck);
+                await context.SaveChangesAsync();
+
+                return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create(ex.Message, 400);
+            }
+        }
+
         //Bejelentkezés logika
         public async Task<Object> Login(LoginDTO loginDto)
         {
@@ -42,9 +82,7 @@ namespace AuthAPI.Services.AuthServices
 
                     if (user!.IsLoggedIn)
                     {
-
                         await Logout(context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
-
                         return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
                     }
 
@@ -52,7 +90,6 @@ namespace AuthAPI.Services.AuthServices
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
-
                     token = _tokenManager.GenerateToken(user);
 
                     user.IsLoggedIn = true;
@@ -102,7 +139,6 @@ namespace AuthAPI.Services.AuthServices
 
                     context.Remove(loggedInUser);
                     await context.SaveChangesAsync();
-
                 }
 
                 return ResponseObject.create("Sikeresen kijelentkeztél!", null!, 200);

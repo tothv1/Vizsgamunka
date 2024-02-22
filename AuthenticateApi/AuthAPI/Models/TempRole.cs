@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace AuthAPI.Models;
 
@@ -9,5 +10,6 @@ public partial class TempRole
 
     public string RoleName { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Registry> Registries { get; set; } = new List<Registry>();
 }

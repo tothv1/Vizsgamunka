@@ -72,11 +72,5 @@ namespace AuthAPI.Services.TokenManager
             });
             context.SaveChanges();
         }
-
-        public void RefreshToken(string token)
-        {
-            var tokenData = JwtDecode(token);
-
-        }
     }
 }

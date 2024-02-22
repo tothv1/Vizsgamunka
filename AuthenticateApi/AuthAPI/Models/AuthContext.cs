@@ -20,8 +20,6 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<ConfirmationKey> ConfirmationKeys { get; set; }
 
-    public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
-
     public virtual DbSet<LoggedInUser> LoggedInUsers { get; set; }
 
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
@@ -33,8 +31,18 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            string connectionString = configuration.GetConnectionString("Connection")!;
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,16 +93,6 @@ public partial class AuthContext : DbContext
             entity.Property(e => e.Userid)
                 .HasMaxLength(254)
                 .HasColumnName("userid");
-        });
-
-        modelBuilder.Entity<Efmigrationshistory>(entity =>
-        {
-            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
-
-            entity.ToTable("__efmigrationshistory");
-
-            entity.Property(e => e.MigrationId).HasMaxLength(150);
-            entity.Property(e => e.ProductVersion).HasMaxLength(32);
         });
 
         modelBuilder.Entity<LoggedInUser>(entity =>
@@ -167,7 +165,7 @@ public partial class AuthContext : DbContext
             entity.HasOne(d => d.ConfirmationKey).WithMany(p => p.RegisteredUsers)
                 .HasForeignKey(d => d.ConfirmationKeyid)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("registered_users_ibfk_1");
+                .HasConstraintName("registered_users_ibfk_3");
 
             entity.HasOne(d => d.Role).WithMany(p => p.RegisteredUsers)
                 .HasForeignKey(d => d.Roleid)

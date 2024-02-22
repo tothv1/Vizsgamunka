@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace AuthAPI.Models;
 
@@ -13,5 +14,6 @@ public partial class ConfirmationKey
 
     public int ExpirationTime { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<RegisteredUser> RegisteredUsers { get; set; } = new List<RegisteredUser>();
 }
