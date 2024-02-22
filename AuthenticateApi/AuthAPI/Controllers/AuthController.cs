@@ -33,9 +33,7 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Register(register);
 
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -50,9 +48,7 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Login(loginDto);
 
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -66,10 +62,7 @@ namespace AuthAPI.Controllers
             try
             {
                 var response = await authService.Logout(token);
-
-                var jsonResponse = JsonConvert.SerializeObject(response);
-
-                return Ok(jsonResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -83,35 +76,8 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
-
-                var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
-
-                if (keyCheck == null)
-                {
-                    return BadRequest("Hibás kulcs, vagy nem létező fiók!");
-                }
-
-                var RegisteredUser = new RegisteredUser
-                {
-                    Userid = keyCheck!.TempUserid,
-                    Email = keyCheck.TempEmail,
-                    Username = keyCheck.TempUsername,
-                    Fullname = keyCheck.TempFullname,
-                    Hash = keyCheck.TempHash,
-                    Regdate = keyCheck.TempRegdate,
-                    Roleid = 2,
-                    ConfirmationKeyid = null
-                };
-
-                await context.AddAsync(RegisteredUser);
-                await context.SaveChangesAsync();
-
-                context.Registries.Remove(keyCheck);
-                await context.SaveChangesAsync();
-                var jsonResponse = JsonConvert.SerializeObject(RegisteredUser);
-
-                return Ok(jsonResponse);
+                var response = await authService.ConfirmAccount(confirmKey);
+                return Ok(response);
 
             }
             catch (Exception ex)
@@ -127,7 +93,6 @@ namespace AuthAPI.Controllers
             try
             {
                 await using var context = new AuthContext();
-
                 return Ok(context.Registries.ToList());
             }
             catch (Exception ex)
