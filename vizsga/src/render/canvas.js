@@ -8,6 +8,21 @@ import '../system/Math';
 import { Clamp, Normalise } from '../system/Math';
 
 let renderOffset = [0,0]
+let gamepad
+
+
+
+window.addEventListener("gamepadconnected", (e) => {
+  gamepad = navigator.getGamepads()[e.gamepad.index];
+  console.log(gamepad)
+
+
+  setInterval(function(){
+    console.log(gamepad.buttons[6].pressed)
+  }, 100)
+});
+
+
 
 const Canvas = props => {
 
@@ -77,6 +92,11 @@ const Canvas = props => {
 
       //const slime = entities.slime;
 
+      if(gamepad!=undefined){
+        
+
+      }
+
       const rawmap = map.rawmap[0];
 
       player.mapsize=[rawmap[0].length*64,rawmap.length*64];
@@ -110,12 +130,9 @@ const Canvas = props => {
       renderOffset=[Clamp(player.x-window.innerWidth/2,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y-window.innerHeight/2,0,(rawmap.length*64)-window.innerHeight)]
       renderOffset=[-renderOffset[0],-renderOffset[1]]
 
-      console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
-      console.log(`player\nx: ${player.x}\ny: ${player.y}`)
 
       let playerrenderpos = [player.x+renderOffset[0],player.y+renderOffset[1]]
 
-      console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
 
       draw(context, player,[playerrenderpos[0],playerrenderpos[1]]);
 
