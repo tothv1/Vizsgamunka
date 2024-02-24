@@ -12,16 +12,55 @@ namespace AuthAPI.Services.AuthServices
     {
 
         private readonly ITokenManager _tokenManager;
-        private readonly IPasswordStrengthChecker _passwordStrengthChecker;
+        private readonly IPasswordManager _passwordStrengthChecker;
         private readonly IConfirmationKeyGenerate _confirmationKeyGenerate;
         private readonly IEmailSenderService _emailSenderService;
 
-        public AuthService(ITokenManager tokenManager, IPasswordStrengthChecker passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
+        public AuthService(ITokenManager tokenManager, IPasswordManager passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
         {
             this._tokenManager = tokenManager;
             this._passwordStrengthChecker = passwordStrengthChecker;
             this._confirmationKeyGenerate = confirmationKeyGenerate;
             this._emailSenderService = emailSenderService;
+        }
+
+        public async Task<Object> ConfirmAccount(string confirmKey)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
+
+                if (keyCheck == null)
+                {
+                    return ResponseObject.create("Hibás kulcs, vagy nem létező fiók!", 400);
+                }
+
+                var RegisteredUser = new RegisteredUser
+                {
+                    Userid = keyCheck!.TempUserid,
+                    Email = keyCheck.TempEmail,
+                    Username = keyCheck.TempUsername,
+                    Fullname = keyCheck.TempFullname,
+                    Hash = keyCheck.TempHash,
+                    Regdate = keyCheck.TempRegdate,
+                    Roleid = 2,
+                };
+
+                await context.AddAsync(RegisteredUser);
+                await context.SaveChangesAsync();
+
+                context.Registries.Remove(keyCheck);
+                await context.SaveChangesAsync();
+
+                return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create(ex.Message, 400);
+            }
         }
 
         //Bejelentkezés logika
@@ -42,9 +81,7 @@ namespace AuthAPI.Services.AuthServices
 
                     if (user!.IsLoggedIn)
                     {
-
                         await Logout(context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
-
                         return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
                     }
 
@@ -52,7 +89,6 @@ namespace AuthAPI.Services.AuthServices
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
-
                     token = _tokenManager.GenerateToken(user);
 
                     user.IsLoggedIn = true;
@@ -102,7 +138,6 @@ namespace AuthAPI.Services.AuthServices
 
                     context.Remove(loggedInUser);
                     await context.SaveChangesAsync();
-
                 }
 
                 return ResponseObject.create("Sikeresen kijelentkeztél!", null!, 200);
@@ -172,9 +207,40 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
-        public Task<Object> Unregister()
+        public async Task<object> Unregister(UnregisterDTO unregisterDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await using var context = new AuthContext();
+
+                var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Email == unregisterDTO.Email);
+
+                if (requestedUser == null)
+                {
+                    return ResponseObject.create("Hibás email", 400);
+                }
+
+                var userVerify = context.LoggedInUsers.FirstOrDefault(r => r.Userid == requestedUser.Userid);
+
+                if (userVerify == null)
+                {
+                    return ResponseObject.create("Hibás email", 400);
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(unregisterDTO.Password, requestedUser!.Hash))
+                {
+                    return ResponseObject.create("Hibás jelszó!", 400);
+                }
+
+                context.Remove(requestedUser);
+                await context.SaveChangesAsync();
+
+                return ResponseObject.create("Sikeresen törölted a felhasználódat!", 200);
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create("Sikertelen felhasználó törlés!", ex.Message, 400);
+            }
         }
     }
 }

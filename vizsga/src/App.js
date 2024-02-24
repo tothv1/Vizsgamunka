@@ -24,7 +24,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Menu />} />
           <Route
-            path="/"
+            path="/gam"
             element={
               <Canvas
                 style={{

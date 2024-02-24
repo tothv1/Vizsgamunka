@@ -1,8 +1,9 @@
 ﻿using AuthAPI.Services.IServices;
+using System.Text;
 
 namespace AuthAPI.Services.PasswordStrengthChecker
 {
-    public class PasswordStrengthChecker : IPasswordStrengthChecker
+    public class PasswordManager : IPasswordManager
     {
         public bool CheckPassword(string password)
         {
@@ -37,6 +38,27 @@ namespace AuthAPI.Services.PasswordStrengthChecker
            
 
             return true;
+        }
+
+        public string generateNewPassword(int length)
+        {
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+            char[] symbols = "<>#&@{};>.:-_'+!%/=()$÷".ToCharArray();
+            char[] numbers = "0123456789".ToCharArray();
+
+            List<char[]> arrrays =
+            [
+                alpha, symbols, numbers
+            ];
+
+            for (int i = 0; i < length; i++)
+            {
+                char[] selectedAray = arrrays[random.Next(arrrays.Count)];
+                sb.Append(selectedAray[random.Next(selectedAray.Length)]);
+            }
+            return sb.ToString();
         }
     }
 }

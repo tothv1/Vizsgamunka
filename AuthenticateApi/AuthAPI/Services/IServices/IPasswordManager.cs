@@ -1,7 +1,9 @@
 ﻿namespace AuthAPI.Services.IServices
 {
-    public interface IPasswordStrengthChecker
+    public interface IPasswordManager
     {
         public bool CheckPassword(string password);
+
+        public string generateNewPassword(int length);
     }
 }
