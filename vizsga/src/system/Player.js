@@ -1,15 +1,13 @@
 import { GameLoop } from "react-game-engine";
 import { useState } from "react";
-import right from "../Assets/characters/1. karakter/KNIGHT-SPRITESHEET-right.png"
-import left from "../Assets/characters/1. karakter/KNIGHT-SPRITESHEET-left.png"
-import up from "../Assets/characters/1. karakter/KNIGHT-SPRITESHEET-up.png"
-import down from "../Assets/characters/1. karakter/KNIGHT-SPRITESHEET-down.png"
+import right from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-right.png"
+import left from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-left.png"
+import up from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-up.png"
+import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
 import { Clamp } from "../system/Math";
-
-
 
 const ID = 0;
 

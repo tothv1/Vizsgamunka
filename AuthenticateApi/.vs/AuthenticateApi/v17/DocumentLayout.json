@@ -3,98 +3,47 @@
   "WorkspaceRootPath": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\authservices\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\authservices\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\tokenmanager\\tokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\tokenmanager\\tokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\iservices\\iauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\iservices\\iauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 0,
+      "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "DockedHeight": 555,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Program.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Program.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Program.cs",
-              "RelativeToolTip": "AuthAPI\\Program.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAAAgwAIAAAAXAAAA",
+              "DocumentIndex": 0,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\Controllers\\UserController.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\UserController.cs",
+              "RelativeToolTip": "AuthAPI\\Controllers\\UserController.cs",
+              "ViewState": "AQIAAEcAAAAAAAAAAAAIwGQAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-17T14:34:47.755Z",
+              "WhenOpened": "2024-02-24T18:24:10.214Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "TokenManager.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\TokenManager\\TokenManager.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Services\\TokenManager\\TokenManager.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\TokenManager\\TokenManager.cs",
-              "RelativeToolTip": "AuthAPI\\Services\\TokenManager\\TokenManager.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAAEYAAAAPAAAA",
+              "Title": "LoggedinUser.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Models\\LoggedinUser.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\Models\\LoggedinUser.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Models\\LoggedinUser.cs",
+              "RelativeToolTip": "AuthAPI\\Models\\LoggedinUser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-17T14:30:44.407Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Controllers\\AuthController.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "AuthAPI\\Controllers\\AuthController.cs",
-              "ViewState": "AQIAACoAAAAAAAAAAAAowEoAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-17T13:44:46.003Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IAuth.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\IServices\\IAuth.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Services\\IServices\\IAuth.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\IServices\\IAuth.cs",
-              "RelativeToolTip": "AuthAPI\\Services\\IServices\\IAuth.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAxAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-17T13:28:28.79Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "RelativeToolTip": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAQwHIAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-16T18:34:41.067Z",
+              "WhenOpened": "2024-02-24T18:22:08.341Z",
               "EditorCaption": ""
             }
           ]

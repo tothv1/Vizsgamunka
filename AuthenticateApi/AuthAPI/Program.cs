@@ -8,6 +8,10 @@ using AuthAPI.Services.ConfirmationKeyGenerators;
 using AuthAPI.Services.PasswordStrengthChecker;
 using AuthAPI.Services.SendEmailService;
 using AuthAPI.Services.TokenManager;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace AuthAPI
 {
@@ -23,7 +27,7 @@ namespace AuthAPI
 
             builder.Services.AddScoped<IAuth, AuthService>();
             builder.Services.AddScoped<IConfirmationKeyGenerate, ConfirmationKeyGenerator>();
-            builder.Services.AddScoped<IPasswordStrengthChecker, PasswordStrengthChecker>();
+            builder.Services.AddScoped<IPasswordManager, PasswordManager>();
             builder.Services.AddScoped<IEmailSenderService, FropsiEmailSender>();
             builder.Services.AddScoped<ITokenManager, TokenManager>();
 
@@ -44,12 +48,34 @@ namespace AuthAPI
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
+
+            builder.Services.AddAuthentication().AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration?.GetSection("AuthSettings:JwtOptions:Secret").Value!)),
+                    ValidIssuer = builder.Configuration?.GetSection("AuthSettings:JwtOptions:Issuer").Value!,
+                    ValidAudience = builder.Configuration?.GetSection("AuthSettings:JwtOptions:Audience").Value!,
+                };
+            });
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (!app.Environment.IsDevelopment() || app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();

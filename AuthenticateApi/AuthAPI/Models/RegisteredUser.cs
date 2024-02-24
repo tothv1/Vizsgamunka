@@ -21,9 +21,7 @@ public partial class RegisteredUser
 
     public int Roleid { get; set; }
 
-    public int? ConfirmationKeyid { get; set; }
-
-    public virtual ConfirmationKey? ConfirmationKey { get; set; }
+    public string? ChangePasswordConfirmationKey { get; set; }
 
     public virtual Role Role { get; set; } = null!;
 }
