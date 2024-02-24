@@ -2,7 +2,7 @@ import { GameLoop } from "react-game-engine";
 import { useState } from "react";
 import render from "../Assets/map/tiles/ezegyfal.jpg"
 
-let ID = 1;
+let ID = 2;
 let state = "sleep"
 
 let frameDelay = 10; //every x updates, the sprite turns over to the next frame
@@ -36,7 +36,7 @@ function UpdateT (deltaTime, frameCount) {
   } 
 
   let obj = {
-    charID: ID,
+    ID: ID,
     frame: frame * width,
     render: drawing,
     x: x,
