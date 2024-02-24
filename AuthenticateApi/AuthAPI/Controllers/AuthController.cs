@@ -6,6 +6,7 @@ using AuthAPI.Services.ConfirmationKeyGenerators;
 using AuthAPI.Services.IServices;
 using AuthAPI.Services.PasswordStrengthChecker;
 using AuthAPI.Services.SendEmailService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,8 @@ namespace AuthAPI.Controllers
             }
         }
 
-        [HttpPost("logout")]
+        [Authorize(Roles = "Admin, User")]
+        [HttpPut("logout")]
         public async Task<ActionResult> LogoutUser([FromBody] string token)
         {
             try
@@ -69,7 +71,6 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpPost("confirmAccount")]
         public async Task<ActionResult> ConfirmEmailAccount([FromQuery] string confirmKey)
@@ -86,7 +87,23 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, User")]
+        [HttpDelete("unregister")]
+        public async Task<ActionResult> Unregister([FromBody] UnregisterDTO unregisterDto)
+        {
+            try
+            {
+                var response = await authService.Unregister(unregisterDto);
 
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("tempusers")]
         public async Task<ActionResult> GetTempResult()
         {

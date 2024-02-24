@@ -12,11 +12,11 @@ namespace AuthAPI.Services.AuthServices
     {
 
         private readonly ITokenManager _tokenManager;
-        private readonly IPasswordStrengthChecker _passwordStrengthChecker;
+        private readonly IPasswordManager _passwordStrengthChecker;
         private readonly IConfirmationKeyGenerate _confirmationKeyGenerate;
         private readonly IEmailSenderService _emailSenderService;
 
-        public AuthService(ITokenManager tokenManager, IPasswordStrengthChecker passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
+        public AuthService(ITokenManager tokenManager, IPasswordManager passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
         {
             this._tokenManager = tokenManager;
             this._passwordStrengthChecker = passwordStrengthChecker;
@@ -46,7 +46,6 @@ namespace AuthAPI.Services.AuthServices
                     Hash = keyCheck.TempHash,
                     Regdate = keyCheck.TempRegdate,
                     Roleid = 2,
-                    ConfirmationKeyid = null
                 };
 
                 await context.AddAsync(RegisteredUser);
@@ -208,9 +207,40 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
-        public Task<Object> Unregister()
+        public async Task<object> Unregister(UnregisterDTO unregisterDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await using var context = new AuthContext();
+
+                var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Email == unregisterDTO.Email);
+
+                if (requestedUser == null)
+                {
+                    return ResponseObject.create("Hibás email", 400);
+                }
+
+                var userVerify = context.LoggedInUsers.FirstOrDefault(r => r.Userid == requestedUser.Userid);
+
+                if (userVerify == null)
+                {
+                    return ResponseObject.create("Hibás email", 400);
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(unregisterDTO.Password, requestedUser!.Hash))
+                {
+                    return ResponseObject.create("Hibás jelszó!", 400);
+                }
+
+                context.Remove(requestedUser);
+                await context.SaveChangesAsync();
+
+                return ResponseObject.create("Sikeresen törölted a felhasználódat!", 200);
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create("Sikertelen felhasználó törlés!", ex.Message, 400);
+            }
         }
     }
 }

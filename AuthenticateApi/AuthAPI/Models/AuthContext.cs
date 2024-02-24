@@ -18,8 +18,6 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<BlacklistedToken> BlacklistedTokens { get; set; }
 
-    public virtual DbSet<ConfirmationKey> ConfirmationKeys { get; set; }
-
     public virtual DbSet<LoggedInUser> LoggedInUsers { get; set; }
 
     public virtual DbSet<RegisteredUser> RegisteredUsers { get; set; }
@@ -71,30 +69,6 @@ public partial class AuthContext : DbContext
                 .HasColumnName("token");
         });
 
-        modelBuilder.Entity<ConfirmationKey>(entity =>
-        {
-            entity.HasKey(e => e.Keyid).HasName("PRIMARY");
-
-            entity
-                .ToTable("confirmation_keys")
-                .UseCollation("utf8mb4_hungarian_ci");
-
-            entity.HasIndex(e => e.Userid, "userid");
-
-            entity.Property(e => e.Keyid)
-                .HasColumnType("int(11)")
-                .HasColumnName("keyid");
-            entity.Property(e => e.ConfirmationKey1)
-                .HasColumnType("text")
-                .HasColumnName("confirmation_key");
-            entity.Property(e => e.ExpirationTime)
-                .HasColumnType("int(11)")
-                .HasColumnName("expiration_time");
-            entity.Property(e => e.Userid)
-                .HasMaxLength(254)
-                .HasColumnName("userid");
-        });
-
         modelBuilder.Entity<LoggedInUser>(entity =>
         {
             entity.HasKey(e => e.Userid).HasName("PRIMARY");
@@ -117,8 +91,6 @@ public partial class AuthContext : DbContext
                 .ToTable("registered_users")
                 .UseCollation("utf8mb4_hungarian_ci");
 
-            entity.HasIndex(e => e.ConfirmationKeyid, "confirmation_keyid");
-
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
             entity.HasIndex(e => e.Roleid, "roleid");
@@ -130,9 +102,9 @@ public partial class AuthContext : DbContext
                 .HasColumnName("userid")
                 .UseCollation("utf8_hungarian_ci")
                 .HasCharSet("utf8");
-            entity.Property(e => e.ConfirmationKeyid)
-                .HasColumnType("int(11)")
-                .HasColumnName("confirmation_keyid");
+            entity.Property(e => e.ChangePasswordConfirmationKey)
+                .HasColumnType("text")
+                .HasColumnName("change_password_confirmation_key");
             entity.Property(e => e.Email)
                 .HasMaxLength(64)
                 .HasColumnName("email")
@@ -161,11 +133,6 @@ public partial class AuthContext : DbContext
                 .HasColumnName("username")
                 .UseCollation("utf8_hungarian_ci")
                 .HasCharSet("utf8");
-
-            entity.HasOne(d => d.ConfirmationKey).WithMany(p => p.RegisteredUsers)
-                .HasForeignKey(d => d.ConfirmationKeyid)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("registered_users_ibfk_3");
 
             entity.HasOne(d => d.Role).WithMany(p => p.RegisteredUsers)
                 .HasForeignKey(d => d.Roleid)

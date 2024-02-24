@@ -1,16 +1,18 @@
 ﻿using AuthAPI.Models;
 using AuthAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthAPI.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
     {
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("roles")]
         public async Task<ActionResult> GetAllRoles()
         {
@@ -30,25 +32,7 @@ namespace AuthAPI.Controllers
 
         }
 
-        [HttpGet("users")]
-        public async Task<ActionResult> GetAllRolesPerUser()
-        {
-            try
-            {
-                var context = new AuthContext();
-
-                var roles = await context.RegisteredUsers.Include(u => u.Role).ToListAsync();
-
-                return Ok(roles);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("assignrole/user")]
         public async Task<ActionResult> AssignRole([FromQuery] string userid, [FromQuery] int role)
         {
