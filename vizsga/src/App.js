@@ -1,9 +1,11 @@
 import React, { PureComponent, useState } from "react";
 import { GameEngine } from "react-game-engine";
 import Canvas from "./render/canvas";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Menu from "./menu";
 
-import wall from "./Assets/map/wall.png"
-import karakter from "./Assets/characters/hatternelkuli.png"
+import wall from "./Assets/map/wall.png";
+import karakter from "./Assets/characters/hatternelkuli.png";
 import slime from "./Assets/characters/slime.png";
 
 import { Update } from "./system/Player";
@@ -11,42 +13,39 @@ import { UpdateT } from "./system/StoneWall";
 import { UpdateSl } from "./system/Slime";
 import { rawMaps } from "./Assets/map/maps";
 
-
-
 export default function App() {
-  
-    //EZT RAKD FEL
-    //npm install --save react-game-engine
+  //EZT RAKD FEL
+  //npm install --save react-game-engine
 
-    const [renderOffset, setRenderOffset] = useState([]);
+  const [renderOffset, setRenderOffset] = useState([]);
 
-    return (
-      <div>
-        <Canvas style={{width:window.innerWidth, height:window.innerHeight, backgroundColor: "lightblue" }}
-        offset={{renderOffset,setRenderOffset}}
-        entities={{
-          //-- Notice that each entity has a unique id (required)
-          //-- and a renderer property (optional). If no renderer
-          //-- is supplied with the entity - it won't get displayed.
-          terrain: {update:UpdateT, rawMap:rawMaps},
-          player: {update:Update},
-          slime: {update:UpdateSl }
-        }}/>
-      </div>
+  return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Menu />} />
+          <Route
+            path="/gam"
+            element={
+              <Canvas
+                style={{
+                  width: window.innerWidth,
+                  height: window.innerHeight,
+                  backgroundColor: "lightblue",
+                }}
+                offset={{ renderOffset, setRenderOffset }}
+                entities={{
+                  //-- Notice that each entity has a unique id (required)
+                  //-- and a renderer property (optional). If no renderer
+                  //-- is supplied with the entity - it won't get displayed.
+                  terrain: { update: UpdateT, rawMap: rawMaps },
+                  player: { update: Update },
+                  slime: { update: UpdateSl },
+                }}
+              />
+            }
+          />
+        </Routes>
+      </Router>
 
-      
-
-      /*<GameEngine
-        style={{ width: rawMap[0].length*64, height: rawMap.length*64, backgroundColor: "lightblue" }}
-        systems={[MoveBox]}
-        entities={{
-          //-- Notice that each entity has a unique id (required)
-          //-- and a renderer property (optional). If no renderer
-          //-- is supplied with the entity - it won't get displayed.
-          wall: { x: 0, y: 0, renderer: <Wall map={rawMap}/>},
-          box1: { x: 200,  y: 200, windowWidth:rawMap.length*64, windowHeight:rawMap[0].length*64, renderer: <Box  />}
-        }}>
-
-      </GameEngine>*/
-    );
+  );
 }
