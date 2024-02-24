@@ -35,7 +35,7 @@
     "ContainingType": "AuthAPI.Controllers.AuthController",
     "Method": "LogoutUser",
     "RelativePath": "Auth/logout",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -74,6 +74,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "AuthAPI.Controllers.AuthController",
+    "Method": "Unregister",
+    "RelativePath": "Auth/unregister",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "unregisterDto",
+        "Type": "AuthAPI.DTOs.UnregisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "AuthAPI.Controllers.RoleController",
     "Method": "AssignRole",
     "RelativePath": "Role/assignrole/user",
@@ -105,13 +121,35 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "AuthAPI.Controllers.RoleController",
-    "Method": "GetAllRolesPerUser",
-    "RelativePath": "Role/users",
-    "HttpMethod": "GET",
+    "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "ResetUserPassword",
+    "RelativePath": "User/resetPassword",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "key",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "ResetPasswordRequest",
+    "RelativePath": "User/resetPasswordRequest",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
