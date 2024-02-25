@@ -7,8 +7,8 @@
       "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\models\\loggedinuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\dtos\\changeemaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\dtos\\changeemaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +18,21 @@
       "DocumentGroups": [
         {
           "DockedHeight": 555,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChangeEmailDTO.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\DTOs\\ChangeEmailDTO.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\DTOs\\ChangeEmailDTO.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\DTOs\\ChangeEmailDTO.cs",
+              "RelativeToolTip": "AuthAPI\\DTOs\\ChangeEmailDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-25T17:21:46.702Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,22 +41,9 @@
               "RelativeDocumentMoniker": "AuthAPI\\Controllers\\UserController.cs",
               "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\UserController.cs",
               "RelativeToolTip": "AuthAPI\\Controllers\\UserController.cs",
-              "ViewState": "AQIAAEcAAAAAAAAAAAAIwGQAAAAJAAAA",
+              "ViewState": "AQIAAJYAAAAAAAAAAAAYwMUAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-24T18:24:10.214Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LoggedinUser.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Models\\LoggedinUser.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Models\\LoggedinUser.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Models\\LoggedinUser.cs",
-              "RelativeToolTip": "AuthAPI\\Models\\LoggedinUser.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-24T18:22:08.341Z",
               "EditorCaption": ""
             }
           ]

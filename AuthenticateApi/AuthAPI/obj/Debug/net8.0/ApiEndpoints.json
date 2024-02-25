@@ -122,6 +122,22 @@
   },
   {
     "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "ChangeUserPassword",
+    "RelativePath": "User/changePassword",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changePasswordDTO",
+        "Type": "AuthAPI.DTOs.ChangePasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.UserController",
     "Method": "ResetUserPassword",
     "RelativePath": "User/resetPassword",
     "HttpMethod": "PUT",
