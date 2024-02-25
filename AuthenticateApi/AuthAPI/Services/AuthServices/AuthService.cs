@@ -74,7 +74,7 @@ namespace AuthAPI.Services.AuthServices
                 {
                     var user = context.RegisteredUsers.FirstOrDefault(user => user.Username == loginDto.UserName);
 
-                    if (user == null)
+                    if (user!.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
@@ -85,10 +85,6 @@ namespace AuthAPI.Services.AuthServices
                         return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
                     }
 
-                    if (user.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
-                    {
-                        return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
-                    }
                     token = _tokenManager.GenerateToken(user);
 
                     user.IsLoggedIn = true;
