@@ -3,6 +3,8 @@ import { GameEngine } from "react-game-engine";
 import Canvas from "./render/canvas";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Menu from "./menu";
+import AuthPage from "./AuthPage";
+import Login from "./login";
 
 import wall from "./Assets/map/wall.png";
 import karakter from "./Assets/characters/hatternelkuli.png";
@@ -13,6 +15,7 @@ import { UpdateT } from "./system/StoneWall";
 import { UpdateSl } from "./system/Slime";
 import { rawMaps } from "./Assets/map/maps";
 
+
 export default function App() {
   //EZT RAKD FEL
   //npm install --save react-game-engine
@@ -22,9 +25,11 @@ export default function App() {
   return (
       <Router>
         <Routes>
-          <Route path="/" element={<Menu />} />
+          <Route path="/" element={<AuthPage />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/login" element={<Login />} />
           <Route
-            path="/gam"
+            path="/game"
             element={
               <Canvas
                 style={{
@@ -33,14 +38,6 @@ export default function App() {
                   backgroundColor: "lightblue",
                 }}
                 offset={{ renderOffset, setRenderOffset }}
-                entities={{
-                  //-- Notice that each entity has a unique id (required)
-                  //-- and a renderer property (optional). If no renderer
-                  //-- is supplied with the entity - it won't get displayed.
-                  terrain: { update: UpdateT, rawMap: rawMaps },
-                  player: { update: Update },
-                  slime: { update: UpdateSl },
-                }}
               />
             }
           />
