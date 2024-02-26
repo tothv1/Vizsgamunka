@@ -108,7 +108,7 @@ namespace AuthAPI.Controllers
 
                 if (selectedUser == null)
                 {
-                    return Ok("A megadott kód helytelen!");
+                    return BadRequest("A megadott kód helytelen!");
                 }
 
                 string resetedPassword = passwordManager.generateNewPassword(16);
