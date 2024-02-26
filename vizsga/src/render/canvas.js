@@ -1,34 +1,30 @@
 import React, { useRef, useEffect } from 'react'
 import { rawMaps } from '../Assets/map/maps';
 
-import { UpdateSl } from '../system/Slime';
-import { UpdateT } from '../system/StoneWall';
-import { Update } from '../system/Player';
+import { Slime } from '../system/Slime';
+import { Wall } from '../system/StoneWall';
+import { Player } from '../system/Player';
 import '../system/Math';
 import { Clamp, Normalise } from '../system/Math';
 
-let renderOffset = [0,0]
+let renderOffset = [0, 0]
 
 const Canvas = props => {
 
 
-  let entities = {};
+  let entities = [];
 
-  entities.terrain={
-    rawmap:rawMaps,
-    update:UpdateT
-  }
-
-  entities.player={
-    update:Update
-  }
-
-  entities.slime={
-    update:UpdateSl
-  }
+  entities.projectileList = [];
+  entities.tileList = [];
+  entities.entityList = [];
+  entities.entityList.push(Slime);
 
 
-  console.log(entities)
+
+
+  const playerRef = Player;
+  playerRef.mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64]
+  entities.entityList.push(playerRef);
 
   const canvasRef = useRef(null)
   let frameCount = 0
@@ -39,19 +35,37 @@ const Canvas = props => {
 
   }
 
-  const draw = async (ctx, object,offset) => {
+  const draw = async (ctx, object, offset) => {
 
-    //console.log(object)
-
-    ctx.globalCompositeOperation =     "source-over"
-
-    ctx.drawImage(object.render, object.frame, 0, object.w, object.h, offset[0], offset[1], object.w, object.h);
+    ctx.globalCompositeOperation = "source-over"
 
 
-
-    
+    ctx.drawImage(object.drawing, object.frame, 0, object.width, object.height, object.offset[0], object.offset[1], object.width, object.height);
 
   }
+
+  const rawmap = rawMaps[0];
+
+  console.log(rawmap);
+
+  for (let i = 0; i < rawmap.length; i++) {
+    for (let j = 0; j < rawmap[i].length; j++) {
+      if (rawmap[i][j] === 1) {
+
+
+        const temp = Wall;
+        console.log(temp)
+        temp.x = j * 64;
+        temp.y = i * 64;
+        console.log(temp)
+        entities.tileList.push(temp)
+      }
+    }
+  }
+  console.log(entities)
+  console.log(playerRef)
+
+
 
   useEffect(() => {
 
@@ -71,53 +85,30 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-      const map = entities.terrain;
-      let player = entities.player.update(deltaTime,frameCount)
-      
+      entities.entityList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        
+      });
 
-      //const slime = entities.slime;
+      entities.tileList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        item.offset = [item.x + renderOffset[0], item.y+ renderOffset[1]];
+        draw(context,item,renderOffset)
+      });
 
-      const rawmap = map.rawmap[0];
 
-      player.mapsize=[rawmap[0].length*64,rawmap.length*64];
-    
 
-      for (let i = 0; i < rawmap.length; i++) {
-        for (let j = 0; j < rawmap[i].length; j++) {
-          if (rawmap[i][j] === 1) {
+      renderOffset = [Clamp(playerRef.x - window.innerWidth / 2, 0, (rawmap[0].length * 64) - window.innerWidth), Clamp(playerRef.y - window.innerHeight / 2, 0, (rawmap.length * 64) - window.innerHeight)]
+      renderOffset = [-renderOffset[0], -renderOffset[1]]
 
-            let obj = UpdateT(deltaTime,frameCount);
-            obj.x = j * 64;
-            obj.y = i * 64;
-            obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
+      //console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
+      //console.log(`player\nx: ${player.x}\ny: ${player.y}`)
 
-            draw(context, obj,obj.offset)
-          }
-          if (rawmap[i][j] === 2) {
+      let playerrenderpos = [playerRef.x + renderOffset[0], playerRef.y + renderOffset[1]]
 
-            let obj = UpdateSl();
-            obj.x = j * 64;
-            obj.y = i * 64;
-            obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
+      //console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
 
-            draw(context, obj,obj.offset)
-          }
-        }
-      }
-
-      
-
-      renderOffset=[Clamp(player.x-window.innerWidth/2,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y-window.innerHeight/2,0,(rawmap.length*64)-window.innerHeight)]
-      renderOffset=[-renderOffset[0],-renderOffset[1]]
-
-      console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
-      console.log(`player\nx: ${player.x}\ny: ${player.y}`)
-
-      let playerrenderpos = [player.x+renderOffset[0],player.y+renderOffset[1]]
-
-      console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
-
-      draw(context, player,[playerrenderpos[0],playerrenderpos[1]]);
+      draw(context, playerRef, [playerrenderpos[0], playerrenderpos[1]]);
 
       lastUpdateTime = window.performance.now();
       frameCount++

@@ -9,29 +9,40 @@ import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
 import { Clamp } from "../system/Math";
 
-const ID = 0;
+const Player = {
+  ID : 0,
 
-let frameDelay = 20; //every x updates, the sprite turns over to the next frame
-let frameLength = 10; // frames in the spritesheet
-let state = "idle";
-let direction = "right";
-let mirror = false;
+  frameDelay : 20, //every x updates, the sprite turns over to the next frame
+  frameLength : 10, // frames in the spritesheet
+  state : "idle",
+  direction : "none",
 
-let x = 0;
-let y = 0;
+  x : 0,
+  y : 0,
 
-let mapsize = [];
+  mapsize : [0,0],
+  offset : [0,0],
 
-let width = 96;
-const height = 64;
+  width : 39,
+  height : 64,
+  
+  speed : 300,
+  health : 100,
 
-const speed = 300;
-let health = 100;
+  UpState : false,
+  DownState : false,
+  RightState : false,
+  LeftState : false,
 
-let UpState = false;
-let DownState = false;
-let RightState = false;
-let LeftState = false;
+  frame : 0,
+
+  drawing : new Image(),
+  update:Update
+
+}
+
+
+
 
 document.addEventListener("keydown", keyhandler);
 document.addEventListener("keyup", keyhandler);
@@ -39,116 +50,119 @@ document.addEventListener("keyup", keyhandler);
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
   if (e.type === "keydown") {
-    if (e.key === "w") 
-    {
-      UpState = true;
-      direction="up"
+    if (e.key === "w") {
+      this.UpState = true;
     }
     if (e.key === "s") {
-      DownState = true;
-      direction="down"
+      this.DownState = true;
     }
     if (e.key === "a") {
-      LeftState = true;
-      direction = "left";
-
+      this.LeftState = true;
     }
     if (e.key === "d") {
-      RightState = true;
-      direction = "right";
-
+      this.RightState = true;
+      console.log(this)
     }
   }
+
+  // felengedésen kinyitja az irány lock-ot, rendereléshez kell
   if (e.type === "keyup") {
-    if (e.key === "w") UpState = false;
-    if (e.key === "s") DownState = false;
-    if (e.key === "a") LeftState = false;
-    if (e.key === "d") RightState = false;
+    if (e.key === "w") {
+      this.UpState = false;
+      if (this.direction === "up") this.direction = "none";
+    }
+    if (e.key === "s") {
+      this.DownState = false;
+      if (this.direction === "down") this.direction = "none";
+    }
+    if (e.key === "a") {
+      this.LeftState = false;
+      if (this.direction === "left") this.direction = "none";
+    }
+    if (e.key === "d") {
+      this.RightState = false;
+      if (this.direction === "right") this.direction = "none";
+    }
   }
 }
 
-let frame = 0;
-
-let drawing = new Image();
 
 function Update(deltaTime, frameCount) {
 
-  let tempRender;
-
-
-
-  if (state==="moving"){
-    if (direction==="left"){
-      drawing.src=left;
-      width=39;
+  if (this.state === "moving") {
+    if (this.direction === "left") {
+      this.drawing.src = left;
+      this.width = 39;
     }
-    if (direction==="right"){
-      drawing.src=right;
-      width=39;
-    }    
-    if (direction==="up"){
-      drawing.src=up;
-      width=53;
-    }    
-    if (direction==="down"){
-      drawing.src=down;
-      width=53;
+    if (this.direction === "right") {
+      this.drawing.src = right;
+      this.width = 39;
+    }
+    if (this.direction === "up") {
+      this.drawing.src = up;
+      this.width = 53;
+    }
+    if (this.direction === "down") {
+      this.drawing.src = down;
+      this.width = 53;
     }
 
-    if (frameCount % frameDelay === 0) {
-      frame++;
+    if (this.frameCount % this.frameDelay === 0) {
+      this.frame++;
     }
-    if (frame >= frameLength) {
-      frame = 0
+    if (this.frame >= this.frameLength) {
+      this.frame = 0
     }
-
-
-  }else{
-    frame=0;
+  } else {
+    this.frame = 0;
     //drawing.src=idle;
     //width=64;
   }
 
-  frameLength=drawing.width/width;
+  this.frameLength = this.drawing.width / this.width;
 
-  if (!UpState && !DownState && !LeftState && !RightState) {
+  if (!this.UpState && !this.DownState && !this.LeftState && !this.RightState) {
 
-    state = "idle";
+    this.state = "idle";
 
   } else {
-    state = "moving";
+    this.state = "moving";
   }
 
-  if (UpState) {
-    y -= speed * deltaTime;
-  }
-  if (DownState) {
-    y += speed * deltaTime;
-  }
-  if (RightState) {
-    x += speed * deltaTime;
-    mirror = false;
-  }
-  if (LeftState) {
-    x -= speed * deltaTime;
-    mirror = true;
-  }
-  x=Clamp(x,0,mapsize[0]);
-  y=Clamp(y,0,mapsize[1]);
+  //irány state, lezárja az irányt
 
-
-
-  let obj = {
-    ID: ID,
-    frame: frame * width,
-    render: drawing,
-    x: x,
-    y: y,
-    w: width,
-    h: height
+  if (this.UpState) {
+    this.y -= this.speed * deltaTime;
+    if (this.direction === "none") {
+      this.direction = "up";
+    }
   }
 
-  return obj;
+  if (this.DownState) {
+    this.y += this.speed * deltaTime;
+    if (this.direction === "none") {
+      this.direction = "down";
+    }
+  }
+
+  if (this.RightState) {
+    this.x += this.speed * deltaTime;
+    if (this.direction === "none") {
+      this.direction = "right";
+    }
+  }
+
+  if (this.LeftState) {
+    this.x -= this.speed * deltaTime;
+    if (this.direction === "none") {
+      this.direction = "left";
+    }
+  }
+
+
+  this.x = Clamp(this.x, 0, this.mapsize[0]);
+  this.y = Clamp(this.y, 0, this.mapsize[1]);
+
 };
 
-export { Update };
+export { Player };

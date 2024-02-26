@@ -2,50 +2,60 @@ import { GameLoop } from "react-game-engine";
 import { useState } from "react";
 import render from "../Assets/map/tiles/ezegyfal.jpg"
 
-let ID = 2;
-let state = "sleep"
+const getImg = () =>{
 
-let frameDelay = 10; //every x updates, the sprite turns over to the next frame
-let frameLength = 1; // frames in the spritesheet
-let mirror = false;
-
-let x=0;
-let y=0;
-
-const width = 64;
-const height = 64;
-
-let frame = 0;
+  var temp = new Image();
+  temp.src=render;
+  return temp;
+}
 
 
-let drawing = new Image();
-drawing.src = render;
 
-function UpdateT (deltaTime, frameCount) {
+const Wall = {
 
-  frameLength=drawing.width/width;
+  ID : 1,
+  state : "sleep",
+
+  frameDelay : 10, //every x updates, the sprite turns over to the next frame
+  frameLength : 1, // frames in the spritesheet
+  mirror : false,
+
+  x:0,
+  y:0,
+
+  offset:[],
+  
+  width : 64,
+  height : 64,
+  
+  frame : 0,
+  
+  
+  drawing : getImg(),
+  
+  update:Update,
 
 
-  if (frameLength > 1) {
-    if (frameCount % frameDelay === 0) {
-      frame++;
+}
+
+
+
+
+
+function Update (deltaTime, frameCount) {
+
+  this.frameLength=this.drawing.width/this.width;
+
+
+  if (this.frameLength > 1) {
+    if (this.frameCount % this.frameDelay === 0) {
+      this.frame++;
     }
-    if (frame >= frameLength) {
-      frame = 0
+    if (this.frame >= this.frameLength) {
+      this.frame = 0
     }
   } 
 
-  let obj = {
-    ID: ID,
-    frame: frame * width,
-    render: drawing,
-    x: x,
-    y: y,
-    w: width,
-    h: height
-  }
-
-  return obj;
 };
 
-export { UpdateT };
+export { Wall };

@@ -3,52 +3,47 @@ import { useState } from "react";
 import rightIdle from "../Assets/characters/slime.png"
 import leftIdle from "../Assets/characters/slime.png"
 
-const ID = 1;
+function Update(deltaTime, frameCount) {
 
-let frameDelay = 10; //every x updates, the sprite turns over to the next frame
-let frameLength = 8; // frames in the spritesheet
-let state = "idle";
-let mirror = false;
+  const ref = this;
 
-let x=0;
-let y=0;
+  ref.frameLength = ref.drawing.width / ref.width;
 
-const width = 64;
-const height = 64;
-
-const speed = 300;
-let health = 100;
-
-let frame = 0;
-
-let drawing = new Image();
-drawing.src = rightIdle;
-
-function UpdateSl (deltaTime,frameCount) {
-
-  frameLength=drawing.width/width;
-
-  if (frameLength > 1) {
-    if (frameCount % frameDelay === 0) {
-      frame++;
+  if (ref.frameLength > 1) {
+    if (ref.frameCount % ref.frameDelay === 0) {
+      ref.frame++;
     }
-    if (frame >= frameLength) {
-      frame = 0
+    if (ref.frame >= ref.frameLength) {
+      ref.frame = 0
     }
   }
 
-
-  let obj = {
-    ID: ID,
-    frame: frame * width,
-    render: drawing,
-    x: x,
-    y: y,
-    w: width,
-    h: height
-  }
-
-  return obj;
 };
 
-export { UpdateSl };
+const Slime = {
+  ID : 1,
+  frameDelay : 10, //every x updates, the sprite turns over to the next frame
+  frameLength : 8, // frames in the spritesheet
+  state : "idle",
+  mirror : false,
+
+  x : 0,
+  y : 0,
+
+  width : 64,
+  height : 64,
+
+  speed : 300,
+  health : 100,
+
+  frame : 0,
+
+  drawing : new Image().src=rightIdle,
+  update:Update
+}
+
+
+
+
+
+export { Slime };

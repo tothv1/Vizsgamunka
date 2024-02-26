@@ -20,7 +20,6 @@ export default function App() {
   //EZT RAKD FEL
   //npm install --save react-game-engine
 
-  const [renderOffset, setRenderOffset] = useState([]);
 
   return (
       <Router>
@@ -37,7 +36,6 @@ export default function App() {
                   height: window.innerHeight,
                   backgroundColor: "lightblue",
                 }}
-                offset={{ renderOffset, setRenderOffset }}
               />
             }
           />
