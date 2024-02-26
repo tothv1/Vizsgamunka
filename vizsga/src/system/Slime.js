@@ -2,23 +2,34 @@ import { GameLoop } from "react-game-engine";
 import { useState } from "react";
 import rightIdle from "../Assets/characters/slime.png"
 import leftIdle from "../Assets/characters/slime.png"
+import { LerpNum } from "./Math";
 
-function Update(deltaTime, frameCount) {
+function Update(deltaTime, frameCount,target) {
 
-  const ref = this;
 
-  ref.frameLength = ref.drawing.width / ref.width;
 
-  if (ref.frameLength > 1) {
-    if (ref.frameCount % ref.frameDelay === 0) {
-      ref.frame++;
+
+  this.frameLength = this.drawing.width / this.width;
+
+  if (this.frameLength > 1) {
+    if (frameCount % this.frameDelay === 0) {
+      this.frame++;
     }
-    if (ref.frame >= ref.frameLength) {
-      ref.frame = 0
+    if (this.frame >= this.frameLength) {
+      this.frame = 0
     }
   }
 
+  this.x=LerpNum(this.x,target.x,1*deltaTime);
+  this.y=LerpNum(this.y,target.y,1*deltaTime);
 };
+
+const getImg = () =>{
+
+  var temp = new Image();
+  temp.src=rightIdle;
+  return temp;
+}
 
 const Slime = {
   ID : 1,
@@ -38,7 +49,7 @@ const Slime = {
 
   frame : 0,
 
-  drawing : new Image().src=rightIdle,
+  drawing : getImg(),
   update:Update
 }
 

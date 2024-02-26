@@ -11,10 +11,11 @@ const getImg = () =>{
 
 
 
+
 const Wall = {
 
   ID : 1,
-  state : "sleep",
+  state : "Sleep",
 
   frameDelay : 10, //every x updates, the sprite turns over to the next frame
   frameLength : 1, // frames in the spritesheet
@@ -35,9 +36,7 @@ const Wall = {
   
   update:Update,
 
-
 }
-
 
 
 

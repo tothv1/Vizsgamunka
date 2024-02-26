@@ -20,6 +20,9 @@ const Player = {
   x : 0,
   y : 0,
 
+  renderx:0,
+  rendery:0,
+
   mapsize : [0,0],
   offset : [0,0],
 
@@ -51,37 +54,40 @@ document.addEventListener("keyup", keyhandler);
 function keyhandler(e) {
   if (e.type === "keydown") {
     if (e.key === "w") {
-      this.UpState = true;
+
+      Player.UpState = true;
     }
     if (e.key === "s") {
-      this.DownState = true;
+
+      Player.DownState = true;
     }
     if (e.key === "a") {
-      this.LeftState = true;
+
+      Player.LeftState = true;
     }
     if (e.key === "d") {
-      this.RightState = true;
-      console.log(this)
+
+      Player.RightState = true;
     }
   }
 
   // felengedésen kinyitja az irány lock-ot, rendereléshez kell
   if (e.type === "keyup") {
     if (e.key === "w") {
-      this.UpState = false;
-      if (this.direction === "up") this.direction = "none";
+      Player.UpState = false;
+      if (Player.direction === "up") Player.direction = "none";
     }
     if (e.key === "s") {
-      this.DownState = false;
-      if (this.direction === "down") this.direction = "none";
+      Player.DownState = false;
+      if (Player.direction === "down") Player.direction = "none";
     }
     if (e.key === "a") {
-      this.LeftState = false;
-      if (this.direction === "left") this.direction = "none";
+      Player.LeftState = false;
+      if (Player.direction === "left") Player.direction = "none";
     }
     if (e.key === "d") {
-      this.RightState = false;
-      if (this.direction === "right") this.direction = "none";
+      Player.RightState = false;
+      if (Player.direction === "right") Player.direction = "none";
     }
   }
 }
@@ -107,7 +113,7 @@ function Update(deltaTime, frameCount) {
       this.width = 53;
     }
 
-    if (this.frameCount % this.frameDelay === 0) {
+    if (frameCount % this.frameDelay === 0) {
       this.frame++;
     }
     if (this.frame >= this.frameLength) {
@@ -160,8 +166,8 @@ function Update(deltaTime, frameCount) {
   }
 
 
-  this.x = Clamp(this.x, 0, this.mapsize[0]);
-  this.y = Clamp(this.y, 0, this.mapsize[1]);
+  this.x = Clamp(this.x, 0, this.mapsize[0]-this.width);
+  this.y = Clamp(this.y, 0, this.mapsize[1]-this.height);
 
 };
 
