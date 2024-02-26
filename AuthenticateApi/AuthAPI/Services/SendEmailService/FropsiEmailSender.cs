@@ -1,4 +1,5 @@
 ﻿using AuthAPI.Services.IServices;
+using Google.Protobuf.WellKnownTypes;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -7,6 +8,13 @@ namespace AuthAPI.Services.SendEmailService
 {
     public class FropsiEmailSender : IEmailSenderService
     {
+
+        private IConfiguration _configuration;
+
+        public FropsiEmailSender(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public bool isValidEmail(string email)
         {
@@ -22,25 +30,22 @@ namespace AuthAPI.Services.SendEmailService
 
         public bool sendMailWithFropsiEmailServer(string mailAddressTo, string subject, string body)
         {
-            /*IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
 
-           string host = configuration.GetSection("SendEmailSettings:Host").ToString()!;
-           string password = configuration.GetSection("SendEmailSettings:Password").ToString()!;*/
+           string host = _configuration.GetSection("SendEmailSettings:Host").Value!;
+           string username = _configuration.GetSection("SendEmailSettings:Username").Value!;
+           string password = _configuration.GetSection("SendEmailSettings:Password").Value!;
 
             MailMessage mail = new MailMessage();
 
-            SmtpClient smtpServer = new SmtpClient("smtp.forpsi.com");
+            SmtpClient smtpServer = new SmtpClient(host);
 
             try
             {
-                mail.From = new MailAddress("postmaster@vitya-dev.hu");
+                mail.From = new MailAddress(username);
                 mail.To.Add(mailAddressTo);
                 mail.Subject = subject;
                 mail.Body = body;
-                smtpServer.Credentials = new NetworkCredential("postmaster@vitya-dev.hu", "dk-Xn2Qurq");
+                smtpServer.Credentials = new NetworkCredential(username, password);
 
                 smtpServer.Port = 587;
                 smtpServer.EnableSsl = true;

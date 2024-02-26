@@ -20,14 +20,14 @@ namespace GameController.Controllers
         {
             try
             {
-                using var userlist = new GameContext();
-                var users = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.Userachievements);
+                using var context = new GameContext();
+                var users = context.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.AchievementsConnects);
 
                 return Ok(users.ToList());
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+                return BadRequest("Sikertelen lekérdezés: " +ex.Message);
 
             }
         }
@@ -39,7 +39,7 @@ namespace GameController.Controllers
             try
             {
                 using var userlist = new GameContext();
-                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.Userachievements).First(s => s.Id == id);
+                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s=> s.AchievementsConnects).First(s => s.Id == id);
 
                 if (user == null)
                 {
@@ -69,7 +69,7 @@ namespace GameController.Controllers
                     Regdate = DateTime.UtcNow,
                     Permission = context.Permissions.First(s => s.PermissionName == "User"),
                     UserStats = userDTO.UserStats,
-                    Userachievements = []
+                    AchievementsConnects = []
 
                 };
 
