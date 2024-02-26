@@ -176,6 +176,11 @@ namespace AuthAPI.Controllers
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changeEmailDTO.OldEmail);
 
+                if(selectedUser == null)
+                {
+                    return BadRequest("Hibás a megadott email!");
+                }
+
                 var hashVerify = BCrypt.Net.BCrypt.Verify(changeEmailDTO.Password, selectedUser!.Hash);
 
                 if (!hashVerify)
@@ -198,7 +203,7 @@ namespace AuthAPI.Controllers
                 context.Update(selectedUser);
                 context.SaveChanges();
 
-                return Ok("A jelszavad megváltozott!");
+                return Ok("Az emailed megváltozott!");
             }
             catch (Exception ex)
             {
