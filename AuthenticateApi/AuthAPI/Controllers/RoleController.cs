@@ -1,9 +1,11 @@
 ﻿using AuthAPI.Models;
 using AuthAPI.Services;
+using GameController.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SyntaxBackEnd.Models;
 
 namespace AuthAPI.Controllers
 {
@@ -38,6 +40,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
+                var gameContext = new GameContext();
                 await using var context = new AuthContext();
 
                 var user = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Userid == userid);
@@ -58,6 +61,13 @@ namespace AuthAPI.Controllers
                 {
                     return Ok(ResponseObject.create("Már rendelkezik a kért szerepkörrel!", 400));
                 }
+
+                var finalGameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email)!;
+
+                finalGameUser.Permission = gameContext.Permissions.FirstOrDefault(r => r.PermissionName == requestedRole.RoleName)!;
+
+                gameContext.Update(finalGameUser);
+                await gameContext.SaveChangesAsync();
 
                 user.Role = requestedRole;
                 context.Update(user);

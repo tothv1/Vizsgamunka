@@ -57,14 +57,13 @@ namespace AuthAPI.Services.AuthServices
                 };
 
                 await context.AddAsync(RegisteredUser);
-                await context.SaveChangesAsync();
-
                 context.Registries.Remove(keyCheck);
                 await context.SaveChangesAsync();
 
-                var gameContext = new GameController.Controllers.GameController();
+                var gameController = new GameController.Controllers.GameController();
+                var gameContext = new GameContext();
 
-                var userStat = new SyntaxBackEnd.Models.Userstat()
+                var userStat = new Userstat()
                 {
                     UserId = 0,
                     Kills = 0,
@@ -76,10 +75,10 @@ namespace AuthAPI.Services.AuthServices
                     Username = keyCheck.TempUsername,
                     Email = keyCheck.TempEmail,
                     Regdate = keyCheck.TempRegdate,
-                    UserStats = userStat
+                    UserStats = userStat,
                 };
 
-                await gameContext.AddUser(gameUser);
+                await gameController.AddUser(gameUser);
 
                 return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
 
@@ -127,6 +126,7 @@ namespace AuthAPI.Services.AuthServices
                         });
                     }
                     var gameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email);
+                    
                     gameUser!.Lastlogin = DateTime.Now;
                     gameContext.Update(gameUser);
                     gameContext.SaveChanges();
@@ -239,6 +239,7 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+        //Unregister logika
         public async Task<object> Unregister(UnregisterDTO unregisterDTO)
         {
             try
@@ -252,17 +253,20 @@ namespace AuthAPI.Services.AuthServices
                     return ResponseObject.create("Hibás email", 400);
                 }
 
-                var userVerify = context.LoggedInUsers.FirstOrDefault(r => r.Userid == requestedUser.Userid);
-
-                if (userVerify == null)
-                {
-                    return ResponseObject.create("Hibás email", 400);
-                }
-
                 if (!BCrypt.Net.BCrypt.Verify(unregisterDTO.Password, requestedUser!.Hash))
                 {
                     return ResponseObject.create("Hibás jelszó!", 400);
                 }
+
+                var gameContext = new GameContext();
+
+                var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
+
+                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserId == requestedGameUser!.UserStatsId);
+
+                gameContext!.Remove(requestedStat);
+                gameContext!.Remove(requestedGameUser);
+                gameContext.SaveChanges();
 
                 context.Remove(requestedUser);
                 await context.SaveChangesAsync();
