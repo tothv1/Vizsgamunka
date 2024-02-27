@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using SyntaxBackEnd.Models;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.Json.Nodes;
@@ -95,6 +96,7 @@ namespace AuthAPI.Services.AuthServices
             try
             {
                 var token = "";
+                var gameContext = new GameContext();
 
                 await using (var context = new AuthContext())
                 {
@@ -112,7 +114,6 @@ namespace AuthAPI.Services.AuthServices
                     {
                         var oldToken = selectedLoggedInUser.Token;
                         _tokenManager.blackListToken(oldToken);
-
                         selectedLoggedInUser.Token = token;
                         context.Update(selectedLoggedInUser);
                     } 
@@ -125,6 +126,11 @@ namespace AuthAPI.Services.AuthServices
                             Token = token
                         });
                     }
+                    var gameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email);
+                    gameUser!.Lastlogin = DateTime.Now;
+                    gameContext.Update(gameUser);
+                    gameContext.SaveChanges();
+
                     await context.SaveChangesAsync();
 
                 }
