@@ -70,7 +70,7 @@ namespace SyntaxBackEnd.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("addAchievement/{userid}/{achiId}")]
-        public ActionResult AddAchievementToUser(int userid, int achiId)
+        public ActionResult AddAchievementToUser(string userid, int achiId)
         {
             try
             {

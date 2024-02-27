@@ -35,7 +35,7 @@
     "Parameters": [
       {
         "Name": "userid",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
       },
       {
@@ -98,8 +98,24 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "ResetAccount",
+    "RelativePath": "Game/resetAccount",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userStatId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace SyntaxBackEnd.Models;
 
 public partial class Userachievement
 {
-    public int UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
     public int AchievementId { get; set; }
 
@@ -15,5 +14,6 @@ public partial class Userachievement
     public DateTime AchievementDate { get; set; }
 
     public virtual AchievementsConnect AchiConnect { get; set; } = null!;
+
     public virtual Achievement Achievement { get; set; } = null!;
 }

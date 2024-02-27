@@ -8,11 +8,10 @@ public partial class AchievementsConnect
 {
     public int AchiId { get; set; }
 
-    public int Userid { get; set; }
+    public string Userid { get; set; } = null!;
 
     [JsonIgnore]
     public virtual User User { get; set; } = null!;
 
-    [JsonIgnore]
     public virtual ICollection<Userachievement> Userachievements { get; set; } = new List<Userachievement>();
 }
