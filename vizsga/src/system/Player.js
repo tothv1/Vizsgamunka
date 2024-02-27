@@ -53,7 +53,7 @@ const Player = {
 document.addEventListener("keydown", keyhandler);
 document.addEventListener("keyup", keyhandler);
 
-document.addEventListener("mousedown",shoot);
+document.addEventListener("click",shoot);
 
 function shoot(e){
   let entities = Player.entityRef;
