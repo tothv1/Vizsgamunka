@@ -1,0 +1,9 @@
+Ami kell még GAME:
+- GetUserStats -GET
+- SetUserStats -PUT
+- GetUserAchievements -GET
+- SetUserAchievements -PUT
+- ResetAccount -PUT
+
+Ami kell még AUTH:
+- ChangeUsername -PUT

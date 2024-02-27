@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj": {}
+    "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj": {}
   },
   "projects": {
-    "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj": {
+    "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj",
+        "projectUniqueName": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj",
         "projectName": "AuthAPI",
-        "projectPath": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj",
-        "packagesPath": "C:\\Users\\Viktor\\.nuget\\packages\\",
-        "outputPath": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\obj\\",
+        "projectPath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\AuthAPI.csproj",
+        "packagesPath": "C:\\Users\\tviktor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Viktor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tviktor\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,18 +32,17 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj": {
+                "projectPath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -82,7 +81,7 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[6.5.0, )"
             },
             "Swashbuckle.AspNetCore.Filters": {
               "target": "Package",
@@ -112,7 +111,114 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
+        "projectName": "SyntaxBackEnd",
+        "projectPath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
+        "packagesPath": "C:\\Users\\tviktor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\tviktor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.10.4, )"
+            },
+            "Azure.Security.KeyVault.Certificates": {
+              "target": "Package",
+              "version": "[4.5.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.19.5, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.0-beta.2, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

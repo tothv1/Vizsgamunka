@@ -10,7 +10,6 @@ namespace GameController.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class GameController : ControllerBase
     {
 
@@ -56,7 +55,7 @@ namespace GameController.Controllers
         }
 
         [HttpPost("addUser")]
-        public ActionResult AddUser(UserDTO userDTO)
+        public async Task<ActionResult> AddUser(UserDTO userDTO)
         {
             try
             {
@@ -73,9 +72,11 @@ namespace GameController.Controllers
 
                 };
 
-                context.Users.Add(user);
+                await context.Users.AddAsync(user);
 
-                context.SaveChanges();
+                Console.WriteLine("asd");
+
+                await context.SaveChangesAsync();
 
                 return Ok("Felhasználó létrehozva.");
             }

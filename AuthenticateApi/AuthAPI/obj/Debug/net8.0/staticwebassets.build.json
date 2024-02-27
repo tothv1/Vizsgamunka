@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "urPnr2NcaB0btaJuI2DtdeT+XBKQK8szdreKVTk8OUw=",
+  "Hash": "TGZAbta2d0ImwgGQxj0+zTzZl7zqcUSwOSa5p8lxYmM=",
   "Source": "AuthAPI",
   "BasePath": "_content/AuthAPI",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
+      "Version": 2,
+      "Source": "SyntaxBackEnd",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }
