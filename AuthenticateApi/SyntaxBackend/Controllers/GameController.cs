@@ -20,7 +20,7 @@ namespace GameController.Controllers
             try
             {
                 using var context = new GameContext();
-                var users = context.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.AchievementsConnects);
+                var users = context.Users.Include(u => u.Role).Include(s => s.UserStats).Include(s => s.AchievementsConnects);
 
                 return Ok(users.ToList());
             }
@@ -33,18 +33,17 @@ namespace GameController.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("getUsers/{id}")]
-        public ActionResult GetUserById(int id)
+        public ActionResult GetUserById(string id)
         {
             try
             {
                 using var userlist = new GameContext();
-                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s=> s.AchievementsConnects).First(s => s.Id == id);
+                var user = userlist.Users.Include(u => u.Role).Include(s => s.UserStats).Include(s=> s.AchievementsConnects).First(s => s.Id == id);
 
                 if (user == null)
-                {
-                    return Ok("A kért felhasználó nem található.");
-                }
-
+                 {
+                     return Ok("A kért felhasználó nem található.");
+                 }
                 return Ok(user);
             }
             catch (Exception ex)
@@ -63,19 +62,15 @@ namespace GameController.Controllers
                 var context = new GameContext();
                 var user = new User
                 {
+                    Id = userDTO.Id,
                     Username = userDTO.Username,
                     Email = userDTO.Email,
-                    Regdate = DateTime.UtcNow,
-                    Permission = context.Permissions.First(s => s.PermissionName == "User"),
+                    Regdate = DateTime.Now,
+                    Role = context.Roles.First(s => s.RoleName == "User")!,
                     UserStats = userDTO.UserStats,
                     AchievementsConnects = []
-
                 };
-
                 await context.Users.AddAsync(user);
-
-                Console.WriteLine("asd");
-
                 await context.SaveChangesAsync();
 
                 return Ok("Felhasználó létrehozva.");
@@ -86,6 +81,29 @@ namespace GameController.Controllers
                 throw;
             }
         }
+
+        [Authorize(Roles ="Admin, User")]
+        [HttpPut("resetAccount")]
+        public async Task<ActionResult> ResetAccount([FromQuery]int userStatId)
+        {
+            try
+            {
+
+                var context = new GameContext();
+               
+                var requestedUser = context.Userstats.FirstOrDefault(u=> u.UserStatId == userStatId);
+
+                await context.SaveChangesAsync();
+
+                return Ok("Sikeresen resetelted a fiókodat!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
+        }
+
 
     }
 }

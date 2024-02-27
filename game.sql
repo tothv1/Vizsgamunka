@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Feb 26. 11:01
--- Kiszolgáló verziója: 10.4.28-MariaDB
--- PHP verzió: 8.2.4
+-- Létrehozás ideje: 2024. Feb 27. 18:08
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `game`
 --
-CREATE DATABASE IF NOT EXISTS `game` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_hungarian_ci;
+CREATE DATABASE IF NOT EXISTS `game` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `game`;
 
 -- --------------------------------------------------------
@@ -34,13 +34,6 @@ CREATE TABLE `achievements` (
   `achievement_name` char(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
---
--- A tábla adatainak kiíratása `achievements`
---
-
-INSERT INTO `achievements` (`id`, `achievement_name`) VALUES
-(1, 'xd');
-
 -- --------------------------------------------------------
 
 --
@@ -49,34 +42,27 @@ INSERT INTO `achievements` (`id`, `achievement_name`) VALUES
 
 CREATE TABLE `achievements_connect` (
   `achi_id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL
+  `userid` varchar(254) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `achievements_connect`
---
-
-INSERT INTO `achievements_connect` (`achi_id`, `userid`) VALUES
-(1, 2),
-(2, 2);
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `permission`
+-- Tábla szerkezet ehhez a táblához `roles`
 --
 
-CREATE TABLE `permission` (
+CREATE TABLE `roles` (
   `id` int(11) NOT NULL,
-  `permission_name` char(32) NOT NULL
+  `role_name` char(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
--- A tábla adatainak kiíratása `permission`
+-- A tábla adatainak kiíratása `roles`
 --
 
-INSERT INTO `permission` (`id`, `permission_name`) VALUES
-(1, 'Admin');
+INSERT INTO `roles` (`id`, `role_name`) VALUES
+(1, 'Admin'),
+(2, 'User');
 
 -- --------------------------------------------------------
 
@@ -85,12 +71,12 @@ INSERT INTO `permission` (`id`, `permission_name`) VALUES
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+  `id` varchar(254) NOT NULL,
   `username` char(32) NOT NULL,
   `email` char(64) NOT NULL,
   `regdate` datetime NOT NULL,
   `lastlogin` datetime NOT NULL,
-  `permission_id` int(11) NOT NULL,
+  `roleid` int(11) NOT NULL,
   `user_stats_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
@@ -98,8 +84,8 @@ CREATE TABLE `user` (
 -- A tábla adatainak kiíratása `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `regdate`, `lastlogin`, `permission_id`, `user_stats_id`) VALUES
-(2, 'vitya0717', 'vitya0717@kkszki.hu', '2024-02-12 12:43:12', '2024-02-12 12:43:12', 1, 1);
+INSERT INTO `user` (`id`, `username`, `email`, `regdate`, `lastlogin`, `roleid`, `user_stats_id`) VALUES
+('bb0d5d3d-95ed-4243-a836-a0ed0e54d032', 'vitya0717', 'tothv@kkszki.hu', '2024-02-27 18:06:08', '0001-01-01 00:00:00', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -108,19 +94,11 @@ INSERT INTO `user` (`id`, `username`, `email`, `regdate`, `lastlogin`, `permissi
 --
 
 CREATE TABLE `userachievements` (
-  `user_id` int(11) NOT NULL,
+  `user_id` varchar(254) NOT NULL,
   `achievement_id` int(11) NOT NULL,
   `achi_connect_id` int(11) NOT NULL,
   `achievement_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `userachievements`
---
-
-INSERT INTO `userachievements` (`user_id`, `achievement_id`, `achi_connect_id`, `achievement_date`) VALUES
-(2, 1, 1, '2024-02-26 10:23:48'),
-(3, 1, 2, '2024-02-26 10:23:48');
 
 -- --------------------------------------------------------
 
@@ -129,7 +107,7 @@ INSERT INTO `userachievements` (`user_id`, `achievement_id`, `achi_connect_id`, 
 --
 
 CREATE TABLE `userstats` (
-  `user_id` int(11) NOT NULL,
+  `user_stat_id` int(11) NOT NULL,
   `kills` int(11) NOT NULL,
   `deaths` int(11) NOT NULL,
   `timesplayed` int(11) NOT NULL
@@ -139,8 +117,26 @@ CREATE TABLE `userstats` (
 -- A tábla adatainak kiíratása `userstats`
 --
 
-INSERT INTO `userstats` (`user_id`, `kills`, `deaths`, `timesplayed`) VALUES
-(1, 0, 0, 1);
+INSERT INTO `userstats` (`user_stat_id`, `kills`, `deaths`, `timesplayed`) VALUES
+(2, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `__efmigrationshistory`
+--
+
+CREATE TABLE `__efmigrationshistory` (
+  `MigrationId` varchar(150) NOT NULL,
+  `ProductVersion` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `__efmigrationshistory`
+--
+
+INSERT INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
+('20240227164821_test', '8.0.1');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -160,9 +156,9 @@ ALTER TABLE `achievements_connect`
   ADD KEY `userid` (`userid`);
 
 --
--- A tábla indexei `permission`
+-- A tábla indexei `roles`
 --
-ALTER TABLE `permission`
+ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -170,9 +166,9 @@ ALTER TABLE `permission`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `User_fk0` (`permission_id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `User_fk0` (`roleid`),
   ADD KEY `user_stats_id` (`user_stats_id`);
 
 --
@@ -187,7 +183,13 @@ ALTER TABLE `userachievements`
 -- A tábla indexei `userstats`
 --
 ALTER TABLE `userstats`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_stat_id`);
+
+--
+-- A tábla indexei `__efmigrationshistory`
+--
+ALTER TABLE `__efmigrationshistory`
+  ADD PRIMARY KEY (`MigrationId`);
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
@@ -197,37 +199,25 @@ ALTER TABLE `userstats`
 -- AUTO_INCREMENT a táblához `achievements`
 --
 ALTER TABLE `achievements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT a táblához `achievements_connect`
 --
 ALTER TABLE `achievements_connect`
-  MODIFY `achi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `achi_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT a táblához `permission`
+-- AUTO_INCREMENT a táblához `roles`
 --
-ALTER TABLE `permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT a táblához `user`
---
-ALTER TABLE `user`
+ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT a táblához `userachievements`
---
-ALTER TABLE `userachievements`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT a táblához `userstats`
 --
 ALTER TABLE `userstats`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_stat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -237,21 +227,21 @@ ALTER TABLE `userstats`
 -- Megkötések a táblához `achievements_connect`
 --
 ALTER TABLE `achievements_connect`
-  ADD CONSTRAINT `achievements_connect_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `achievements_connect_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Megkötések a táblához `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `User_fk0` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_stats_id`) REFERENCES `userstats` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `User_fk0` FOREIGN KEY (`roleid`) REFERENCES `roles` (`id`),
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_stats_id`) REFERENCES `userstats` (`user_stat_id`) ON DELETE CASCADE;
 
 --
 -- Megkötések a táblához `userachievements`
 --
 ALTER TABLE `userachievements`
-  ADD CONSTRAINT `UserAchievements_fk0` FOREIGN KEY (`achievement_id`) REFERENCES `achievements` (`id`),
-  ADD CONSTRAINT `userachievements_ibfk_1` FOREIGN KEY (`achi_connect_id`) REFERENCES `achievements_connect` (`achi_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `userachievements_ibfk_1` FOREIGN KEY (`achi_connect_id`) REFERENCES `achievements_connect` (`achi_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `userachievements_ibfk_2` FOREIGN KEY (`achievement_id`) REFERENCES `achievements` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

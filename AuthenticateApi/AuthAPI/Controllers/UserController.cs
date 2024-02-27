@@ -62,6 +62,25 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("users/status")]
+        public async Task<ActionResult> GetAllActiveOrInactive([FromQuery] bool isActive)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
+
+                return Ok(users);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPut("resetPasswordRequest")]
         public async Task<ActionResult> ResetPasswordRequest([FromBody]string email)
         {
@@ -96,6 +115,8 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
 
         [HttpPut("resetPassword")]
         public async Task<ActionResult> ResetUserPassword([FromBody] string key)
@@ -204,26 +225,6 @@ namespace AuthAPI.Controllers
                 context.SaveChanges();
 
                 return Ok("Az emailed megváltozott!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("users/status")]
-        public async Task<ActionResult> GetAllActiveOrInactive([FromQuery]bool isActive)
-        {
-            try
-            {
-                var context = new AuthContext();
-
-                var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
-
-                return Ok(users);
-
             }
             catch (Exception ex)
             {

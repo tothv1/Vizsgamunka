@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SyntaxBackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d767b3dbf39b109ba4b75c60066754c4cb1ccdc8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e30a9c4497f42d217cc25218164baf6434c38fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("SyntaxBackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SyntaxBackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

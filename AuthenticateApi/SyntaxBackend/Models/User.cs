@@ -5,7 +5,7 @@ namespace SyntaxBackEnd.Models;
 
 public partial class User
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = null!;
 
     public string Username { get; set; } = null!;
 
@@ -15,13 +15,13 @@ public partial class User
 
     public DateTime Lastlogin { get; set; }
 
-    public int PermissionId { get; set; }
+    public int Roleid { get; set; }
 
     public int UserStatsId { get; set; }
 
     public virtual ICollection<AchievementsConnect> AchievementsConnects { get; set; } = new List<AchievementsConnect>();
 
-    public virtual Permission Permission { get; set; } = null!;
+    public virtual Role Role { get; set; } = null!;
 
     public virtual Userstat UserStats { get; set; } = null!;
 }

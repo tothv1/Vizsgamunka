@@ -291,3 +291,14 @@ C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net
 C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\System.Memory.Data.dll
 C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.dll
 C:\Users\tviktor\Desktop\Gitek\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.pdb
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.deps.json
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.runtimeconfig.json
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.exe
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Azure.Core.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Azure.Identity.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Azure.Security.KeyVault.Certificates.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\System.Memory.Data.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.dll
+E:\GitRepok\Vizsgamunka\AuthenticateApi\AuthAPI\bin\Debug\net8.0\SyntaxBackEnd.pdb

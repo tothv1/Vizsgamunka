@@ -64,7 +64,7 @@ namespace AuthAPI.Controllers
 
                 var finalGameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email)!;
 
-                finalGameUser.Permission = gameContext.Permissions.FirstOrDefault(r => r.PermissionName == requestedRole.RoleName)!;
+                finalGameUser.Role = gameContext.Roles.FirstOrDefault(r => r.RoleName == requestedRole.RoleName)!;
 
                 gameContext.Update(finalGameUser);
                 await gameContext.SaveChangesAsync();

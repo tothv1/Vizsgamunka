@@ -65,20 +65,21 @@ namespace AuthAPI.Services.AuthServices
 
                 var userStat = new Userstat()
                 {
-                    UserId = 0,
+                    UserStatId = 0,
                     Kills = 0,
                     Deaths = 0,
                     Timesplayed = 0,
                 };
                 var gameUser = new SyntaxBackEnd.DTOs.UserDTO()
                 {
+                    Id = keyCheck.TempUserid,
                     Username = keyCheck.TempUsername,
                     Email = keyCheck.TempEmail,
                     Regdate = keyCheck.TempRegdate,
                     UserStats = userStat,
                 };
 
-                await gameController.AddUser(gameUser);
+                var res =  await gameController.AddUser(gameUser);
 
                 return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
 
@@ -262,7 +263,7 @@ namespace AuthAPI.Services.AuthServices
 
                 var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
 
-                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserId == requestedGameUser!.UserStatsId);
+                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserStatId == requestedGameUser!.UserStatsId);
 
                 gameContext!.Remove(requestedStat);
                 gameContext!.Remove(requestedGameUser);

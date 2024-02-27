@@ -6,14 +6,14 @@ namespace SyntaxBackEnd.Models;
 
 public partial class Userstat
 {
-    public int UserId { get; set; }
+    public int UserStatId { get; set; }
 
     public int Kills { get; set; }
 
     public int Deaths { get; set; }
 
     public int Timesplayed { get; set; }
-    [JsonIgnore]
 
+    [JsonIgnore]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
