@@ -1,4 +1,5 @@
-﻿using AuthAPI.Models;
+﻿using AuthAPI.DTOs;
+using AuthAPI.Models;
 using AuthAPI.Services;
 using AuthAPI.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -107,13 +108,20 @@ namespace AuthAPI.Controllers
 
                 if (selectedUser == null)
                 {
-                    return Ok("A megadott kód helytelen!");
+                    return BadRequest("A megadott kód helytelen!");
                 }
 
                 string resetedPassword = passwordManager.generateNewPassword(16);
 
                 emailSenderService.sendMailWithFropsiEmailServer(selectedUser.Email, "Visszaállított jelszó", $"Az új jelszavad: {resetedPassword}");
 
+                var newHashPassword = BCrypt.Net.BCrypt.HashPassword(resetedPassword);
+
+                selectedUser.ChangePasswordConfirmationKey = null;
+                selectedUser.Hash = newHashPassword;
+
+                context.Update(selectedUser);
+                context.SaveChanges();
 
                 return Ok("Az új jelszavadat elküldtük emailben!");
             }
@@ -123,6 +131,85 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [HttpPut("changePassword")]
+        public async Task<ActionResult> ChangeUserPassword([FromBody] ChangePasswordDTO changePasswordDTO)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changePasswordDTO.Email);
+
+                var oldHash = BCrypt.Net.BCrypt.Verify(changePasswordDTO.OldPassword, selectedUser!.Hash);
+
+                if(!oldHash)
+                {
+                    return BadRequest("A régi jelszó helytelen!");
+                }
+
+                if(!changePasswordDTO.NewPassword.Equals(changePasswordDTO.NewPasswordAgain))
+                {
+                    return BadRequest("A két jelszó nem egyezik!");
+                }
+
+                var newHashPassword = BCrypt.Net.BCrypt.HashPassword(changePasswordDTO.NewPassword);
+
+                selectedUser.Hash = newHashPassword;
+
+                context.Update(selectedUser);
+                context.SaveChanges();
+
+                return Ok("A jelszavad megváltozott!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("changeEmail")]
+        public async Task<ActionResult> ChangeUserEmail([FromBody] ChangeEmailDTO changeEmailDTO)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changeEmailDTO.OldEmail);
+
+                if(selectedUser == null)
+                {
+                    return BadRequest("Hibás a megadott email!");
+                }
+
+                var hashVerify = BCrypt.Net.BCrypt.Verify(changeEmailDTO.Password, selectedUser!.Hash);
+
+                if (!hashVerify)
+                {
+                    return BadRequest("A megadott jelszó helytelen!");
+                }
+
+                if (changeEmailDTO.NewEmail.Equals(selectedUser.Email))
+                {
+                    return BadRequest("Nem lehet ugyaz az email");
+                }
+                
+                if(context.RegisteredUsers.FirstOrDefault(u => u.Email == changeEmailDTO.NewEmail) != null)
+                {
+                    return BadRequest("Ez az email már foglalt!");
+                }
+
+                selectedUser.Email = changeEmailDTO.NewEmail;
+
+                context.Update(selectedUser);
+                context.SaveChanges();
+
+                return Ok("Az emailed megváltozott!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
         [Authorize(Roles = "Admin")]

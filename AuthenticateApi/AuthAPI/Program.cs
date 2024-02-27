@@ -74,7 +74,6 @@ namespace AuthAPI
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment() || app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -85,6 +84,7 @@ namespace AuthAPI
 
             app.UseAuthorization();
 
+            app.UseCors(CorsEnabled);
 
             app.MapControllers();
 
