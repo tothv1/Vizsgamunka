@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const AuthPage = () => {
     return (
-        <div className='container text-center'>
+        <div className='container'>
             <div>
                 <button className='btn btn-primary'>Regisztráció</button><br />
                 <Link to='/login'>Már van felhasználója? Bejelentkezés</Link>
