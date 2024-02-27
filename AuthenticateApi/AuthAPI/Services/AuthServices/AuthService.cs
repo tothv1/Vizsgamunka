@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Net;
+using System.Text.Json.Nodes;
 
 namespace AuthAPI.Services.AuthServices
 {
@@ -28,6 +30,7 @@ namespace AuthAPI.Services.AuthServices
             this._emailSenderService = emailSenderService;
         }
 
+        //Fiók megerősítés
         public async Task<Object> ConfirmAccount(string confirmKey)
         {
             try
@@ -57,6 +60,25 @@ namespace AuthAPI.Services.AuthServices
 
                 context.Registries.Remove(keyCheck);
                 await context.SaveChangesAsync();
+
+                var gameContext = new GameController.Controllers.GameController();
+
+                var userStat = new SyntaxBackEnd.Models.Userstat()
+                {
+                    UserId = 0,
+                    Kills = 0,
+                    Deaths = 0,
+                    Timesplayed = 0,
+                };
+                var gameUser = new SyntaxBackEnd.DTOs.UserDTO()
+                {
+                    Username = keyCheck.TempUsername,
+                    Email = keyCheck.TempEmail,
+                    Regdate = keyCheck.TempRegdate,
+                    UserStats = userStat
+                };
+
+                await gameContext.AddUser(gameUser);
 
                 return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
 
