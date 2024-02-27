@@ -3,3 +3,9 @@
     background-size: cover;
     background-position: center;
 }
+
+.menu-container {
+    background-image: url('../src/Assets/background/menuhatter.jpg');
+    background-size: cover;
+    background-position: center;
+}

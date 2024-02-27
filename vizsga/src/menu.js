@@ -3,6 +3,7 @@ import Canvas from "./render/canvas";
 import { useHistory } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './AuthPage.css'
 
 const Menu = () => {
   //bootstrapet, react-router-dom -ot majd installálni
@@ -53,7 +54,7 @@ const Menu = () => {
   //style={{ position: 'fixed', top: '50%', right: '10px', transform: 'translateY(-50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)', zIndex: 999 }}
 
   return (
-    <div className="container">
+    <div className="container menu-container">
       <div className="row">
         <div className="col border border-primary">
         <h1>Játék Menü</h1>

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Login = () => {
     return (
-        <div className='container w-50 border border-dark mt-5'>
+        <div className='container w-50 border border-dark mt-5 auth-container'>
             <form onSubmit={ () => { 
                 
 
