@@ -7,7 +7,9 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
-import { Clamp } from "../system/Math";
+import { Clamp, Normalise,GetDirection, GetDirRad } from "../system/Math";
+import { Slime } from "./Slime";
+import { Arrow } from "./Projectile";
 
 const Player = {
   ID : 0,
@@ -15,7 +17,9 @@ const Player = {
   frameDelay : 20, //every x updates, the sprite turns over to the next frame
   frameLength : 10, // frames in the spritesheet
   state : "idle",
-  direction : "none",
+  direction : "down",
+
+  rotation : 0,
 
   x : 0,
   y : 0,
@@ -25,6 +29,7 @@ const Player = {
 
   mapsize : [0,0],
   offset : [0,0],
+  renderoffset : [0,0],
 
   width : 39,
   height : 64,
@@ -40,15 +45,31 @@ const Player = {
   frame : 0,
 
   drawing : new Image(),
+  entityRef:[],
   update:Update
 
 }
 
-
-
-
 document.addEventListener("keydown", keyhandler);
 document.addEventListener("keyup", keyhandler);
+
+document.addEventListener("mousedown",shoot);
+
+function shoot(e){
+  let entities = Player.entityRef;
+
+  let temp = Object.create(Arrow);
+  temp.x=Player.x;
+  temp.y=Player.y;
+  temp.direction=Normalise(GetDirection([Player.x,Player.y],[e.pageX-Player.renderoffset[0],e.pageY-Player.renderoffset[1]]));
+  temp.rotation = GetDirRad(temp.direction);
+  console.log(temp.rotation)
+  console.log(Player.renderoffset);
+
+  entities.projectileList.push(temp);
+
+  console.log(entities);
+}
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
@@ -98,11 +119,11 @@ function Update(deltaTime, frameCount) {
   if (this.state === "moving") {
     if (this.direction === "left") {
       this.drawing.src = left;
-      this.width = 39;
+      this.width = 64;
     }
     if (this.direction === "right") {
       this.drawing.src = right;
-      this.width = 39;
+      this.width = 64;
     }
     if (this.direction === "up") {
       this.drawing.src = up;
@@ -128,9 +149,7 @@ function Update(deltaTime, frameCount) {
   this.frameLength = this.drawing.width / this.width;
 
   if (!this.UpState && !this.DownState && !this.LeftState && !this.RightState) {
-
     this.state = "idle";
-
   } else {
     this.state = "moving";
   }

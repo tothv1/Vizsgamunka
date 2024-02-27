@@ -2,7 +2,7 @@ import { GameLoop } from "react-game-engine";
 import { useState } from "react";
 import rightIdle from "../Assets/characters/slime.png"
 import leftIdle from "../Assets/characters/slime.png"
-import { LerpNum } from "./Math";
+import { GetDirAngle, GetDirection, LerpNum, Normalise, RadToDegrees, Translate } from "./Math";
 
 function Update(deltaTime, frameCount,target) {
 
@@ -20,8 +20,13 @@ function Update(deltaTime, frameCount,target) {
     }
   }
 
-  this.x=LerpNum(this.x,target.x,1*deltaTime);
-  this.y=LerpNum(this.y,target.y,1*deltaTime);
+  let dir = GetDirection([this.x,this.y],[target.x,target.y]);
+  let normDir = Normalise(dir);
+  let translation = Translate([this.x,this.y],[normDir[0]*this.speed*deltaTime,normDir[1]*this.speed*deltaTime]);
+
+  this.x=translation[0];
+  this.y=translation[1];
+
 };
 
 const getImg = () =>{
@@ -37,6 +42,8 @@ const Slime = {
   frameLength : 8, // frames in the spritesheet
   state : "idle",
   mirror : false,
+  
+  rotation : 0,
 
   x : 0,
   y : 0,

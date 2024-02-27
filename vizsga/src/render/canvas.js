@@ -20,9 +20,10 @@ const Canvas = props => {
 
 
   const playerRef = Player;
-  playerRef.x=600;
-  playerRef.y=600;
+  playerRef.x = 600;
+  playerRef.y = 600;
   playerRef.mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64]
+  playerRef.entityRef = entities;
   entities.entityList.push(playerRef);
 
   const canvasRef = useRef(null)
@@ -34,10 +35,22 @@ const Canvas = props => {
   }
 
   const draw = (ctx, object, offset) => {
+    ctx.save();
+    if(object.rotation!=undefined || object.rotation!=0){
+      ctx.translate(offset[0]+object.width/2, offset[1]+object.height/2);
 
-    ctx.globalCompositeOperation = "source-over"
+      ctx.rotate(object.rotation);
+      ctx.translate(-offset[0]-object.width/2, -offset[1]-object.height/2);
+      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
+      ctx.rotate(-object.rotation);
 
-    ctx.drawImage(object.drawing, object.frame*object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
+    }else{
+      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
+
+    }
+    ctx.restore();
+
+
 
   }
 
@@ -46,14 +59,14 @@ const Canvas = props => {
     for (let j = 0; j < rawmap[i].length; j++) {
       if (rawmap[i][j] === 1) {
         const temp = Object.create(Wall);
-        temp.x=j*64;
-        temp.y=i*64;
+        temp.x = j * 64;
+        temp.y = i * 64;
         entities.tileList.push(temp);
       }
       if (rawmap[i][j] === 2) {
         const temp = Object.create(Slime);
-        temp.x=j*64;
-        temp.y=i*64;
+        temp.x = j * 64;
+        temp.y = i * 64;
         entities.entityList.push(temp);
       }
     }
@@ -82,17 +95,24 @@ const Canvas = props => {
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
       entities.entityList.forEach(item => {
-        item.update(deltaTime, frameCount,Player);
-        if (item.ID===1){
-          item.offset = [item.x + renderOffset[0], item.y+ renderOffset[1]];
-          draw(context,item,item.offset);
+        item.update(deltaTime, frameCount, Player);
+        item.renderoffset = renderOffset;
+        if (item.ID === 1) {
+          item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+          draw(context, item, item.offset);
         }
       });
 
       entities.tileList.forEach(item => {
         item.update(deltaTime, frameCount);
-        item.offset = [item.x + renderOffset[0], item.y+ renderOffset[1]];
-        draw(context,item,item.offset)
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
+      });
+
+      entities.projectileList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
       });
 
       renderOffset = [Clamp(playerRef.x - window.innerWidth / 2, 0, (rawmap[0].length * 64) - window.innerWidth), Clamp(playerRef.y - window.innerHeight / 2, 0, (rawmap.length * 64) - window.innerHeight)]
