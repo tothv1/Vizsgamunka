@@ -1,57 +1,80 @@
 import React, { useRef, useEffect } from 'react'
 import { rawMaps } from '../Assets/map/maps';
 
-import { UpdateSl } from '../system/Slime';
-import { UpdateT } from '../system/StoneWall';
-import { Update } from '../system/Player';
+import { Slime } from '../system/Slime';
+import { Wall } from '../system/StoneWall';
+import { Player } from '../system/Player';
 import '../system/Math';
 import { Clamp, Normalise } from '../system/Math';
 
-let renderOffset = [0,0]
+let renderOffset = [0, 0]
 
 const Canvas = props => {
 
 
-  let entities = {};
+  let entities = [];
 
-  entities.terrain={
-    rawmap:rawMaps,
-    update:UpdateT
-  }
-
-  entities.player={
-    update:Update
-  }
-
-  entities.slime={
-    update:UpdateSl
-  }
+  entities.projectileList = [];
+  entities.tileList = [];
+  entities.entityList = [];
 
 
-  console.log(entities)
+  const playerRef = Player;
+  playerRef.x = 600;
+  playerRef.y = 600;
+  playerRef.mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64]
+  playerRef.entityRef = entities;
+  entities.entityList.push(playerRef);
 
   const canvasRef = useRef(null)
   let frameCount = 0
-
 
   const clrCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
   }
 
-  const draw = async (ctx, object,offset) => {
+  const draw = (ctx, object, offset) => {
+    ctx.save();
+    if(object.rotation!=undefined || object.rotation!=0){
+      ctx.translate(offset[0]+object.width/2, offset[1]+object.height/2);
 
-    //console.log(object)
+      ctx.rotate(object.rotation);
+      ctx.translate(-offset[0]-object.width/2, -offset[1]-object.height/2);
+      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
+      ctx.rotate(-object.rotation);
 
-    ctx.globalCompositeOperation =     "source-over"
+    }else{
+      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
 
-    ctx.drawImage(object.render, object.frame, 0, object.w, object.h, offset[0], offset[1], object.w, object.h);
+    }
+    ctx.restore();
 
 
-
-    
 
   }
+
+  const rawmap = rawMaps[0];
+  for (let i = 0; i < rawmap.length; i++) {
+    for (let j = 0; j < rawmap[i].length; j++) {
+      if (rawmap[i][j] === 1) {
+        const temp = Object.create(Wall);
+        temp.x = j * 64;
+        temp.y = i * 64;
+        entities.tileList.push(temp);
+      }
+      if (rawmap[i][j] === 2) {
+        const temp = Object.create(Slime);
+        temp.x = j * 64;
+        temp.y = i * 64;
+        entities.entityList.push(temp);
+      }
+    }
+  }
+  console.log(entities)
+  console.log(playerRef)
+
+
 
   useEffect(() => {
 
@@ -71,53 +94,33 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-      const map = entities.terrain;
-      let player = entities.player.update(deltaTime,frameCount)
-      
-
-      //const slime = entities.slime;
-
-      const rawmap = map.rawmap[0];
-
-      player.mapsize=[rawmap[0].length*64,rawmap.length*64];
-    
-
-      for (let i = 0; i < rawmap.length; i++) {
-        for (let j = 0; j < rawmap[i].length; j++) {
-          if (rawmap[i][j] === 1) {
-
-            let obj = UpdateT(deltaTime,frameCount);
-            obj.x = j * 64;
-            obj.y = i * 64;
-            obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
-
-            draw(context, obj,obj.offset)
-          }
-          if (rawmap[i][j] === 2) {
-
-            let obj = UpdateSl();
-            obj.x = j * 64;
-            obj.y = i * 64;
-            obj.offset=[j*64+renderOffset[0],i*64+renderOffset[1]]
-
-            draw(context, obj,obj.offset)
-          }
+      entities.entityList.forEach(item => {
+        item.update(deltaTime, frameCount, Player);
+        item.renderoffset = renderOffset;
+        if (item.ID === 1) {
+          item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+          draw(context, item, item.offset);
         }
-      }
+      });
 
-      
+      entities.tileList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
+      });
 
-      renderOffset=[Clamp(player.x-window.innerWidth/2,0,(rawmap[0].length*64)-window.innerWidth),Clamp(player.y-window.innerHeight/2,0,(rawmap.length*64)-window.innerHeight)]
-      renderOffset=[-renderOffset[0],-renderOffset[1]]
+      entities.projectileList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
+      });
 
-      console.log(`render\nx: ${renderOffset[0]}\ny: ${renderOffset[1]}`)
-      console.log(`player\nx: ${player.x}\ny: ${player.y}`)
+      renderOffset = [Clamp(playerRef.x - window.innerWidth / 2, 0, (rawmap[0].length * 64) - window.innerWidth), Clamp(playerRef.y - window.innerHeight / 2, 0, (rawmap.length * 64) - window.innerHeight)]
+      renderOffset = [-renderOffset[0], -renderOffset[1]]
 
-      let playerrenderpos = [player.x+renderOffset[0],player.y+renderOffset[1]]
+      let playerrenderpos = [playerRef.x + renderOffset[0], playerRef.y + renderOffset[1]]
 
-      console.log(`should be here\nx: ${playerrenderpos[0]}\ny: ${playerrenderpos[1]}`)
-
-      draw(context, player,[playerrenderpos[0],playerrenderpos[1]]);
+      draw(context, playerRef, [playerrenderpos[0], playerrenderpos[1]]);
 
       lastUpdateTime = window.performance.now();
       frameCount++

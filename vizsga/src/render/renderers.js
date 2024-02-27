@@ -3,7 +3,6 @@ import karakter from "../Assets/characters/hatternelkuli.png";
 import wall from "../Assets/map/wall.png";
 import slime from "../Assets/characters/slime.png";
 
-
 class Element {
   constructor(x, y, type) {
     this.x = x;

@@ -2,53 +2,66 @@ import { GameLoop } from "react-game-engine";
 import { useState } from "react";
 import rightIdle from "../Assets/characters/slime.png"
 import leftIdle from "../Assets/characters/slime.png"
+import { GetDirAngle, GetDirection, LerpNum, Normalise, RadToDegrees, Translate } from "./Math";
 
-const ID = 1;
+function Update(deltaTime, frameCount,target) {
 
-let frameDelay = 10; //every x updates, the sprite turns over to the next frame
-let frameLength = 8; // frames in the spritesheet
-let state = "idle";
-let mirror = false;
 
-let x=0;
-let y=0;
 
-const width = 64;
-const height = 64;
 
-const speed = 300;
-let health = 100;
+  this.frameLength = this.drawing.width / this.width;
 
-let frame = 0;
-
-let drawing = new Image();
-drawing.src = rightIdle;
-
-function UpdateSl (deltaTime,frameCount) {
-
-  frameLength=drawing.width/width;
-
-  if (frameLength > 1) {
-    if (frameCount % frameDelay === 0) {
-      frame++;
+  if (this.frameLength > 1) {
+    if (frameCount % this.frameDelay === 0) {
+      this.frame++;
     }
-    if (frame >= frameLength) {
-      frame = 0
+    if (this.frame >= this.frameLength) {
+      this.frame = 0
     }
   }
 
+  let dir = GetDirection([this.x,this.y],[target.x,target.y]);
+  let normDir = Normalise(dir);
+  let translation = Translate([this.x,this.y],[normDir[0]*this.speed*deltaTime,normDir[1]*this.speed*deltaTime]);
 
-  let obj = {
-    ID: ID,
-    frame: frame * width,
-    render: drawing,
-    x: x,
-    y: y,
-    w: width,
-    h: height
-  }
+  this.x=translation[0];
+  this.y=translation[1];
 
-  return obj;
 };
 
-export { UpdateSl };
+const getImg = () =>{
+
+  var temp = new Image();
+  temp.src=rightIdle;
+  return temp;
+}
+
+const Slime = {
+  ID : 1,
+  frameDelay : 10, //every x updates, the sprite turns over to the next frame
+  frameLength : 8, // frames in the spritesheet
+  state : "idle",
+  mirror : false,
+  
+  rotation : 0,
+
+  x : 0,
+  y : 0,
+
+  width : 64,
+  height : 64,
+
+  speed : 300,
+  health : 100,
+
+  frame : 0,
+
+  drawing : getImg(),
+  update:Update
+}
+
+
+
+
+
+export { Slime };
