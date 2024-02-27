@@ -122,6 +122,38 @@
   },
   {
     "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "ChangeUserEmail",
+    "RelativePath": "User/changeEmail",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changeEmailDTO",
+        "Type": "AuthAPI.DTOs.ChangeEmailDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "ChangeUserPassword",
+    "RelativePath": "User/changePassword",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changePasswordDTO",
+        "Type": "AuthAPI.DTOs.ChangePasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.UserController",
     "Method": "ResetUserPassword",
     "RelativePath": "User/resetPassword",
     "HttpMethod": "PUT",

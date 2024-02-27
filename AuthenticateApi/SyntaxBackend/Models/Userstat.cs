@@ -6,7 +6,6 @@ namespace SyntaxBackEnd.Models;
 
 public partial class Userstat
 {
-    [JsonIgnore]
     public int UserId { get; set; }
 
     public int Kills { get; set; }
@@ -14,7 +13,7 @@ public partial class Userstat
     public int Deaths { get; set; }
 
     public int Timesplayed { get; set; }
-
     [JsonIgnore]
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

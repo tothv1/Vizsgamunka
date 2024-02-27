@@ -5,6 +5,10 @@ using AuthAPI.Services.IServices;
 using AuthAPI.Services.PasswordStrengthChecker;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
+using System.Linq.Expressions;
+using System.Net;
 
 namespace AuthAPI.Services.AuthServices
 {
@@ -74,31 +78,31 @@ namespace AuthAPI.Services.AuthServices
                 {
                     var user = context.RegisteredUsers.FirstOrDefault(user => user.Username == loginDto.UserName);
 
-                    if (user == null)
+                    if (user!.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
 
-                    if (user!.IsLoggedIn)
-                    {
-                        await Logout(context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid)!.Token);
-                        return ResponseObject.create("Már be vagy jelentkezve egy másik gépen, minden egyéb eszközön kijelentkeztetünk!", 400);
-                    }
-
-                    if (user.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
-                    {
-                        return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
-                    }
                     token = _tokenManager.GenerateToken(user);
+                    var selectedLoggedInUser = context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid);
 
-                    user.IsLoggedIn = true;
-                    context.Update(user);
-
-                    await context.AddAsync(new LoggedInUser()
+                    if (selectedLoggedInUser != null)
                     {
-                        Userid = user.Userid,
-                        Token = token
-                    });
+                        var oldToken = selectedLoggedInUser.Token;
+                        _tokenManager.blackListToken(oldToken);
+
+                        selectedLoggedInUser.Token = token;
+                        context.Update(selectedLoggedInUser);
+                    } 
+                    else
+                    {
+                        user.IsLoggedIn = true;
+                        await context.AddAsync(new LoggedInUser()
+                        {
+                            Userid = user.Userid,
+                            Token = token
+                        });
+                    }
                     await context.SaveChangesAsync();
 
                 }
