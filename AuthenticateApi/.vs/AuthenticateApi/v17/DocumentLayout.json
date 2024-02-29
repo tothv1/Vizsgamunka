@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\authservices\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\authservices\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\syntaxbackend\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|solutionrelative:syntaxbackend\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\syntaxbackend\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|solutionrelative:syntaxbackend\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\syntaxbackend\\controllers\\achievementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|solutionrelative:syntaxbackend\\controllers\\achievementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,46 +13,20 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 555,
-          "SelectedChildIndex": 1,
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserDTO.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\DTOs\\UserDTO.cs",
-              "RelativeDocumentMoniker": "SyntaxBackend\\DTOs\\UserDTO.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\DTOs\\UserDTO.cs",
-              "RelativeToolTip": "SyntaxBackend\\DTOs\\UserDTO.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-27T17:02:40.53Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "RelativeToolTip": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "ViewState": "AQIAACYAAAAAAAAAAAAgwDgAAAASAAAA",
+              "Title": "AchievementController.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\AchievementController.cs",
+              "RelativeDocumentMoniker": "SyntaxBackend\\Controllers\\AchievementController.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\AchievementController.cs",
+              "RelativeToolTip": "SyntaxBackend\\Controllers\\AchievementController.cs",
+              "ViewState": "AQIAADwAAAAAAAAAAAAowE4AAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-27T16:02:34.649Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "GameController.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\GameController.cs",
-              "RelativeDocumentMoniker": "SyntaxBackend\\Controllers\\GameController.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\GameController.cs",
-              "RelativeToolTip": "SyntaxBackend\\Controllers\\GameController.cs",
-              "ViewState": "AQIAADEAAAAAAAAAAAAAwEAAAAAkAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-27T15:32:33.154Z",
+              "WhenOpened": "2024-02-29T12:48:51.729Z",
               "EditorCaption": ""
             }
           ]

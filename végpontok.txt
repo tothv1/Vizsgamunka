@@ -1,5 +1,1 @@
-Ami kell még GAME:
-- GetUserStats -GET
-- SetUserStats -PUT
-- GetUserAchievements -GET
-- ResetAccount -PUT
+semmi

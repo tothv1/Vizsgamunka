@@ -47,14 +47,14 @@ namespace AuthAPI.Controllers
 
                 if (user == null)
                 {
-                    return Ok(ResponseObject.create("Nincs ilyen felhasználó!", 400));
+                    return NotFound(ResponseObject.create("Nincs ilyen felhasználó!", 400));
                 }
 
                 var requestedRole = await context.Roles.FirstOrDefaultAsync(r => r.Roleid == role);
 
                 if (requestedRole == null)
                 {
-                    return Ok(ResponseObject.create("Nincs ilyen szerepkör!", 400));
+                    return NotFound(ResponseObject.create("Nincs ilyen szerepkör!", 400));
                 }
 
                 if(user.Roleid == requestedRole.Roleid)

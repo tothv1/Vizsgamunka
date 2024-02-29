@@ -18,13 +18,13 @@ public partial class GameContext : DbContext
 
     public virtual DbSet<Achievement> Achievements { get; set; }
 
-    public virtual DbSet<AchievementsConnect> AchievementsConnects { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<Userachievement> Userachievements { get; set; }
+    public virtual DbSet<UserAchievement> UserAchievements { get; set; }
+
+    public virtual DbSet<UserAchievementDetail> UserAchievementDetails { get; set; }
 
     public virtual DbSet<Userstat> Userstats { get; set; }
 
@@ -35,14 +35,16 @@ public partial class GameContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_hungarian_ci")
+            .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
         modelBuilder.Entity<Achievement>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("achievements");
+            entity
+                .ToTable("achievements")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -53,31 +55,13 @@ public partial class GameContext : DbContext
                 .HasColumnName("achievement_name");
         });
 
-        modelBuilder.Entity<AchievementsConnect>(entity =>
-        {
-            entity.HasKey(e => e.AchiId).HasName("PRIMARY");
-
-            entity.ToTable("achievements_connect");
-
-            entity.HasIndex(e => e.Userid, "userid");
-
-            entity.Property(e => e.AchiId)
-                .HasColumnType("int(11)")
-                .HasColumnName("achi_id");
-            entity.Property(e => e.Userid)
-                .HasMaxLength(254)
-                .HasColumnName("userid");
-
-            entity.HasOne(d => d.User).WithMany(p => p.AchievementsConnects)
-                .HasForeignKey(d => d.Userid)
-                .HasConstraintName("achievements_connect_ibfk_1");
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("roles");
+            entity
+                .ToTable("roles")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -92,7 +76,9 @@ public partial class GameContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("user");
+            entity
+                .ToTable("user")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.Roleid, "User_fk0");
 
@@ -136,43 +122,69 @@ public partial class GameContext : DbContext
                 .HasConstraintName("user_ibfk_1");
         });
 
-        modelBuilder.Entity<Userachievement>(entity =>
+        modelBuilder.Entity<UserAchievement>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+            entity.HasKey(e => e.AchievementId).HasName("PRIMARY");
 
-            entity.ToTable("userachievements");
+            entity
+                .ToTable("user_achievements")
+                .UseCollation("utf8mb4_hungarian_ci");
+
+            entity.HasIndex(e => e.Userid, "userid");
+
+            entity.Property(e => e.AchievementId)
+                .HasColumnType("int(11)")
+                .HasColumnName("achievement_id");
+            entity.Property(e => e.Userid)
+                .HasMaxLength(254)
+                .HasColumnName("userid");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserAchievements)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("user_achievements_ibfk_1");
+        });
+
+        modelBuilder.Entity<UserAchievementDetail>(entity =>
+        {
+            entity.HasKey(e => e.AchievementDetailId).HasName("PRIMARY");
+
+            entity
+                .ToTable("user_achievement_details")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.HasIndex(e => e.AchievementId, "UserAchievements_fk0");
 
-            entity.HasIndex(e => e.AchiConnectId, "achi_connect_id");
+            entity.HasIndex(e => e.UserAchievementId, "achi_connect_id");
 
-            entity.Property(e => e.UserId)
-                .HasMaxLength(254)
-                .HasColumnName("user_id");
-            entity.Property(e => e.AchiConnectId)
+            entity.Property(e => e.AchievementDetailId)
                 .HasColumnType("int(11)")
-                .HasColumnName("achi_connect_id");
+                .HasColumnName("achievement_detail_id");
             entity.Property(e => e.AchievementDate)
                 .HasColumnType("datetime")
                 .HasColumnName("achievement_date");
             entity.Property(e => e.AchievementId)
                 .HasColumnType("int(11)")
                 .HasColumnName("achievement_id");
+            entity.Property(e => e.UserAchievementId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_achievement_id");
 
-            entity.HasOne(d => d.AchiConnect).WithMany(p => p.Userachievements)
-                .HasForeignKey(d => d.AchiConnectId)
-                .HasConstraintName("userachievements_ibfk_1");
-
-            entity.HasOne(d => d.Achievement).WithMany(p => p.Userachievements)
+            entity.HasOne(d => d.Achievement).WithMany(p => p.UserAchievementDetails)
                 .HasForeignKey(d => d.AchievementId)
-                .HasConstraintName("userachievements_ibfk_2");
+                .HasConstraintName("user_achievement_details_ibfk_2");
+
+            entity.HasOne(d => d.UserAchievement).WithMany(p => p.UserAchievementDetails)
+                .HasForeignKey(d => d.UserAchievementId)
+                .HasConstraintName("user_achievement_details_ibfk_1");
         });
 
         modelBuilder.Entity<Userstat>(entity =>
         {
             entity.HasKey(e => e.UserStatId).HasName("PRIMARY");
 
-            entity.ToTable("userstats");
+            entity
+                .ToTable("userstats")
+                .UseCollation("utf8mb4_hungarian_ci");
 
             entity.Property(e => e.UserStatId)
                 .HasColumnType("int(11)")
