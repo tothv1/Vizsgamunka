@@ -19,9 +19,9 @@ public partial class User
 
     public int UserStatsId { get; set; }
 
-    public virtual ICollection<AchievementsConnect> AchievementsConnects { get; set; } = new List<AchievementsConnect>();
-
     public virtual Role Role { get; set; } = null!;
+
+    public virtual ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
 
     public virtual Userstat UserStats { get; set; } = null!;
 }

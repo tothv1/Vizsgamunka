@@ -12,15 +12,15 @@
   {
     "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
     "Method": "GetUserAchievements",
-    "RelativePath": "Game/achievements/{userId}",
+    "RelativePath": "Game/achievements/user",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": true
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -28,20 +28,20 @@
   {
     "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
     "Method": "AddAchievementToUser",
-    "RelativePath": "Game/addAchievement/{userid}/{achiId}",
+    "RelativePath": "Game/addAchievement/user",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userid",
+        "Name": "userId",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "achiId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

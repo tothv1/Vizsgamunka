@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SyntaxBackEnd.Models;
 
-public partial class Userachievement
+public partial class UserAchievement
 {
-    public string UserId { get; set; } = null!;
-
     public int AchievementId { get; set; }
 
-    public int AchiConnectId { get; set; }
+    public string Userid { get; set; } = null!;
 
-    public DateTime AchievementDate { get; set; }
+    [JsonIgnore]
+    public virtual User User { get; set; } = null!;
 
-    public virtual AchievementsConnect AchiConnect { get; set; } = null!;
-
-    public virtual Achievement Achievement { get; set; } = null!;
+    [JsonIgnore]
+    public virtual ICollection<UserAchievementDetail> UserAchievementDetails { get; set; } = new List<UserAchievementDetail>();
 }
