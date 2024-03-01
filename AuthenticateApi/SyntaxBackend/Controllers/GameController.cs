@@ -8,9 +8,9 @@ using System.Text.Json.Nodes;
 
 namespace GameController.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class GameController : ControllerBase
     {
 
@@ -21,32 +21,45 @@ namespace GameController.Controllers
             try
             {
                 using var context = new GameContext();
-                var users = context.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s => s.AchievementsConnects);
 
-                return Ok(users.ToList());
+                var requestedUsers = context.Users
+                    .Include(u => u.Role)
+                    .Include(s => s.UserStats)
+                    .Include(a => a.UserAchievements)
+                    .ThenInclude(a => a.UserAchievementDetails)
+                    .ThenInclude(a => a.Achievement);
+
+
+                return Ok(requestedUsers.ToList());
             }
             catch (Exception ex)
             {
-                return BadRequest("Sikertelen lekérdezés: " +ex.Message);
+                return BadRequest("Sikertelen lekérdezés: " + ex.Message);
 
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("getUsers/{id}")]
-        public ActionResult GetUserById(int id)
+        [Authorize(Roles = "Admin, User")]
+        [HttpGet("getUsers/user")]
+        public ActionResult GetUserById(string id)
         {
             try
             {
-                using var userlist = new GameContext();
-                var user = userlist.Users.Include(u => u.Permission).Include(s => s.UserStats).Include(s=> s.AchievementsConnects).First(s => s.Id == id);
+                using var context = new GameContext();
 
-                if (user == null)
+                var requestedUser = context.Users
+                     .Include(u => u.Role)
+                     .Include(s => s.UserStats)
+                     .Include(a => a.UserAchievements)
+                     .ThenInclude(a => a.UserAchievementDetails)
+                     .ThenInclude(a => a.Achievement)
+                     .FirstOrDefault(user => user.Id == id);
+
+                if (requestedUser == null)
                 {
-                    return Ok("A kért felhasználó nem található.");
+                    return NotFound("A kért felhasználó nem található.");
                 }
-
-                return Ok(user);
+                return Ok(requestedUser);
             }
             catch (Exception ex)
             {
@@ -55,8 +68,39 @@ namespace GameController.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, User")]
+        [HttpGet("getStats/user")]
+        public ActionResult GetUserStatsById(string id)
+        {
+            try
+            {
+                using var context = new GameContext();
+
+                var requestedUser = context.Users.FirstOrDefault(u => u.Id == id);
+
+                if (requestedUser == null)
+                {
+                    return NotFound("A keresett felhasználó nem létezik!");
+                }
+                var requestedStats = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser!.UserStatsId);
+
+                if (requestedUser == null)
+                {
+                    return Ok("A kért felhasználó nem található.");
+                }
+                return Ok(requestedStats);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+
+            }
+        }
+
+
+
         [HttpPost("addUser")]
-        public ActionResult AddUser(UserDTO userDTO)
+        public async Task<ActionResult> AddUser(UserDTO userDTO)
         {
             try
             {
@@ -64,18 +108,16 @@ namespace GameController.Controllers
                 var context = new GameContext();
                 var user = new User
                 {
+                    Id = userDTO.Id,
                     Username = userDTO.Username,
                     Email = userDTO.Email,
-                    Regdate = DateTime.UtcNow,
-                    Permission = context.Permissions.First(s => s.PermissionName == "User"),
+                    Regdate = DateTime.Now,
+                    Role = context.Roles.First(s => s.RoleName == "User")!,
                     UserStats = userDTO.UserStats,
-                    AchievementsConnects = []
-
+                    UserAchievements = []
                 };
-
-                context.Users.Add(user);
-
-                context.SaveChanges();
+                await context.Users.AddAsync(user);
+                await context.SaveChangesAsync();
 
                 return Ok("Felhasználó létrehozva.");
             }
@@ -85,6 +127,74 @@ namespace GameController.Controllers
                 throw;
             }
         }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpPut("resetAccount")]
+        public async Task<ActionResult> ResetAccount([FromQuery] string userId)
+        {
+            try
+            {
+
+                var context = new GameContext();
+
+                var requestedUser = context.Users.FirstOrDefault(u => u.Id == userId);
+
+                if (requestedUser == null)
+                {
+                    return NotFound("A kért felhasználó nem található!");
+                }
+
+                var requestedStat = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser.UserStatsId);
+
+                requestedStat!.Kills = 0;
+                requestedStat.Deaths = 0;
+                requestedStat.Timesplayed = 0;
+
+                await context.SaveChangesAsync();
+
+                return Ok("Sikeresen resetelted a fiókodat!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
+        }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpPut("updateAccountStats")]
+        public async Task<ActionResult> UpdateUserStat([FromBody] Userstat userstat)
+        {
+            try
+            {
+
+                var context = new GameContext();
+
+                var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+
+                if (requestedStat == null)
+                {
+                    return NotFound("A kért statisztika nem található!");
+                }
+
+                requestedStat!.Kills = userstat.Kills;
+                requestedStat!.Deaths = userstat.Deaths;
+                requestedStat!.Timesplayed = userstat.Timesplayed;
+
+                context.Update(requestedStat);
+                await context.SaveChangesAsync();
+
+                return Ok("Frissültek a statisztikáid!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
+        }
+
+
+
 
     }
 }

@@ -12,15 +12,15 @@
   {
     "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
     "Method": "GetUserAchievements",
-    "RelativePath": "Game/achievements/{userId}",
+    "RelativePath": "Game/achievements/user",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "userId",
-        "Type": "System.Int32",
-        "IsRequired": true
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -28,20 +28,20 @@
   {
     "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
     "Method": "AddAchievementToUser",
-    "RelativePath": "Game/addAchievement/{userid}/{achiId}",
+    "RelativePath": "Game/addAchievement/user",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userid",
-        "Type": "System.Int32",
-        "IsRequired": true
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
       },
       {
         "Name": "achiId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -98,8 +98,24 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "ResetAccount",
+    "RelativePath": "Game/resetAccount",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userStatId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

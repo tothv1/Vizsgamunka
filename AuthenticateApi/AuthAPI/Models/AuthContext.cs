@@ -7,8 +7,14 @@ namespace AuthAPI.Models;
 
 public partial class AuthContext : DbContext
 {
+    private IConfiguration _configuration;
     public AuthContext()
     {
+    }
+
+    public AuthContext(IConfiguration configuration)
+    {
+        this._configuration = configuration;
     }
 
     public AuthContext(DbContextOptions<AuthContext> options)
@@ -29,18 +35,13 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
+    
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
-                .Build();
-            string connectionString = configuration.GetConnectionString("Connection")!;
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
-    }
+        /*string connectionString = _configuration.GetConnectionString("Connection")!;
+        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));*/
+        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
+
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

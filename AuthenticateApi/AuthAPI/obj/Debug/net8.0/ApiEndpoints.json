@@ -90,6 +90,159 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "GetAllAchievements",
+    "RelativePath": "Game/achievements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "GetUserAchievements",
+    "RelativePath": "Game/achievements/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "AddAchievementToUser",
+    "RelativePath": "Game/addAchievement/user",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "achiId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "AddUser",
+    "RelativePath": "Game/addUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userDTO",
+        "Type": "SyntaxBackEnd.DTOs.UserDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "AddAchievementToUser",
+    "RelativePath": "Game/createAchievement",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "achievement",
+        "Type": "SyntaxBackEnd.DTOs.AchievementDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "GetUserStatsById",
+    "RelativePath": "Game/getStats/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "getUsers",
+    "RelativePath": "Game/getUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "GetUserById",
+    "RelativePath": "Game/getUsers/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "ResetAccount",
+    "RelativePath": "Game/resetAccount",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "UpdateUserStat",
+    "RelativePath": "Game/updateAccountStats",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userstat",
+        "Type": "SyntaxBackEnd.Models.Userstat",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "AuthAPI.Controllers.RoleController",
     "Method": "AssignRole",
     "RelativePath": "Role/assignrole/user",

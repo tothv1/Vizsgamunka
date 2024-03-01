@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using SyntaxBackEnd.Models;
 using System.Linq.Expressions;
 using System.Net;
+using System.Text.Json.Nodes;
 
 namespace AuthAPI.Services.AuthServices
 {
@@ -28,6 +31,7 @@ namespace AuthAPI.Services.AuthServices
             this._emailSenderService = emailSenderService;
         }
 
+        //Fiók megerősítés
         public async Task<Object> ConfirmAccount(string confirmKey)
         {
             try
@@ -53,10 +57,29 @@ namespace AuthAPI.Services.AuthServices
                 };
 
                 await context.AddAsync(RegisteredUser);
-                await context.SaveChangesAsync();
-
                 context.Registries.Remove(keyCheck);
                 await context.SaveChangesAsync();
+
+                var gameController = new GameController.Controllers.GameController();
+                var gameContext = new GameContext();
+
+                var userStat = new Userstat()
+                {
+                    UserStatId = 0,
+                    Kills = 0,
+                    Deaths = 0,
+                    Timesplayed = 0,
+                };
+                var gameUser = new SyntaxBackEnd.DTOs.UserDTO()
+                {
+                    Id = keyCheck.TempUserid,
+                    Username = keyCheck.TempUsername,
+                    Email = keyCheck.TempEmail,
+                    Regdate = keyCheck.TempRegdate,
+                    UserStats = userStat,
+                };
+
+                var res =  await gameController.AddUser(gameUser);
 
                 return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
 
@@ -73,6 +96,7 @@ namespace AuthAPI.Services.AuthServices
             try
             {
                 var token = "";
+                var gameContext = new GameContext();
 
                 await using (var context = new AuthContext())
                 {
@@ -90,7 +114,6 @@ namespace AuthAPI.Services.AuthServices
                     {
                         var oldToken = selectedLoggedInUser.Token;
                         _tokenManager.blackListToken(oldToken);
-
                         selectedLoggedInUser.Token = token;
                         context.Update(selectedLoggedInUser);
                     } 
@@ -103,6 +126,12 @@ namespace AuthAPI.Services.AuthServices
                             Token = token
                         });
                     }
+                    var gameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email);
+                    
+                    gameUser!.Lastlogin = DateTime.Now;
+                    gameContext.Update(gameUser);
+                    gameContext.SaveChanges();
+
                     await context.SaveChangesAsync();
 
                 }
@@ -211,6 +240,7 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+        //Unregister logika
         public async Task<object> Unregister(UnregisterDTO unregisterDTO)
         {
             try
@@ -224,17 +254,20 @@ namespace AuthAPI.Services.AuthServices
                     return ResponseObject.create("Hibás email", 400);
                 }
 
-                var userVerify = context.LoggedInUsers.FirstOrDefault(r => r.Userid == requestedUser.Userid);
-
-                if (userVerify == null)
-                {
-                    return ResponseObject.create("Hibás email", 400);
-                }
-
                 if (!BCrypt.Net.BCrypt.Verify(unregisterDTO.Password, requestedUser!.Hash))
                 {
                     return ResponseObject.create("Hibás jelszó!", 400);
                 }
+
+                var gameContext = new GameContext();
+
+                var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
+
+                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserStatId == requestedGameUser!.UserStatsId);
+
+                gameContext!.Remove(requestedStat);
+                gameContext!.Remove(requestedGameUser);
+                gameContext.SaveChanges();
 
                 context.Remove(requestedUser);
                 await context.SaveChangesAsync();

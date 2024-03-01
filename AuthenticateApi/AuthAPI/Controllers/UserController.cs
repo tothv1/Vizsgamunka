@@ -53,7 +53,31 @@ namespace AuthAPI.Controllers
 
                 var selectedUser = await context.RegisteredUsers.Include(u => u.Role).FirstOrDefaultAsync(user => user.Userid == id);
 
+                if (selectedUser == null)
+                {
+                    return NotFound("A kért felhasználó nem található");
+                }
+
                 return Ok(selectedUser);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("users/status")]
+        public async Task<ActionResult> GetAllActiveOrInactive([FromQuery] bool isActive)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
+
+                return Ok(users);
 
             }
             catch (Exception ex)
@@ -76,9 +100,9 @@ namespace AuthAPI.Controllers
                     return Ok("A jelszó visszaállító email elküldve, ha érvényes a megadott email cím!");
                 }
 
-                var passwordResetKey = confirmationKeyGenerate.GenerateConfirmationKey(email, selectedUser.Hash);
+                var passwordResetKey = confirmationKeyGenerate.GeneratePasswordResetCode();
 
-                string mess = $"Megerősítő kód: <b>{passwordResetKey}</b>";
+                string mess = $"Megerősítő kód: {passwordResetKey}";
 
                 if (!emailSenderService.sendMailWithFropsiEmailServer(email, "Jelszó visszaállító", mess))
                 {
@@ -97,6 +121,8 @@ namespace AuthAPI.Controllers
             }
         }
 
+
+        [Authorize(Roles = "Admin, User")]
         [HttpPut("resetPassword")]
         public async Task<ActionResult> ResetUserPassword([FromBody] string key)
         {
@@ -131,6 +157,7 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, User")]
         [HttpPut("changePassword")]
         public async Task<ActionResult> ChangeUserPassword([FromBody] ChangePasswordDTO changePasswordDTO)
         {
@@ -167,6 +194,7 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, User")]
         [HttpPut("changeEmail")]
         public async Task<ActionResult> ChangeUserEmail([FromBody] ChangeEmailDTO changeEmailDTO)
         {
@@ -204,26 +232,6 @@ namespace AuthAPI.Controllers
                 context.SaveChanges();
 
                 return Ok("Az emailed megváltozott!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("users/status")]
-        public async Task<ActionResult> GetAllActiveOrInactive([FromQuery]bool isActive)
-        {
-            try
-            {
-                var context = new AuthContext();
-
-                var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
-
-                return Ok(users);
-
             }
             catch (Exception ex)
             {
