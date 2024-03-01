@@ -4,7 +4,9 @@ import Canvas from "./render/canvas";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Menu from "./menu";
 import AuthPage from "./AuthPage";
-import Login from "./login";
+
+import Login from "./pages/login";
+import Register from "./pages/register";
 
 import wall from "./Assets/map/wall.png";
 import karakter from "./Assets/characters/hatternelkuli.png";
@@ -27,6 +29,7 @@ export default function App() {
           <Route path="/" element={<AuthPage />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route
             path="/game"
             element={
