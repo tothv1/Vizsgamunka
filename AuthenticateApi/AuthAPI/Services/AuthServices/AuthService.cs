@@ -101,9 +101,8 @@ namespace AuthAPI.Services.AuthServices
                 await using (var context = new AuthContext())
                 {
                     var user = context.RegisteredUsers.FirstOrDefault(user => user.Username == loginDto.UserName);
-
-
-                    if (user == null)
+                    
+                    if(user == null)
                     {
                         return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
                     }
