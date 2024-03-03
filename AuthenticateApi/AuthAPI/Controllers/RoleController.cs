@@ -1,9 +1,11 @@
 ﻿using AuthAPI.Models;
 using AuthAPI.Services;
+using GameController.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SyntaxBackEnd.Models;
 
 namespace AuthAPI.Controllers
 {
@@ -38,26 +40,34 @@ namespace AuthAPI.Controllers
         {
             try
             {
+                var gameContext = new GameContext();
                 await using var context = new AuthContext();
 
                 var user = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Userid == userid);
 
                 if (user == null)
                 {
-                    return Ok(ResponseObject.create("Nincs ilyen felhasználó!", 400));
+                    return NotFound(ResponseObject.create("Nincs ilyen felhasználó!", 400));
                 }
 
                 var requestedRole = await context.Roles.FirstOrDefaultAsync(r => r.Roleid == role);
 
                 if (requestedRole == null)
                 {
-                    return Ok(ResponseObject.create("Nincs ilyen szerepkör!", 400));
+                    return NotFound(ResponseObject.create("Nincs ilyen szerepkör!", 400));
                 }
 
                 if(user.Roleid == requestedRole.Roleid)
                 {
                     return Ok(ResponseObject.create("Már rendelkezik a kért szerepkörrel!", 400));
                 }
+
+                var finalGameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email)!;
+
+                finalGameUser.Role = gameContext.Roles.FirstOrDefault(r => r.RoleName == requestedRole.RoleName)!;
+
+                gameContext.Update(finalGameUser);
+                await gameContext.SaveChangesAsync();
 
                 user.Role = requestedRole;
                 context.Update(user);

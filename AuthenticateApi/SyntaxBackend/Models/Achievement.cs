@@ -11,5 +11,5 @@ public partial class Achievement
     public string AchievementName { get; set; } = null!;
 
     [JsonIgnore]
-    public virtual ICollection<Userachievement> Userachievements { get; set; } = new List<Userachievement>();
+    public virtual ICollection<UserAchievementDetail> UserAchievementDetails { get; set; } = new List<UserAchievementDetail>();
 }

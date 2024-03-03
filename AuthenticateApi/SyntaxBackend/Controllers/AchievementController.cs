@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SyntaxBackEnd.DTOs;
 using SyntaxBackEnd.Models;
@@ -23,9 +24,9 @@ namespace SyntaxBackEnd.Controllers
 
                 var achievements = context.Achievements;
 
-                if(achievements.IsNullOrEmpty())
+                if (achievements.IsNullOrEmpty())
                 {
-                    return BadRequest("Jelenleg nincs teljesítmény, vagy valami hiba történt.");
+                    return NotFound("Jelenleg nincs teljesítmény, vagy valami hiba történt.");
                 }
 
                 return Ok(achievements.ToList());
@@ -38,8 +39,8 @@ namespace SyntaxBackEnd.Controllers
         }
 
         [Authorize(Roles = "Admin, User")]
-        [HttpGet("achievements/{userId}")]
-        public ActionResult GetUserAchievements(int userId)
+        [HttpGet("achievements/user")]
+        public ActionResult GetUserAchievements(string userId)
         {
             try
             {
@@ -49,14 +50,24 @@ namespace SyntaxBackEnd.Controllers
 
                 if (achievements.IsNullOrEmpty())
                 {
-                    return BadRequest("Jelenleg nincs teljesítmény, vagy valami hiba történt.");
+                    return NotFound("Jelenleg nincs teljesítmény, vagy valami hiba történt.");
                 }
 
-                var userAchievements = context.Userachievements.ToList();
+
+                var userAchievements = context.UserAchievementDetails
+                    .Include(s => s.UserAchievement)
+                    .Include(u => u.Achievement)
+                    .Where(s => s.UserAchievement.Userid == userId)
+                    .ToList();
+
+                if (userAchievements == null)
+                {
+                    return NotFound("Nincs ilyen felhasználó!");
+                }
 
                 if (userAchievements.IsNullOrEmpty())
                 {
-                    return BadRequest("Ennek a felhasználónak nincs teljesítménye, vagy valami hiba történt.");
+                    return NotFound("Ennek a felhasználónak nincs teljesítménye, vagy valami hiba történt.");
                 }
 
                 return Ok(userAchievements);
@@ -69,39 +80,44 @@ namespace SyntaxBackEnd.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("addAchievement/{userid}/{achiId}")]
-        public ActionResult AddAchievementToUser(int userid, int achiId)
+        [HttpPost("addAchievement/user")]
+        public ActionResult AddAchievementToUser(string userId, int achiId)
         {
             try
             {
                 using var context = new GameContext();
 
-                var user = context.Users.FirstOrDefault(u => u.Id == userid);
+                var user = context.Users.FirstOrDefault(u => u.Id == userId);
 
                 var achievement = context.Achievements.FirstOrDefault(a => a.Id == achiId);
 
                 if (user == null)
                 {
-                    return Ok("A kért felhasználó nem található.");
+                    return NotFound("A kért felhasználó nem található.");
                 }
 
                 if (achievement == null)
                 {
-                    return Ok("Az kért teljesítmény nem található.");
+                    return NotFound("Az kért teljesítmény nem található.");
                 }
 
-                if(context.Userachievements.FirstOrDefault(achi => achi.Achievement == achievement) != null)
+                if(context.UserAchievementDetails.FirstOrDefault(achi => achi.Achievement == achievement) != null)
                 {
                     return BadRequest("Már megszerezted ezt a teljesítményt.");
                 }
 
-                context.Userachievements.Add(new Userachievement
+                var userAchievement = new UserAchievement
                 {
-                    UserId = userid,
+                    AchievementId = 0,
+                    Userid = userId,
+                };
+
+                context.Add(new UserAchievementDetail
+                {
+                    AchievementDetailId = 0,
                     AchievementId = achiId,
-                    Achievement = achievement,
-                    AchievementDate = DateTime.UtcNow,
-                    
+                    UserAchievement = userAchievement,
+                    AchievementDate = DateTime.Now,
                 });
                 context.SaveChanges();
 
@@ -126,7 +142,7 @@ namespace SyntaxBackEnd.Controllers
 
                 if (context.Achievements.Contains(context.Achievements.FirstOrDefault(a => a.AchievementName == achievement.AchievementName)))
                 {
-                    return BadRequest("Már létezik ilyen nevű teljesítmény");
+                    return NotFound("Már létezik ilyen nevű teljesítmény");
                 }
 
                 context.Add(new Achievement
