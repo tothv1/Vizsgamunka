@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "AuthAPI.Controllers.AuthController",
+    "Method": "IsValidKey",
+    "RelativePath": "Auth/keyValidate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "confirmKey",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.AuthController",
     "Method": "LoginUser",
     "RelativePath": "Auth/login",
     "HttpMethod": "POST",
@@ -42,7 +58,7 @@
       {
         "Name": "token",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

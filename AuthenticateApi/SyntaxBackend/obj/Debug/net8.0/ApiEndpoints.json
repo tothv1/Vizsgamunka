@@ -80,6 +80,22 @@
   },
   {
     "ContainingType": "GameController.Controllers.GameController",
+    "Method": "GetUserStatsById",
+    "RelativePath": "Game/getStats/user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
     "Method": "getUsers",
     "RelativePath": "Game/getUsers",
     "HttpMethod": "GET",
@@ -91,7 +107,7 @@
   {
     "ContainingType": "GameController.Controllers.GameController",
     "Method": "GetUserById",
-    "RelativePath": "Game/getUsers/{id}",
+    "RelativePath": "Game/getUsers/user",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -99,7 +115,7 @@
       {
         "Name": "id",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -113,9 +129,25 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userStatId",
-        "Type": "System.Int32",
+        "Name": "userId",
+        "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GameController.Controllers.GameController",
+    "Method": "UpdateUserStat",
+    "RelativePath": "Game/updateAccountStats",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userstat",
+        "Type": "SyntaxBackEnd.Models.Userstat",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

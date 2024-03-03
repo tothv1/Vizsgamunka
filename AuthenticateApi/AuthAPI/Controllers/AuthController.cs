@@ -57,9 +57,25 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [HttpGet("keyValidate")]
+        public async Task<ActionResult> IsValidKey([FromQuery] string confirmKey)
+        {
+            try
+            {
+                var response = await authService.IsValidKey(confirmKey);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [Authorize(Roles = "Admin, User")]
         [HttpPut("logout")]
-        public async Task<ActionResult> LogoutUser([FromBody] string token)
+        public async Task<ActionResult> LogoutUser([FromQuery] string token)
         {
             try
             {

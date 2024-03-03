@@ -8,6 +8,7 @@ namespace AuthAPI.Services.IServices
         public Task<Object> Register(RegisterDTO register);
         public Task<Object> Login(LoginDTO loginDto);
         public Task<Object> ConfirmAccount(string confirmKey);
+        public Task<Object> IsValidKey(string confirmKey);
         public Task<Object> Unregister(UnregisterDTO unregisterDTO);
         public Task<Object> Logout(string token);
 

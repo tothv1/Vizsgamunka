@@ -39,7 +39,8 @@ namespace AuthAPI
                 {
                     policy.WithOrigins("*")
                     .AllowAnyHeader()
-                    .AllowAnyMethod().AllowAnyOrigin();
+                    .AllowAnyMethod().
+                    AllowAnyOrigin();
                 });
             });
             

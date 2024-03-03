@@ -1,4 +1,5 @@
-﻿using AuthAPI.Models;
+﻿using AuthAPI.DTOs;
+using AuthAPI.Models;
 using AuthAPI.Services.IServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
@@ -36,6 +37,40 @@ namespace AuthAPI.Services.TokenManager
                 new Claim("username",registeredUser.Username),
                 new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
                 new Claim("userRegdate",registeredUser.Regdate.ToString())
+            };
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Audience = jwtOptions.Audience,
+                Issuer = jwtOptions.Issuer,
+                Subject = new ClaimsIdentity(claimList),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescription);
+
+            return tokenHandler.WriteToken(token);
+        }
+
+        public string GenerateConfirmationToken(ConfirmationUserDTO registeredUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
+
+            var context = new AuthContext();
+
+            var roles = context.Roles;
+
+            var claimList = new List<Claim>
+            {
+                //Token tartalma
+
+                new Claim("userid",registeredUser.UserId),
+                new Claim("username",registeredUser.Username),
+                new Claim("fullname", registeredUser.Fullname),
+                new Claim("Email", registeredUser.Email),
             };
 
             var tokenDescription = new SecurityTokenDescriptor
