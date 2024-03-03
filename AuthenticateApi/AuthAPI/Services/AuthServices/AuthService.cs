@@ -90,6 +90,31 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+        //Fiók megerősítés ellenőrzés
+        public async Task<Object> IsValidKey(string confirmKey)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
+
+                if (keyCheck == null)
+                {
+                    return ResponseObject.create("Hibás kulcs, vagy nem létező fiók!", 400);
+                }
+
+                return ResponseObject.create("A megadott kulcs helyes!", keyCheck, 200);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create(ex.Message, 400);
+            }
+        }
+
+
+
         //Bejelentkezés logika
         public async Task<Object> Login(LoginDTO loginDto)
         {
@@ -224,11 +249,11 @@ namespace AuthAPI.Services.AuthServices
                     TempRegdate = DateTime.UtcNow,
                     TempRoleid = 1,
                     TempUserExpire = expireDate.AddHours(24),
-                    TempConfirmationKey = _confirmationKeyGenerate.GenerateConfirmationKey(register.Email, passwordHash)
+                    TempConfirmationKey = _tokenManager.GenerateConfirmationToken(new ConfirmationUserDTO { UserId=userId, Email=register.Email, Fullname=register.Fullname, Username = register.Username })
                 };
 
 
-                string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:5159/Auth/confirmAccount?confirmKey={registry.TempConfirmationKey}";
+                string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:3000/confirm/{registry.TempConfirmationKey}";
 
                 if (!_emailSenderService.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email", message)) {
                     return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", "null email", 400);

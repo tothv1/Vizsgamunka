@@ -7,20 +7,20 @@
       "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\authservices\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\syntaxbackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|solutionrelative:syntaxbackend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\tokenmanager\\tokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\tokenmanager\\tokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\services\\iservices\\itokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\services\\iservices\\itokenmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\syntaxbackend\\controllers\\achievementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D2B4A82C-BA31-4A2B-B85D-6F57CAAE798D}|SyntaxBackend\\SyntaxBackEnd.csproj|solutionrelative:syntaxbackend\\controllers\\achievementcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|e:\\gitrepok\\vizsgamunka\\authenticateapi\\authapi\\dtos\\confirmationuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D3B089F-BAE1-419A-9E40-833E7790C500}|AuthAPI\\AuthAPI.csproj|solutionrelative:authapi\\dtos\\confirmationuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,28 +34,28 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "AuthAPI\\Properties\\launchSettings.json",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Properties\\launchSettings.json",
-              "RelativeToolTip": "AuthAPI\\Properties\\launchSettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAABAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-03-02T12:56:12.876Z",
+              "DocumentIndex": 4,
+              "Title": "ConfirmationUserDTO.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\DTOs\\ConfirmationUserDTO.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\DTOs\\ConfirmationUserDTO.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\DTOs\\ConfirmationUserDTO.cs",
+              "RelativeToolTip": "AuthAPI\\DTOs\\ConfirmationUserDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-03T15:24:06.335Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\appsettings.json",
-              "RelativeDocumentMoniker": "SyntaxBackend\\appsettings.json",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\appsettings.json",
-              "RelativeToolTip": "SyntaxBackend\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAeAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-03-02T12:55:56.535Z",
+              "DocumentIndex": 3,
+              "Title": "ITokenManager.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\IServices\\ITokenManager.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\Services\\IServices\\ITokenManager.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\IServices\\ITokenManager.cs",
+              "RelativeToolTip": "AuthAPI\\Services\\IServices\\ITokenManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAABUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-03T15:21:37.395Z",
               "EditorCaption": ""
             },
             {
@@ -66,34 +66,36 @@
               "RelativeDocumentMoniker": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
               "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\AuthServices\\AuthService.cs",
               "RelativeToolTip": "AuthAPI\\Services\\AuthServices\\AuthService.cs",
-              "ViewState": "AQIAAFcAAAAAAAAAAAAowGsAAAAVAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAQwBkAAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-02T12:03:28.338Z",
+              "WhenOpened": "2024-03-03T15:17:53.926Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "AuthAPI\\Controllers\\AuthController.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "AuthAPI\\Controllers\\AuthController.cs",
-              "ViewState": "AQIAACEAAAAAAAAAAAAowAAAAAAAAAAA",
+              "DocumentIndex": 2,
+              "Title": "TokenManager.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\TokenManager\\TokenManager.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\Services\\TokenManager\\TokenManager.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Services\\TokenManager\\TokenManager.cs",
+              "RelativeToolTip": "AuthAPI\\Services\\TokenManager\\TokenManager.cs",
+              "ViewState": "AQIAACIAAAAAAAAAAAAIwEYAAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-02T12:03:21.218Z"
+              "WhenOpened": "2024-03-03T15:12:19.258Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AchievementController.cs",
-              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\AchievementController.cs",
-              "RelativeDocumentMoniker": "SyntaxBackend\\Controllers\\AchievementController.cs",
-              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\Controllers\\AchievementController.cs",
-              "RelativeToolTip": "SyntaxBackend\\Controllers\\AchievementController.cs",
-              "ViewState": "AQIAADwAAAAAAAAAAAAowE4AAAANAAAA",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Program.cs",
+              "RelativeDocumentMoniker": "AuthAPI\\Program.cs",
+              "ToolTip": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\AuthAPI\\Program.cs",
+              "RelativeToolTip": "AuthAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-29T12:48:51.729Z"
+              "WhenOpened": "2024-03-02T20:28:39.226Z",
+              "EditorCaption": ""
             }
           ]
         }
