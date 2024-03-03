@@ -27,6 +27,9 @@ function Update(deltaTime, frameCount,target) {
   this.x=translation[0];
   this.y=translation[1];
 
+  this.xcenter = this.x-(this.width/2);
+  this.ycenter = this.y-(this.height/2);
+
 };
 
 const getImg = () =>{
@@ -55,6 +58,9 @@ const Slime = {
   health : 100,
 
   frame : 0,
+
+  xcenter : 0,
+  ycenter : 0,
 
   drawing : getImg(),
   update:Update

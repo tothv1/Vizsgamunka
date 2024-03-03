@@ -17,12 +17,15 @@ const Canvas = props => {
   entities.projectileList = [];
   entities.tileList = [];
   entities.entityList = [];
+  entities.effectList = [];
+
+  let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
 
 
   const playerRef = Player;
   playerRef.x = 600;
   playerRef.y = 600;
-  playerRef.mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64]
+  playerRef.mapsize = mapsize;
   playerRef.entityRef = entities;
   entities.entityList.push(playerRef);
 
@@ -78,6 +81,10 @@ const Canvas = props => {
 
   useEffect(() => {
 
+    if (Document.hidden){
+      console.log("fuck")
+    }
+
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
 
@@ -98,7 +105,7 @@ const Canvas = props => {
         item.update(deltaTime, frameCount, Player);
         item.renderoffset = renderOffset;
         if (item.ID === 1) {
-          item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+          item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
           draw(context, item, item.offset);
         }
       });
@@ -111,6 +118,18 @@ const Canvas = props => {
 
       entities.projectileList.forEach(item => {
         item.update(deltaTime, frameCount);
+        if(item.x<-500 || item.x>mapsize[0]+500 || item.y<-500 || item.y>mapsize[1]+500){
+          entities.projectileList.splice(item,1);
+        }
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
+      });
+
+      entities.effectList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        if(item.frame>item.maxFrame){
+          entities.effectList.splice(item,1);
+        }
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         draw(context, item, item.offset)
       });
@@ -120,7 +139,7 @@ const Canvas = props => {
 
       let playerrenderpos = [playerRef.x + renderOffset[0], playerRef.y + renderOffset[1]]
 
-      draw(context, playerRef, [playerrenderpos[0], playerrenderpos[1]]);
+      draw(context, playerRef, [playerrenderpos[0]-Player.width/2, playerrenderpos[1]-Player.height/2]);
 
       lastUpdateTime = window.performance.now();
       frameCount++

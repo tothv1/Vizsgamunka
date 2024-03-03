@@ -24,8 +24,13 @@ const Player = {
   x : 0,
   y : 0,
 
+  xcenter : 0,
+  ycenter : 0,
+
   renderx:0,
   rendery:0,
+
+
 
   mapsize : [0,0],
   offset : [0,0],
@@ -187,6 +192,9 @@ function Update(deltaTime, frameCount) {
 
   this.x = Clamp(this.x, 0, this.mapsize[0]-this.width);
   this.y = Clamp(this.y, 0, this.mapsize[1]-this.height);
+
+  this.xcenter = this.x-this.width/2;
+  this.ycenter = this.y-this.height/2;
 
 };
 

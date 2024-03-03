@@ -29,7 +29,10 @@ const Wall = {
   
   width : 64,
   height : 64,
-  
+
+  xcenter : 0,
+  ycenter : 0,
+
   frame : 0,
   
   
@@ -55,6 +58,9 @@ function Update (deltaTime, frameCount) {
       this.frame = 0
     }
   } 
+  
+  this.xcenter = this.x+this.width/2;
+  this.ycenter = this.y+this.height/2;
 
 };
 
