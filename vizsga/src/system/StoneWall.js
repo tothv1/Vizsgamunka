@@ -16,10 +16,13 @@ const Wall = {
 
   ID : 1,
   state : "Sleep",
+  type:"solid",
 
   frameDelay : 10, //every x updates, the sprite turns over to the next frame
   frameLength : 1, // frames in the spritesheet
   mirror : false,
+
+
 
   x:0,
   y:0,
@@ -29,6 +32,9 @@ const Wall = {
   
   width : 64,
   height : 64,
+
+  xhitbox:64,
+  yhitbox:64,
 
   xcenter : 0,
   ycenter : 0,

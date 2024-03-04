@@ -40,3 +40,37 @@ export function RadToDegrees(radian){
 export function GetDirRad(direction) {
     return Math.atan2(direction[1],direction[0])-Math.PI/2;
 }
+
+export function CheckCollision(object1,object2){
+
+    if(object1.team==object2.team){
+        return false
+    }
+
+    let obj1bottom = object1.ycenter+(object1.yhitbox/2);
+    let obj1top = object1.ycenter-(object1.yhitbox/2);
+    let obj1right = object1.xcenter+(object1.xhitbox/2);
+    let obj1left = object1.xcenter-(object1.xhitbox/2);
+
+    let obj2bottom = object2.ycenter+(object2.yhitbox/2);
+    let obj2top = object2.ycenter-(object2.yhitbox/2);
+    let obj2right = object2.xcenter+(object2.xhitbox/2);
+    let obj2left = object2.xcenter-(object2.xhitbox/2);
+
+    let hit = true;
+
+    if ((obj1bottom < obj2top) ||
+        (obj1top > obj2bottom) ||
+        (obj1right < obj2left) ||
+        (obj1left > obj2right)) {
+        hit = false;
+        
+    }
+
+    console.log(`${object1} x ${object2}`);
+    return hit
+}
+
+export function getRandomRange(min, max) {
+    return Math.random() * (max - min) + min;
+}

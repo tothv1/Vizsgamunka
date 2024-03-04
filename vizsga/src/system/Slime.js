@@ -6,9 +6,6 @@ import { GetDirAngle, GetDirection, LerpNum, Normalise, RadToDegrees, Translate 
 
 function Update(deltaTime, frameCount,target) {
 
-
-
-
   this.frameLength = this.drawing.width / this.width;
 
   if (this.frameLength > 1) {
@@ -32,6 +29,13 @@ function Update(deltaTime, frameCount,target) {
 
 };
 
+function takeDamage(damage){
+  this.health-=damage;
+  if (this.health<=0){
+    this.dead=true;
+  }
+}
+
 const getImg = () =>{
 
   var temp = new Image();
@@ -45,14 +49,23 @@ const Slime = {
   frameLength : 8, // frames in the spritesheet
   state : "idle",
   mirror : false,
+
+  dead:false,
   
   rotation : 0,
 
   x : 0,
   y : 0,
 
+  team:2,
+
+  health:100,
+
   width : 64,
   height : 64,
+
+  xhitbox:32,
+  yhitbox:32,
 
   speed : 300,
   health : 100,
@@ -63,7 +76,9 @@ const Slime = {
   ycenter : 0,
 
   drawing : getImg(),
-  update:Update
+  update:Update,
+  takeDamage:takeDamage
+
 }
 
 

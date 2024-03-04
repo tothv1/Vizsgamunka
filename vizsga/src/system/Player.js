@@ -7,7 +7,7 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
-import { Clamp, Normalise,GetDirection, GetDirRad } from "../system/Math";
+import { Clamp, Normalise,GetDirection, GetDirRad, getRandomRange } from "../system/Math";
 import { Slime } from "./Slime";
 import { Arrow } from "./Projectile";
 
@@ -30,16 +30,20 @@ const Player = {
   renderx:0,
   rendery:0,
 
+  team:1,
 
+  xhitbox:32,
+  yhitbox:32,
 
   mapsize : [0,0],
   offset : [0,0],
   renderoffset : [0,0],
 
-  width : 39,
+  width : 64,
   height : 64,
   
   speed : 300,
+  
   health : 100,
 
   UpState : false,
@@ -68,6 +72,8 @@ function shoot(e){
   temp.y=Player.y;
   temp.direction=Normalise(GetDirection([Player.x,Player.y],[e.pageX-Player.renderoffset[0],e.pageY-Player.renderoffset[1]]));
   temp.rotation = GetDirRad(temp.direction);
+  temp.damage =Math.floor(getRandomRange(10,15));
+  
   console.log(temp.rotation)
   console.log(Player.renderoffset);
 
@@ -124,19 +130,15 @@ function Update(deltaTime, frameCount) {
   if (this.state === "moving") {
     if (this.direction === "left") {
       this.drawing.src = left;
-      this.width = 64;
     }
     if (this.direction === "right") {
       this.drawing.src = right;
-      this.width = 64;
     }
     if (this.direction === "up") {
       this.drawing.src = up;
-      this.width = 53;
     }
     if (this.direction === "down") {
       this.drawing.src = down;
-      this.width = 53;
     }
 
     if (frameCount % this.frameDelay === 0) {

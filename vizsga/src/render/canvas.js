@@ -4,8 +4,11 @@ import { rawMaps } from '../Assets/map/maps';
 import { Slime } from '../system/Slime';
 import { Wall } from '../system/StoneWall';
 import { Player } from '../system/Player';
+import { DMGpopup } from './DmgPopup';
 import '../system/Math';
-import { Clamp, Normalise } from '../system/Math';
+import { Clamp, Normalise, CheckCollision } from '../system/Math';
+
+
 
 let renderOffset = [0, 0]
 
@@ -20,6 +23,8 @@ const Canvas = props => {
   entities.effectList = [];
 
   let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
+
+
 
 
   const playerRef = Player;
@@ -52,9 +57,15 @@ const Canvas = props => {
 
     }
     ctx.restore();
+  }
 
+  const drawText = (ctx, object,offset) => {
+    ctx.save();
 
+    ctx.font = `${object.size}px serif`;
+    ctx.fillText(`${object.damage}`, offset[0], offset[1]);
 
+    ctx.restore();
   }
 
   const rawmap = rawMaps[0];
@@ -101,37 +112,72 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
+
+      //entity update
       entities.entityList.forEach(item => {
-        item.update(deltaTime, frameCount, Player);
+        item.update(deltaTime, frameCount, playerRef);
         item.renderoffset = renderOffset;
         if (item.ID === 1) {
           item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
           draw(context, item, item.offset);
         }
+        if(item.dead){
+          entities.entityList = entities.entityList.filter((xd) => !xd.dead);
+        }
       });
 
+      // tile update
       entities.tileList.forEach(item => {
         item.update(deltaTime, frameCount);
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         draw(context, item, item.offset)
       });
 
+
+      //projectile update
       entities.projectileList.forEach(item => {
         item.update(deltaTime, frameCount);
+
+        entities.entityList.forEach(element => {
+          if (CheckCollision(item,element) && item.hitlimit>0){
+
+
+
+            item.hitlimit--;
+            element.takeDamage(item.damage);
+            let temp = Object.create(DMGpopup);
+            temp.x=element.x;
+            temp.y=element.y;
+            temp.damage=item.damage;
+            temp.size = Math.sqrt(item.damage)+20;
+
+            console.log(temp.size)
+
+            entities.effectList.push(temp);
+            if(item.hitlimit<=0){
+              item.dead=true;
+            }
+
+          }
+        });
+
         if(item.x<-500 || item.x>mapsize[0]+500 || item.y<-500 || item.y>mapsize[1]+500){
-          entities.projectileList.splice(item,1);
+          item.dead=true;
         }
-        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        entities.projectileList = entities.projectileList.filter((xd) => !xd.dead);
+
+        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset)
       });
 
+      //effect update
       entities.effectList.forEach(item => {
         item.update(deltaTime, frameCount);
         if(item.frame>item.maxFrame){
           entities.effectList.splice(item,1);
         }
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
-        draw(context, item, item.offset)
+        drawText(context, item,item.offset);
       });
 
       renderOffset = [Clamp(playerRef.x - window.innerWidth / 2, 0, (rawmap[0].length * 64) - window.innerWidth), Clamp(playerRef.y - window.innerHeight / 2, 0, (rawmap.length * 64) - window.innerHeight)]

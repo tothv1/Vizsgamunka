@@ -22,6 +22,8 @@ function Update(deltaTime, frameCount, target) {
     this.y = translation[1];
 
 
+    this.xcenter = this.x-(this.width/2);
+    this.ycenter = this.y-(this.height/2);
 };
 
 
@@ -44,10 +46,19 @@ const Arrow = {
     y: 0,
     rotation : 0,
 
+    xcenter : 0,
+    ycenter : 0,
+
     renderx: 0,
     rendery: 0,
 
+    team:1,
+
+
     offset: [0, 0],
+
+    xhitbox:32,
+    yhitbox:32,
 
     width: 64,
     height: 64,
@@ -55,6 +66,12 @@ const Arrow = {
     speed: 1000,
 
     frame: 0,
+
+    damage: 5000,
+
+    dead:false,
+
+    hitlimit:1,
 
     direction: [],
     drawing: getImg(),
