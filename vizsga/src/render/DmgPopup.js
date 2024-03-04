@@ -1,4 +1,4 @@
-import { Clamp, Normalise,GetDirection, GetDirRad } from "../system/Math";
+import { Clamp, Normalise,GetDirection, GetDirRad, getRandomRange } from "../system/Math";
 
 const DMGpopup = {
     ID : 0,
@@ -12,6 +12,8 @@ const DMGpopup = {
 
     damage : 0,
     size:0,
+    drift: [0,0],
+    driftspd : [0,20],
 
     frame : 0,
     maxFrame: 60,
@@ -29,11 +31,12 @@ const DMGpopup = {
     this.xcenter = this.x+this.width/2;
     this.ycenter = this.y+this.height/2;
 
-    this.y-=this.spd*deltaTime;
+    this.drift = [this.drift[0]+this.driftspd[0],
+                  this.drift[1]+this.driftspd[1]];
 
-    var drift = Math.random()*10;
-
-    this.x-=drift*deltaTime
+    this.x+=this.drift[0]*deltaTime;
+    this.y+=this.drift[1]*deltaTime;
+    
 
     this.frame++;
   }

@@ -72,5 +72,11 @@ export function CheckCollision(object1,object2){
 }
 
 export function getRandomRange(min, max) {
-    return Math.random() * (max - min) + min;
+    var num = Math.random() * (max - min) + min;
+
+    console.log(min);
+    console.log(max);
+    console.log(num)
+
+    return num;
 }

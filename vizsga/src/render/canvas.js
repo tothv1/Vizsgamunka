@@ -6,7 +6,7 @@ import { Wall } from '../system/StoneWall';
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
-import { Clamp, Normalise, CheckCollision } from '../system/Math';
+import { Clamp, Normalise, CheckCollision,getRandomRange } from '../system/Math';
 
 
 
@@ -150,6 +150,7 @@ const Canvas = props => {
             temp.y=element.y;
             temp.damage=item.damage;
             temp.size = Math.sqrt(item.damage)+20;
+            temp.drift = [getRandomRange(-100,100),-500];
 
             console.log(temp.size)
 
