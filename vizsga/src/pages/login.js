@@ -1,32 +1,52 @@
 import React from 'react'
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import menuhatter from '../Assets/background/menuhatter.jpg'
+import axios from 'axios'
+import {jwtDecode} from 'jwt-decode'
 
-const Login = () => {
-    return (
-        <div className='container w-50 border border-dark mt-5 auth-container'>
-            <form onSubmit={async  (e) => { 
-                e.preventDefault();
-                e.persist();
+const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData, setTokenData}) => {
 
-                var res = await axios.post('https://localhost:7096/Auth/login', {
-                    username: e.target.username.value,
-                    password: e.target.password.value
-                }).then(res => console.log(res.data)).catch(err => console.log(err));
+  const navigate = useNavigate();
 
-            } } className='form-control'>
-                <h1>Login</h1>
-                <div className='form-group m-2'>
-                    <label htmlFor='username'>Username</label>
-                    <input type='text' className='form-control' id='username' />
-                </div>
-                <div className='form-group m-2'>
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' className='form-control' id='password' />
-                </div>
-                <button type='submit' className='btn btn-primary'>BejelentkezÃ©s</button>
-            </form>
+  return (
+    <div className='container w-25'>
+      <form onSubmit={async (e) => {
+        e.preventDefault();
+        e.persist();
+
+        var response = await axios.post('https://localhost:7096/Auth/login', {
+          username: e.target.username.value,
+          password: e.target.password.value
+        })
+        .then(async (response) => {
+          if (response.data.status == 200) {
+            localStorage.setItem('token', response.data.resObj);
+            await setToken(response.data.resObj);
+            const  decoded = jwtDecode(response.data.resObj);
+            await setTokenData(decoded);
+            await setRole(decoded.role);
+            await setIsLoggedIn(true);
+          }
+        })
+        .then(() => {
+          navigate('/menu');
+        });
+      }} className='form-control'>
+        <div>
+          <img className='w-100' src={menuhatter} alt='logo' />
         </div>
-    )
+        <div className='form-group'>
+          <label>Felhasználónév</label>
+          <input id='username' type='text' className='form-control' />
+        </div>
+        <div className='form-group'>
+          <label>Jelszó</label>
+          <input id='password' type='password' className='form-control' />
+        </div>
+        <button type='submit' className='btn btn-primary mt-2'>Bejelentkezés</button>
+      </form>
+    </div>
+  )
 }
 
-export default Login
+export default Login;

@@ -1,44 +1,57 @@
 import React from 'react'
-import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom'
+import menuhatter from '../Assets/background/menuhatter.jpg'
+import axios from 'axios'
+import {jwtDecode} from 'jwt-decode'
 
-const register = () => {
+const Register = () => {
+  const navigate = useNavigate();
+  
   return (
-    <div className='container w-50 border border-dark mt-5 auth-container'>
-            <form onSubmit={async  (e) => { 
-                e.preventDefault();
-                e.persist();
+    <div className='container w-25'>
+      <form onSubmit={async (e) => {
+        e.preventDefault();
+        e.persist();
 
-                var res = await axios.post('https://localhost:7096/Auth/register', {
-                    fullname: e.target.fullname.value,
-                    email: e.target.email.value,
-                    username: e.target.username.value,
-                    password: e.target.password.value
-                });
-
-                console.log(res.data);
-
-            } } className='form-control'>
-                <h1>Regisztráció</h1>
-                <div className='form-group m-2'>
-                    <label htmlFor='username'>Username</label>
-                    <input type='text' className='form-control' id='username' />
-                </div>
-                <div className='form-group m-2'>
-                    <label htmlFor='fullname'>Fullname</label>
-                    <input type='text' className='form-control' id='fullname' />
-                </div>
-                <div className='form-group m-2'>
-                    <label htmlFor='email'>Email</label>
-                    <input type='text' className='form-control' id='email' />
-                </div>
-                <div className='form-group m-2'>
-                    <label htmlFor='password'>Password</label>
-                    <input type='password' className='form-control' id='password' />
-                </div>
-                <button type='submit' className='btn btn-primary'>Regisztráció</button>
-            </form>
+        var response = await axios.post('https://localhost:7096/Auth/Register', {
+          username: e.target.username.value,
+          fullname: e.target.fullname.value,
+          email: e.target.email.value,
+          password: e.target.password.value,
+        })
+        .then(async (response) => {
+          if (response.data.status == 200) {
+            console.log(response.data);
+          }
+        });
+      }} className='form-control'>
+        <div>
+          <img className='w-100' src={menuhatter} alt='logo' />
         </div>
+        <div className='form-group'>
+          <label>Felhasználónév</label>
+          <input id='username' type='text' className='form-control' required/>
+        </div>
+        <div className='form-group'>
+          <label>Teljes név</label>
+          <input id='fullname' type='text' className='form-control' required/>
+        </div>
+        <div className='form-group'>
+          <label>E-mail cím</label>
+          <input id='email' type='email' className='form-control' required/>
+        </div>
+        <div className='form-group'>
+          <label>Jelszó</label>
+          <input id='password' type='password' className='form-control' required/>
+        </div>
+        <div className='form-group'>
+          <label>Jelszó megerősítés</label>
+          <input id='passwordre' type='password' className='form-control' required/>
+        </div>
+        <button type='submit' className='btn btn-primary mt-2'>Regisztráció</button>
+      </form>
+    </div>
   )
 }
 
-export default register
+export default Register
