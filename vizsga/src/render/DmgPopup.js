@@ -31,8 +31,9 @@ const DMGpopup = {
     this.xcenter = this.x+this.width/2;
     this.ycenter = this.y+this.height/2;
 
-    this.drift = [this.drift[0]+this.driftspd[0],
-                  this.drift[1]+this.driftspd[1]];
+    this.drift =
+    [this.drift[0]+this.driftspd[0],
+     this.drift[1]+this.driftspd[1]];
 
     this.x+=this.drift[0]*deltaTime;
     this.y+=this.drift[1]*deltaTime;

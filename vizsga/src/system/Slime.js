@@ -3,6 +3,7 @@ import { useState } from "react";
 import rightIdle from "../Assets/characters/slime.png"
 import leftIdle from "../Assets/characters/slime.png"
 import { GetDirAngle, GetDirection, LerpNum, Normalise, RadToDegrees, Translate } from "./Math";
+import { HPbar } from "../render/HPBar";
 
 function Update(deltaTime, frameCount,target) {
 
@@ -59,7 +60,8 @@ const Slime = {
 
   team:2,
 
-  health:100,
+  maxHealth : 100,
+  health : 100,
 
   width : 64,
   height : 64,
@@ -77,7 +79,8 @@ const Slime = {
 
   drawing : getImg(),
   update:Update,
-  takeDamage:takeDamage
+  takeDamage:takeDamage,
+  hpbar : Object.create(HPbar)
 
 }
 
