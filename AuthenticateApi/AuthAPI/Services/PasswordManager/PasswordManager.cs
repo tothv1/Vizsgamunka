@@ -60,5 +60,10 @@ namespace AuthAPI.Services.PasswordStrengthChecker
             }
             return sb.ToString();
         }
+
+        public bool PasswordMatch(string password, string passwordRepeate)
+        {
+            return password.Equals(passwordRepeate);
+        }
     }
 }

@@ -19,14 +19,14 @@ namespace AuthAPI.Services.AuthServices
     {
 
         private readonly ITokenManager _tokenManager;
-        private readonly IPasswordManager _passwordStrengthChecker;
+        private readonly IPasswordManager _passwordManager;
         private readonly IConfirmationKeyGenerate _confirmationKeyGenerate;
         private readonly IEmailSenderService _emailSenderService;
 
-        public AuthService(ITokenManager tokenManager, IPasswordManager passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
+        public AuthService(ITokenManager tokenManager, IPasswordManager passwordManager, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
         {
             this._tokenManager = tokenManager;
-            this._passwordStrengthChecker = passwordStrengthChecker;
+            this._passwordManager = passwordManager;
             this._confirmationKeyGenerate = confirmationKeyGenerate;
             this._emailSenderService = emailSenderService;
         }
@@ -218,7 +218,11 @@ namespace AuthAPI.Services.AuthServices
             {
                 var context = new AuthContext();
 
-                if (!_passwordStrengthChecker.CheckPassword(register.Password))
+                if (!_passwordManager.PasswordMatch(register.Password, register.PasswordRepeate))
+                {
+                    return ResponseObject.create("A két jelszó nem egyezik!", "null pass", 400);
+                }
+                if (!_passwordManager.CheckPassword(register.Password))
                 {
                     return ResponseObject.create("Nem elég erős a jelszó!", "null pass", 400);
                 }
