@@ -23,13 +23,11 @@ namespace SyntaxAdminWPF.Pages
     public partial class AdminPanel : Page
     {
 
-        public static AdminPanel instance { get; private set; } = null!;
+        public static AdminPanel instance { get; private set; } = new AdminPanel();
 
         public AdminPanel()
         {
             InitializeComponent();
-
-            instance = this;
 
             LB_loggedInText.Content = ($"Bejelentkezett felhasználó, {MainPage.ResponseToken["username"]}");
 
@@ -38,7 +36,15 @@ namespace SyntaxAdminWPF.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MainPage.ResponseToken = null!;
+            MainPage.instance.ResizeMode = ResizeMode.NoResize;
+            MainPage.instance.Height = 450;
+            MainPage.instance.Width = 800;
+
+            MainPage.instance.UpdateLayout();
+
             NavigationService.GoBack();
+
+           
         }
     }
 }

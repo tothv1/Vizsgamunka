@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:SyntaxAdminWPF"
              Startup="Application_Startup">
     <Application.Resources>
-         
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="\Fonts\GameFont.ttf#Joystix Monospace" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="\Fonts\GameFont.ttf#Joystix Monospace" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="\Fonts\GameFont.ttf#Joystix Monospace" />
+        </Style>
     </Application.Resources>
 </Application>

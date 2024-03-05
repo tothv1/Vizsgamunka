@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SyntaxAdminWPF.Pages"
         mc:Ignorable="d"
         Title="SyntaxAdmin" Height="450" Width="800">
+
     <Frame x:Name="loginPage" NavigationUIVisibility="Hidden">
         <Frame.Content>
             <local:Login />

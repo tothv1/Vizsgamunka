@@ -12,11 +12,11 @@ namespace SyntaxAdminWPF
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            MainPage mainPage = new MainPage();
 
-            mainPage.ResizeMode = ResizeMode.NoResize;
+            MainPage.instance.ResizeMode = ResizeMode.NoResize;
 
-            mainPage.Show();
+            MainPage.instance.Show();
+
 
         }
     }

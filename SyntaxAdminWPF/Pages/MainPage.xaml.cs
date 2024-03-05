@@ -21,12 +21,11 @@ namespace SyntaxAdminWPF.Pages
     public partial class MainPage : Window
     {
 
-        public static MainPage instance;
-        public static dynamic ResponseToken { get; set; }
+        public static MainPage instance = new MainPage();
+        public static dynamic ResponseToken { get; set; } = null!;
         public MainPage()
         {
             InitializeComponent();
-            MainPage.instance = this;
         }
 
         public static JwtSecurityToken JwtDecode(string token)
