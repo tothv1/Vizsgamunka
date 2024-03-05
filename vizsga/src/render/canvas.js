@@ -61,21 +61,26 @@ const Canvas = props => {
   }
 
   const drawText = (ctx, object, offset) => {
-    ctx.save();
 
-    ctx.font = `${object.size}px serif`;
+    ctx.font = `${object.size}px Joystix Monospace`;
     ctx.fillText(`${object.damage}`, offset[0], offset[1]);
 
-    ctx.restore();
   }
 
   const drawHPBar = (ctx, object, offset) => {
-    ctx.save();
-
-    ctx.rect(object.width*object.ratio, object.height, offset[0], offset[1]);
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.rect(offset[0],offset[1], object.width, object.height);
+    ctx.closePath();
     ctx.fill();
 
-    ctx.restore();
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.rect(offset[0],offset[1], object.width*object.ratio, object.height);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = 'black';
   }
 
   const rawmap = rawMaps[0];
@@ -165,8 +170,6 @@ const Canvas = props => {
             temp.damage = item.damage;
             temp.size = Math.sqrt(item.damage) + 20;
             temp.drift = [getRandomRange(-100, 100), -500];
-
-            console.log(temp.size)
 
             entities.effectList.push(temp);
             if (item.hitlimit <= 0) {

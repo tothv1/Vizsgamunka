@@ -74,8 +74,6 @@ function shoot(e){
   temp.rotation = GetDirRad(temp.direction);
   temp.damage =Math.floor(getRandomRange(10,15));
   
-  console.log(temp.rotation)
-  console.log(Player.renderoffset);
 
   entities.projectileList.push(temp);
 

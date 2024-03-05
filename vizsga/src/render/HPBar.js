@@ -29,7 +29,7 @@ const HPbar = {
   function setVal (maxHP,currentHP){
     this.maxValue = maxHP;
     this.currentValue=currentHP;
-    this.ratio = maxHP/currentHP;
+    this.ratio = currentHP/maxHP;
   }
 
   export {HPbar}
