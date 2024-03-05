@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SyntaxAdminWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,24 @@ namespace SyntaxAdminWPF.Pages
                 
                 dynamic responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody)!;
 
-                MessageBox.Show("" + responseObject["resObj"]);
+                if (responseObject["status"] == 200)
+                {
+                    string token = responseObject["resObj"];
+                    string tokenTemp = JsonConvert.SerializeObject(MainPage.JwtDecode(token));
+                    dynamic tokenPayload = JsonConvert.DeserializeObject(tokenTemp)!;
+                    dynamic tokenObject = tokenPayload["Payload"];
+                    MainPage.ResponseToken = tokenObject;
+
+                    if (tokenObject["role"] == "Admin")
+                    {
+                        NavigationService.Navigate(new Uri(".\\Pages\\AdminPanel.xaml", UriKind.RelativeOrAbsolute));
+                        MainPage.instance.ResizeMode = ResizeMode.CanResize; 
+                        return;
+                    }
+                    MessageBox.Show("Nem vagy admin");
+                    return;
+                }
+                
             }
             catch (Exception ex)
             {

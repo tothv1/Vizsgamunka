@@ -18,7 +18,6 @@
         <TextBox x:Name="TB_username" HorizontalAlignment="Center" Margin="0,228,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <Label Content="Jelszó" HorizontalAlignment="Left" Margin="340,266,0,0" VerticalAlignment="Top" Foreground="#FFF9F8F8"/>
         <PasswordBox x:Name="TB_password" HorizontalAlignment="Center" Margin="0,297,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Bejelenetkezés" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.498,0.221" Foreground="White" FontSize="20"/>
-
+        <Label Content="Bejelentkezés" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.498,0.221" Foreground="White" FontSize="20"/>
     </Grid>
 </Page>

@@ -1,4 +1,4 @@
-﻿namespace SyntaxAdminWPF.Pages
+﻿namespace SyntaxAdminWPF.Models
 {
     public class LoginDTO
     {
