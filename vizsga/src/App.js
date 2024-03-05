@@ -11,7 +11,6 @@ export default function App() {
   //EZT RAKD FEL
   //npm install --save react-game-engine
 
-
   return (
       <Router>
         <Routes>
@@ -21,6 +20,7 @@ export default function App() {
           <Route
             path="/game"
             element={
+              
               <Canvas
                 style={{
                   width: window.innerWidth,

@@ -34,7 +34,11 @@ const getImg = () => {
     return temp;
 }
 
-
+function SetVals (position,rotation,obj) {
+    this.x=position[0];
+    this.y=position[1];
+    this.rotation=rotation;
+}
 
 const Arrow = {
     ID: 100,
@@ -67,7 +71,7 @@ const Arrow = {
 
     frame: 0,
 
-    damage: 5000,
+    damage: 10,
 
     dead:false,
 
@@ -76,7 +80,8 @@ const Arrow = {
     direction: [],
     drawing: getImg(),
     entityRef: [],
-    update: Update
+    update: Update,
+    setvals : SetVals
 
 }
 

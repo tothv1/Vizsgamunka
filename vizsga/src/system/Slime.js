@@ -69,7 +69,7 @@ const Slime = {
   xhitbox:32,
   yhitbox:32,
 
-  speed : 300,
+  speed : 100,
   health : 100,
 
   frame : 0,

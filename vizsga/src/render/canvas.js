@@ -14,6 +14,7 @@ let renderOffset = [0, 0]
 
 const Canvas = props => {
 
+  const canvasRef = useRef(null)
 
   let entities = [];
 
@@ -28,14 +29,16 @@ const Canvas = props => {
 
 
 
-  const playerRef = Player;
+  const playerRef = Object.create(Player);
   playerRef.x = 600;
   playerRef.y = 600;
   playerRef.mapsize = mapsize;
   playerRef.entityRef = entities;
+
+  playerRef.canvasRef = canvasRef.current;
+
   entities.entityList.push(playerRef);
 
-  const canvasRef = useRef(null)
   let frameCount = 0
 
   const clrCanvas = (ctx) => {
@@ -62,21 +65,23 @@ const Canvas = props => {
 
   const drawText = (ctx, object, offset) => {
 
+    ctx.globalAlpha = object.opacity;
     ctx.font = `${object.size}px Joystix Monospace`;
     ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+    ctx.globalAlpha = 1.0;
 
   }
 
   const drawHPBar = (ctx, object, offset) => {
     ctx.fillStyle = 'black';
     ctx.beginPath();
-    ctx.rect(offset[0],offset[1], object.width, object.height);
+    ctx.rect(offset[0], offset[1], object.width, object.height);
     ctx.closePath();
     ctx.fill();
 
     ctx.fillStyle = 'red';
     ctx.beginPath();
-    ctx.rect(offset[0],offset[1], object.width*object.ratio, object.height);
+    ctx.rect(offset[0], offset[1], object.width * object.ratio, object.height);
     ctx.closePath();
     ctx.fill();
 
@@ -103,13 +108,15 @@ const Canvas = props => {
   console.log(entities)
   console.log(playerRef)
 
-
-
   useEffect(() => {
 
-    if (Document.hidden) {
-      console.log("fuck")
-    }
+    document.addEventListener("keydown", playerRef.keyhandler);
+    document.addEventListener("keyup", playerRef.keyhandler);
+    document.addEventListener("click",(event) => {
+      entities.projectileList.push(playerRef.shoot(event, playerRef))
+    });
+    
+    console.log("fuck")
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -135,9 +142,9 @@ const Canvas = props => {
         if (item.ID === 1) {
           item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
           draw(context, item, item.offset);
-          item.hpbar.setval(item.maxHealth,item.health);
-          drawHPBar(context,item.hpbar,item.offset);
-  
+          item.hpbar.setval(item.maxHealth, item.health);
+          drawHPBar(context, item.hpbar, item.offset);
+
         }
         if (item.dead) {
           entities.entityList = entities.entityList.filter((xd) => !xd.dead);

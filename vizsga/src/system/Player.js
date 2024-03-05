@@ -7,7 +7,7 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
-import { Clamp, Normalise,GetDirection, GetDirRad, getRandomRange } from "../system/Math";
+import { Clamp, Normalise,GetDirection, GetDirRad, getRandomRange,CreateProjectile } from "../system/Math";
 import { Slime } from "./Slime";
 import { Arrow } from "./Projectile";
 
@@ -53,71 +53,66 @@ const Player = {
 
   frame : 0,
 
+  canvasRef :0,
+
   drawing : new Image(),
   entityRef:[],
-  update:Update
+  update : Update,
+  keyhandler : keyhandler,
+  shoot : shoot
 
 }
 
-document.addEventListener("keydown", keyhandler);
-document.addEventListener("keyup", keyhandler);
 
-document.addEventListener("click",shoot);
+function shoot(e,obj){
+  console.log(obj)
+  let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0], e.pageY - obj.renderoffset[1]])
+  let normalised = Normalise(direction);
+  let rotation = GetDirRad(normalised);
 
-function shoot(e){
-  let entities = Player.entityRef;
-
-  let temp = Object.create(Arrow);
-  temp.x=Player.x;
-  temp.y=Player.y;
-  temp.direction=Normalise(GetDirection([Player.x,Player.y],[e.pageX-Player.renderoffset[0],e.pageY-Player.renderoffset[1]]));
-  temp.rotation = GetDirRad(temp.direction);
-  temp.damage =Math.floor(getRandomRange(10,15));
-  
-
-  entities.projectileList.push(temp);
-
-  console.log(entities);
+  let temp = CreateProjectile([obj.x,obj.y],rotation,Arrow);
+  return temp
 }
+
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
   if (e.type === "keydown") {
     if (e.key === "w") {
 
-      Player.UpState = true;
+      this.UpState = true;
     }
     if (e.key === "s") {
 
-      Player.DownState = true;
+      this.DownState = true;
     }
     if (e.key === "a") {
 
-      Player.LeftState = true;
+      this.LeftState = true;
     }
     if (e.key === "d") {
 
-      Player.RightState = true;
+      this.RightState = true;
     }
   }
 
   // felengedésen kinyitja az irány lock-ot, rendereléshez kell
   if (e.type === "keyup") {
     if (e.key === "w") {
-      Player.UpState = false;
-      if (Player.direction === "up") Player.direction = "none";
+      this.UpState = false;
+      if (this.direction === "up") this.direction = "none";
     }
     if (e.key === "s") {
-      Player.DownState = false;
-      if (Player.direction === "down") Player.direction = "none";
+      this.DownState = false;
+      if (this.direction === "down") this.direction = "none";
     }
     if (e.key === "a") {
-      Player.LeftState = false;
-      if (Player.direction === "left") Player.direction = "none";
+      this.LeftState = false;
+      if (this.direction === "left") this.direction = "none";
     }
     if (e.key === "d") {
-      Player.RightState = false;
-      if (Player.direction === "right") Player.direction = "none";
+      this.RightState = false;
+      if (this.direction === "right") this.direction = "none";
     }
   }
 }

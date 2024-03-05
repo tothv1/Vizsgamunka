@@ -18,6 +18,9 @@ const DMGpopup = {
     frame : 0,
     maxFrame: 60,
 
+    fade:true,
+    opacity:1,
+
     offset : [0,0],
   
     entityRef:[],
@@ -38,6 +41,10 @@ const DMGpopup = {
     this.x+=this.drift[0]*deltaTime;
     this.y+=this.drift[1]*deltaTime;
     
+    if (this.fade){
+      this.opacity = 1-(this.frame/this.maxFrame);
+
+    }
 
     this.frame++;
   }
