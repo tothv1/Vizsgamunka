@@ -3,7 +3,7 @@ import render from "../Assets/nyil.png"
 import "../system/Math";
 import { GetDirection, Normalise,Translate } from "../system/Math";
 
-function Update(deltaTime, frameCount, target) {
+function Update(deltaTime, frameCount) {
 
     this.frameLength = this.drawing.width / this.width;
 
@@ -32,13 +32,7 @@ const getImg = () => {
     var temp = new Image();
     temp.src = render;
     return temp;
-}
-
-function SetVals (position,rotation,obj) {
-    this.x=position[0];
-    this.y=position[1];
-    this.rotation=rotation;
-}
+};
 
 const Arrow = {
     ID: 100,
@@ -46,7 +40,7 @@ const Arrow = {
     frameDelay: 20, //every x updates, the sprite turns over to the next frame
     frameLength: 10, // frames in the spritesheet
 
-    x: 0,
+    x: 1,
     y: 0,
     rotation : 0,
 
@@ -77,11 +71,10 @@ const Arrow = {
 
     hitlimit:1,
 
-    direction: [],
+    direction: [0,0],
     drawing: getImg(),
-    entityRef: [],
     update: Update,
-    setvals : SetVals
+    
 
 }
 

@@ -21,7 +21,7 @@ const Player = {
 
   rotation : 0,
 
-  x : 0,
+  x : 1,
   y : 0,
 
   xcenter : 0,
@@ -65,18 +65,22 @@ const Player = {
 
 
 function shoot(e,obj){
-  console.log(obj)
+  
   let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0], e.pageY - obj.renderoffset[1]])
   let normalised = Normalise(direction);
-  let rotation = GetDirRad(normalised);
 
-  let temp = CreateProjectile([obj.x,obj.y],rotation,Arrow);
+  let xd = Object.create(Arrow);
+
+  let temp = CreateProjectile([obj.x,obj.y], normalised, xd);
   return temp
 }
 
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
+
+
+
   if (e.type === "keydown") {
     if (e.key === "w") {
 
@@ -185,8 +189,8 @@ function Update(deltaTime, frameCount) {
   }
 
 
-  this.x = Clamp(this.x, 0, this.mapsize[0]-this.width);
-  this.y = Clamp(this.y, 0, this.mapsize[1]-this.height);
+  this.x = Clamp(this.x, 0, this.mapsize[0]+this.width);
+  this.y = Clamp(this.y, 0, this.mapsize[1]+this.height);
 
   this.xcenter = this.x-this.width/2;
   this.ycenter = this.y-this.height/2;

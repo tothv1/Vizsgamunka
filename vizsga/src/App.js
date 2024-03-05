@@ -8,8 +8,6 @@ import Login from "./login";
 
 
 export default function App() {
-  //EZT RAKD FEL
-  //npm install --save react-game-engine
 
   return (
       <Router>

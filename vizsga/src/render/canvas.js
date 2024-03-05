@@ -110,8 +110,14 @@ const Canvas = props => {
 
   useEffect(() => {
 
-    document.addEventListener("keydown", playerRef.keyhandler);
-    document.addEventListener("keyup", playerRef.keyhandler);
+    
+
+    document.addEventListener("keydown", (event)=>{
+      playerRef.keyhandler(event)
+    });
+    document.addEventListener("keyup", (event)=>{
+      playerRef.keyhandler(event)
+    });
     document.addEventListener("click",(event) => {
       entities.projectileList.push(playerRef.shoot(event, playerRef))
     });
