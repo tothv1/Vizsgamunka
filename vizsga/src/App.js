@@ -6,15 +6,6 @@ import Menu from "./menu";
 import AuthPage from "./AuthPage";
 import Login from "./login";
 
-import wall from "./Assets/map/wall.png";
-import karakter from "./Assets/characters/hatternelkuli.png";
-import slime from "./Assets/characters/slime.png";
-
-import { Update } from "./system/Player";
-import { UpdateT } from "./system/StoneWall";
-import { UpdateSl } from "./system/Slime";
-import { rawMaps } from "./Assets/map/maps";
-
 
 export default function App() {
   //EZT RAKD FEL
