@@ -11,13 +11,19 @@
       WindowWidth="400"
       WindowHeight="500"
       Background="white">
+    <Page.Resources>
+        <Style TargetType="Control">
+            <Setter Property="FontFamily" Value="/Fonts/gamefont.otf" />
+        </Style>
+    </Page.Resources>
+
     <Grid RenderTransformOrigin="0.5,0.5">
         <Image Source="\Images\menuhatterblur.jpg" Margin="0,0,-2,0" Stretch="UniformToFill"/>
         <Button Content="Bejelentkezés" HorizontalAlignment="Center" Margin="0,344,0,0" VerticalAlignment="Top" Width="180" Height="40" Click="Button_Click"/>
-        <Label Content="Felhasználónév" HorizontalAlignment="Left" Margin="340,197,0,0" VerticalAlignment="Top" Foreground="#FFF9F8F8"/>
+        <Label Content="Felhasználónév" HorizontalAlignment="Center" Margin="0,199,0,0" VerticalAlignment="Top" Foreground="#FFF9F8F8"/>
         <TextBox x:Name="TB_username" HorizontalAlignment="Center" Margin="0,228,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Jelszó" HorizontalAlignment="Left" Margin="340,266,0,0" VerticalAlignment="Top" Foreground="#FFF9F8F8"/>
+        <Label Content="Jelszó" HorizontalAlignment="Center" Margin="0,268,0,0" VerticalAlignment="Top" Foreground="#FFF9F8F8"/>
         <PasswordBox x:Name="TB_password" HorizontalAlignment="Center" Margin="0,297,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Bejelentkezés" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.498,0.221" Foreground="White" FontSize="20"/>
+        <Label Content="Bejelentkezés" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.498,0.221" Foreground="White" FontSize="20" Cursor="AppStarting" />
     </Grid>
 </Page>

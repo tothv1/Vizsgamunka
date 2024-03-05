@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\GameFont.ttf" />
     <None Remove="Images\menuhatter.jpg" />
     <None Remove="Images\menuhatterblur.jpg" />
   </ItemGroup>
@@ -19,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\GameFont.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\menuhatter.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
