@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SyntaxAdminWPF.Models;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -22,7 +23,11 @@ namespace SyntaxAdminWPF.Pages
     {
 
         public static MainPage instance = new MainPage();
-        public static dynamic ResponseToken { get; set; } = null!;
+        public static dynamic ResponseTokenData { get; set; } = null!;
+        public static string ResponseToken { get; set; } = null!;
+
+        public static List<User> FelhasznaloLista = new List<User>();
+
         public MainPage()
         {
             InitializeComponent();

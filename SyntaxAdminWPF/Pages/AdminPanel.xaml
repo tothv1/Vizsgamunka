@@ -12,6 +12,13 @@
     <Grid Background="#FFEBE0E0">
         <Image Source="\Images\menuhatter.jpg" Margin="0,0,-2,0" Stretch="UniformToFill"/>
         <Label Name="LB_loggedInText" Content="Bejelentkezett felhasználó, Admin" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Foreground="White"/>
-        <Button Content="Kijelentkezés" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" Height="32" Width="130" Click="Button_Click"/>
+        <Button Content="Kijelentkezés" HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top" Height="45" Width="145" Click="Button_Click"/>
+        <Button HorizontalAlignment="Center" Margin="0,165,0,0" VerticalAlignment="Top" Width="160" Height="27">
+            <Button Content="Felhasználók" Click="Button_NavigateToUsers"/>
+        </Button>
+        <Button HorizontalAlignment="Center" Margin="0,197,0,0" VerticalAlignment="Top" Width="161" Height="27">
+            <Button Content="Teljesítmények" Click="ButtonAchievements"/>
+        </Button>
+        <Button Content="Szerepkörök" HorizontalAlignment="Center" Margin="0,229,0,0" VerticalAlignment="Top" Width="160" Height="27" Click="ButtonRoles"/>
     </Grid>
 </Page>
