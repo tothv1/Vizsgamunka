@@ -59,19 +59,20 @@ const Player = {
   entityRef:[],
   update : Update,
   keyhandler : keyhandler,
+  takeDamage:takeDamage,
   shoot : shoot
 
 }
 
 
-function shoot(e,obj){
+function shoot(e,obj,aimOffset){
   
-  let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0], e.pageY - obj.renderoffset[1]])
+  let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0]-aimOffset[0], e.pageY - obj.renderoffset[1]-aimOffset[1]])
   let normalised = Normalise(direction);
 
   let xd = Object.create(Arrow);
 
-  let temp = CreateProjectile([obj.x,obj.y], normalised, xd);
+  let temp = CreateProjectile([obj.x,obj.y], normalised, xd,this.team);
   return temp
 }
 
@@ -196,5 +197,12 @@ function Update(deltaTime, frameCount) {
   this.ycenter = this.y-this.height/2;
 
 };
+
+function takeDamage(damage){
+  this.health-=damage;
+  if (this.health<=0){
+    this.dead=true;
+  }
+}
 
 export { Player };

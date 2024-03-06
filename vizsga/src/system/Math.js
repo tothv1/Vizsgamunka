@@ -78,19 +78,16 @@ export function getRandomRange(min, max) {
     return num;
 }
 
-export function CreateProjectile(position, direction, object) {
+export function CreateProjectile(position, direction, object,team) {
 
     const temp = object;
-
-    console.log()
     
     temp.x=position[0];
     temp.y=position[1];
     temp.direction=direction;
     temp.rotation=GetDirRad(direction);
+    temp.team=team;
 
-    //temp.direction = Normalise(GetDirection([Player.x, Player.y], [e.pageX - Player.renderoffset[0], e.pageY - Player.renderoffset[1]]));
-    //temp.rotation = GetDirRad(temp.direction);
     temp.damage = Math.round(getRandomRange(object.damage*0.8,object.damage*1.2));
 
 

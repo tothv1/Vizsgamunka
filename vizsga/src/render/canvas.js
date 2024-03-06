@@ -11,10 +11,16 @@ import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math
 
 
 let renderOffset = [0, 0]
+let gameSize = [0, 0]
+let aimOffset = [0, 0];
+
 
 const Canvas = props => {
 
   const canvasRef = useRef(null)
+
+  gameSize = [props.style.width, props.style.height]
+
 
   let entities = [];
 
@@ -110,22 +116,23 @@ const Canvas = props => {
 
   useEffect(() => {
 
-    
 
-    document.addEventListener("keydown", (event)=>{
+    document.addEventListener("keydown", (event) => {
       playerRef.keyhandler(event)
     });
-    document.addEventListener("keyup", (event)=>{
+    document.addEventListener("keyup", (event) => {
       playerRef.keyhandler(event)
     });
-    document.addEventListener("click",(event) => {
-      entities.projectileList.push(playerRef.shoot(event, playerRef))
+    document.addEventListener("click", (event) => {
+      entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))
     });
-    
-    console.log("fuck")
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
+
+    var rect = canvas.getBoundingClientRect();
+    aimOffset = [rect.left,rect.top]
+    console.log(rect.top, rect.right, rect.bottom, rect.left);
 
     //console.log(entities)
 
@@ -213,11 +220,10 @@ const Canvas = props => {
 
 
 
-      renderOffset = [Clamp(playerRef.x - window.innerWidth / 2, 0, (rawmap[0].length * 64) - window.innerWidth), Clamp(playerRef.y - window.innerHeight / 2, 0, (rawmap.length * 64) - window.innerHeight)]
+      renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
       renderOffset = [-renderOffset[0], -renderOffset[1]]
 
       let playerrenderpos = [playerRef.x + renderOffset[0], playerRef.y + renderOffset[1]]
-
       draw(context, playerRef, [playerrenderpos[0] - Player.width / 2, playerrenderpos[1] - Player.height / 2]);
 
       lastUpdateTime = window.performance.now();
@@ -231,7 +237,11 @@ const Canvas = props => {
     }
   }, [draw])
 
-  return <canvas width={window.innerWidth} height={window.innerHeight} className='mg-0 b-0' ref={canvasRef} {...props} />
+  return (
+    <div className={"d-flex align-items-center justify-content-center vh-100"}>
+      <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
+    </div>
+  )
 }
 
 export default Canvas

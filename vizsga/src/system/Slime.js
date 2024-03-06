@@ -20,6 +20,7 @@ function Update(deltaTime, frameCount,target) {
 
   let dir = GetDirection([this.x,this.y],[target.x,target.y]);
   let normDir = Normalise(dir);
+  
   let translation = Translate([this.x,this.y],[normDir[0]*this.speed*deltaTime,normDir[1]*this.speed*deltaTime]);
 
   this.x=translation[0];

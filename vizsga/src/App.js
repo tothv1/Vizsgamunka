@@ -21,10 +21,12 @@ export default function App() {
               
               <Canvas
                 style={{
-                  width: window.innerWidth,
-                  height: window.innerHeight,
+                  width: 600,
+                  height: 600,
                   backgroundColor: "lightblue",
                 }}
+                
+                
               />
             }
           />
