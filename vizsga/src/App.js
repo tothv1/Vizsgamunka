@@ -21,8 +21,8 @@ export default function App() {
               
               <Canvas
                 style={{
-                  width: 600,
-                  height: 600,
+                  width: 800,
+                  height: 800,
                   backgroundColor: "lightblue",
                 }}
                 

@@ -65,10 +65,11 @@ const Arrow = {
 
     frame: 0,
 
-    damage: 10,
+    damage: 0,
 
     dead:false,
 
+    critLevel:0,
     hitlimit:1,
 
     direction: [0,0],

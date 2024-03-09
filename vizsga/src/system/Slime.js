@@ -78,6 +78,11 @@ const Slime = {
   xcenter : 0,
   ycenter : 0,
 
+  entityref : [],
+
+  aimPoint:[0,0],
+  aimOffset:[0,0],
+
   drawing : getImg(),
   update:Update,
   takeDamage:takeDamage,

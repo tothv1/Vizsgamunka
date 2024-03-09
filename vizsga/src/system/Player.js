@@ -19,19 +19,19 @@ const Player = {
   state : "idle",
   direction : "down",
 
+  
+
+  width : 64,
+  height : 64,
+
   rotation : 0,
 
   x : 1,
   y : 0,
-
   xcenter : 0,
   ycenter : 0,
-
   renderx:0,
   rendery:0,
-
-  team:1,
-
   xhitbox:32,
   yhitbox:32,
 
@@ -39,12 +39,14 @@ const Player = {
   offset : [0,0],
   renderoffset : [0,0],
 
-  width : 64,
-  height : 64,
-  
   speed : 300,
-  
   health : 100,
+  team:1,
+  shooting:false,
+  aimPoint:[0,0],
+  aimOffset:[0,0],
+  weapons:[],
+
 
   UpState : false,
   DownState : false,
@@ -71,6 +73,7 @@ function shoot(e,obj,aimOffset){
   let normalised = Normalise(direction);
 
   let xd = Object.create(Arrow);
+  xd.damage=getRandomRange(-10,10);
 
   let temp = CreateProjectile([obj.x,obj.y], normalised, xd,this.team);
   return temp
@@ -80,7 +83,16 @@ function shoot(e,obj,aimOffset){
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
 
-
+  if (e.type === "mouseup"){
+    this.weapons.forEach(weapon => {
+      weapon.active=false;
+    });
+  }
+  if(e.type==="mousedown"){
+    this.weapons.forEach(weapon => {
+      weapon.active=true;
+    });
+  }
 
   if (e.type === "keydown") {
     if (e.key === "w") {
@@ -195,6 +207,10 @@ function Update(deltaTime, frameCount) {
 
   this.xcenter = this.x-this.width/2;
   this.ycenter = this.y-this.height/2;
+
+  this.weapons.forEach(weapon => {
+    weapon.update(deltaTime,frameCount)
+  });
 
 };
 

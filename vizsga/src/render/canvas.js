@@ -7,49 +7,24 @@ import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
 import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math';
+import { Bow } from '../system/Weapons/Bow';
 
 
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
 let aimOffset = [0, 0];
-
+let aimpoint = [0, 0];
+let entities = [];
 
 const Canvas = props => {
 
   const canvasRef = useRef(null)
-
   gameSize = [props.style.width, props.style.height]
-
-
-  let entities = [];
-
-  entities.projectileList = [];
-  entities.tileList = [];
-  entities.entityList = [];
-  entities.effectList = [];
-  entities.hpBarList = [];
-
-  let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
-
-
-
-
-  const playerRef = Object.create(Player);
-  playerRef.x = 600;
-  playerRef.y = 600;
-  playerRef.mapsize = mapsize;
-  playerRef.entityRef = entities;
-
-  playerRef.canvasRef = canvasRef.current;
-
-  entities.entityList.push(playerRef);
-
   let frameCount = 0
 
   const clrCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-
   }
 
   const draw = (ctx, object, offset) => {
@@ -73,9 +48,33 @@ const Canvas = props => {
 
     ctx.globalAlpha = object.opacity;
     ctx.font = `${object.size}px Joystix Monospace`;
-    ctx.fillText(`${object.damage}`, offset[0], offset[1]);
-    ctx.globalAlpha = 1.0;
 
+    if (object.damage < 0) {
+      ctx.fillStyle = '#00ff66';
+      ctx.fillText(`${object.damage.toString().substring(1)}`, offset[0], offset[1]);
+
+      ctx.strokeStyle = 'black';
+      ctx.strokeText(`${object.damage.toString().substring(1)}`, offset[0], offset[1]);
+      ctx.globalAlpha = 1.0;
+    } else {
+
+      if (object.critLevel == 0 ) {
+        ctx.fillStyle = 'white';
+        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+      }
+      if (object.critLevel == 1 ) {
+        ctx.fillStyle = 'yellow';
+        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+      }
+      if (object.critLevel >=2 ) {
+        ctx.fillStyle = 'red';
+        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+      }
+
+      ctx.strokeStyle = 'black';
+      ctx.strokeText(`${object.damage}`, offset[0], offset[1]);
+      ctx.globalAlpha = 1.0;
+    }
   }
 
   const drawHPBar = (ctx, object, offset) => {
@@ -94,28 +93,63 @@ const Canvas = props => {
     ctx.fillStyle = 'black';
   }
 
-  const rawmap = rawMaps[0];
-  for (let i = 0; i < rawmap.length; i++) {
-    for (let j = 0; j < rawmap[i].length; j++) {
-      if (rawmap[i][j] === 1) {
-        const temp = Object.create(Wall);
-        temp.x = j * 64;
-        temp.y = i * 64;
-        entities.tileList.push(temp);
-      }
-      if (rawmap[i][j] === 2) {
-        const temp = Object.create(Slime);
-        temp.x = j * 64;
-        temp.y = i * 64;
-        entities.entityList.push(temp);
-      }
-    }
-  }
-  console.log(entities)
-  console.log(playerRef)
+
 
   useEffect(() => {
 
+    const canvas = canvasRef.current
+    const context = canvas.getContext('2d')
+    var rect = canvas.getBoundingClientRect();
+    aimOffset = [rect.left, rect.top]
+
+    // init
+
+    entities.projectileList = [];
+    entities.tileList = [];
+    entities.entityList = [];
+    entities.effectList = [];
+    entities.hpBarList = [];
+
+    let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
+
+    const playerRef = Object.create(Player);
+    playerRef.x = 600;
+    playerRef.y = 600;
+    playerRef.mapsize = mapsize;
+    playerRef.entityRef = entities;
+    playerRef.aimOffset = aimOffset;
+
+    let wep = Object.create(Bow);
+    wep.owner = playerRef;
+    console.log(wep);
+    playerRef.weapons.push(wep);
+    playerRef.canvasRef = canvasRef.current;
+
+
+    entities.entityList.push(playerRef);
+
+    const rawmap = rawMaps[0];
+    for (let i = 0; i < rawmap.length; i++) {
+      for (let j = 0; j < rawmap[i].length; j++) {
+        if (rawmap[i][j] === 1) {
+          const temp = Object.create(Wall);
+          temp.x = j * 64;
+          temp.y = i * 64;
+          entities.tileList.push(temp);
+        }
+        if (rawmap[i][j] === 2) {
+          const temp = Object.create(Slime);
+          temp.x = j * 64;
+          temp.y = i * 64;
+          temp.entityref = entities;
+          entities.entityList.push(temp);
+        }
+      }
+    }
+    console.log(entities)
+    console.log(playerRef)
+
+    //eventek playernek
 
     document.addEventListener("keydown", (event) => {
       playerRef.keyhandler(event)
@@ -123,15 +157,21 @@ const Canvas = props => {
     document.addEventListener("keyup", (event) => {
       playerRef.keyhandler(event)
     });
-    document.addEventListener("click", (event) => {
-      entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))
+    document.addEventListener("mousedown", (event) => {
+      playerRef.keyhandler(event)
+    });
+    document.addEventListener("mouseup", (event) => {
+      playerRef.keyhandler(event)
+    });
+    document.addEventListener("mousemove", (event) => {
+      aimpoint = [event.pageX, event.pageY];
+      playerRef.aimpoint = aimpoint;
     });
 
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
+    //entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))
 
-    var rect = canvas.getBoundingClientRect();
-    aimOffset = [rect.left,rect.top]
+
+
     console.log(rect.top, rect.right, rect.bottom, rect.left);
 
     //console.log(entities)
@@ -190,6 +230,8 @@ const Canvas = props => {
             temp.damage = item.damage;
             temp.size = Math.sqrt(item.damage) + 20;
             temp.drift = [getRandomRange(-100, 100), -500];
+            temp.critLevel = item.critLevel;
+
 
             entities.effectList.push(temp);
             if (item.hitlimit <= 0) {
