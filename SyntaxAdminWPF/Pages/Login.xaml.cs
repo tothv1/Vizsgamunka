@@ -32,6 +32,8 @@ namespace SyntaxAdminWPF.Pages
         public Login()
         {
             InitializeComponent();
+            TB_username.Text = "vitya0717";
+            TB_password.Password = "Alma123@";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -47,7 +49,6 @@ namespace SyntaxAdminWPF.Pages
 
             StringContent stringContent = new(JsonConvert.SerializeObject(userCredentials), Encoding.UTF8, "application/json");
 
-
             try
             {
                 HttpResponseMessage result = client.PostAsync(url, stringContent).Result;
@@ -62,7 +63,8 @@ namespace SyntaxAdminWPF.Pages
                     string tokenTemp = JsonConvert.SerializeObject(MainPage.JwtDecode(token));
                     dynamic tokenPayload = JsonConvert.DeserializeObject(tokenTemp)!;
                     dynamic tokenObject = tokenPayload["Payload"];
-                    MainPage.ResponseToken = tokenObject;
+                    MainPage.ResponseTokenData = tokenObject;
+                    MainPage.ResponseToken = token;
 
                     if (tokenObject["role"] == "Admin")
                     {
