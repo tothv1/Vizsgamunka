@@ -40,7 +40,7 @@ const Player = {
   renderoffset : [0,0],
 
   speed : 300,
-  health : 100,
+  health : 10000,
   team:1,
   shooting:false,
   aimPoint:[0,0],
@@ -62,26 +62,12 @@ const Player = {
   update : Update,
   keyhandler : keyhandler,
   takeDamage:takeDamage,
-  shoot : shoot
 
 }
-
-
-function shoot(e,obj,aimOffset){
-  
-  let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0]-aimOffset[0], e.pageY - obj.renderoffset[1]-aimOffset[1]])
-  let normalised = Normalise(direction);
-
-  let xd = Object.create(Arrow);
-  xd.damage=getRandomRange(-10,10);
-
-  let temp = CreateProjectile([obj.x,obj.y], normalised, xd,this.team);
-  return temp
-}
-
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
+
 
   if (e.type === "mouseup"){
     this.weapons.forEach(weapon => {
@@ -201,7 +187,6 @@ function Update(deltaTime, frameCount) {
     }
   }
 
-
   this.x = Clamp(this.x, 0, this.mapsize[0]+this.width);
   this.y = Clamp(this.y, 0, this.mapsize[1]+this.height);
 
@@ -211,7 +196,6 @@ function Update(deltaTime, frameCount) {
   this.weapons.forEach(weapon => {
     weapon.update(deltaTime,frameCount)
   });
-
 };
 
 function takeDamage(damage){

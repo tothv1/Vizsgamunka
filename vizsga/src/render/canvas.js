@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { rawMaps } from '../Assets/map/maps';
 
-import { Slime } from '../system/Slime';
+import { Slime, xd } from '../system/Slime';
 import { Wall } from '../system/StoneWall';
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
@@ -58,15 +58,19 @@ const Canvas = props => {
       ctx.globalAlpha = 1.0;
     } else {
 
-      if (object.critLevel == 0 ) {
+      if (object.critLevel == 0) {
         ctx.fillStyle = 'white';
         ctx.fillText(`${object.damage}`, offset[0], offset[1]);
       }
-      if (object.critLevel == 1 ) {
+      if (object.critLevel == 1) {
         ctx.fillStyle = 'yellow';
         ctx.fillText(`${object.damage}`, offset[0], offset[1]);
       }
-      if (object.critLevel >=2 ) {
+      if (object.critLevel == 2) {
+        ctx.fillStyle = 'orange';
+        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+      }
+      if (object.critLevel >= 3) {
         ctx.fillStyle = 'red';
         ctx.fillText(`${object.damage}`, offset[0], offset[1]);
       }
@@ -121,31 +125,56 @@ const Canvas = props => {
 
     let wep = Object.create(Bow);
     wep.owner = playerRef;
-    console.log(wep);
     playerRef.weapons.push(wep);
     playerRef.canvasRef = canvasRef.current;
-
 
     entities.entityList.push(playerRef);
 
     const rawmap = rawMaps[0];
+
+
     for (let i = 0; i < rawmap.length; i++) {
       for (let j = 0; j < rawmap[i].length; j++) {
         if (rawmap[i][j] === 1) {
           const temp = Object.create(Wall);
           temp.x = j * 64;
           temp.y = i * 64;
+
           entities.tileList.push(temp);
         }
         if (rawmap[i][j] === 2) {
-          const temp = Object.create(Slime);
+
+          const temp = new Slime();
+          
           temp.x = j * 64;
           temp.y = i * 64;
-          temp.entityref = entities;
+          temp.entityRef = entities;
+          temp.aimOffset = aimOffset;
+
           entities.entityList.push(temp);
         }
       }
     }
+
+    entities.entityList.forEach(entity => {
+      
+
+
+      if (entity.ID === 1) {
+
+        let temp = Object.create(Bow);
+        temp.owner = entity;
+        temp.firerate = 1;
+        temp.active = true;
+        entity.weapons.push(temp);
+
+        //entity.init(temp);
+      }
+
+      console.log(entity)
+
+    });
+
     console.log(entities)
     console.log(playerRef)
 
@@ -165,7 +194,7 @@ const Canvas = props => {
     });
     document.addEventListener("mousemove", (event) => {
       aimpoint = [event.pageX, event.pageY];
-      playerRef.aimpoint = aimpoint;
+      playerRef.aimPoint = aimpoint;
     });
 
     //entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))

@@ -14,7 +14,7 @@ const Bow = {
     y: 0,
     rotation: 0,
 
-    offset: [],
+    offset: [0,0],
 
     width: 64,
     height: 64,
@@ -28,7 +28,7 @@ const Bow = {
     spread : 5,
 
     damage : 10,
-    critChance : 50,
+    critChance : 20,
     critDamageMult:2,
 
     active: false,
@@ -42,8 +42,17 @@ const Bow = {
 
 function Shoot(aimPoint,source,aimOffset) {
 
+    let direction = [0,0];
 
-    let direction = GetDirection([source.x, source.y], [aimPoint[0] - source.renderoffset[0]-aimOffset[0], aimPoint[1] - source.renderoffset[1]-aimOffset[1]])
+    if(source.ID===0){
+        direction = GetDirection([source.x, source.y], [aimPoint[0] - source.renderoffset[0]-aimOffset[0], aimPoint[1] - source.renderoffset[1]-aimOffset[1]])
+    }else{
+        direction = GetDirection([source.x, source.y], [aimPoint[0], aimPoint[1] ])
+    }
+
+
+
+
     let normalised = Normalise(direction);
   
     let xd = Object.create(Arrow);
@@ -58,7 +67,6 @@ function Shoot(aimPoint,source,aimOffset) {
 
     if(critRoll<=localCrit){
         critLevel++;
-
     }
     xd.critLevel = critLevel;
     xd.damage=xd.damage*Math.pow(this.critDamageMult,critLevel);
@@ -74,7 +82,7 @@ function Update(deltaTime, frameCount) {
     if (this.active && this.nextfire<=0)
     {
         this.nextfire=this.firerate;
-        this.owner.entityRef.projectileList.push(this.shoot(this.owner.aimpoint,this.owner,this.owner.aimOffset))
+        this.owner.entityRef.projectileList.push(this.shoot(this.owner.aimPoint,this.owner,this.owner.aimOffset))
     }
 
 
