@@ -101,7 +101,7 @@ namespace SyntaxBackEnd.Controllers
                     return NotFound("Az kért teljesítmény nem található.");
                 }
 
-                if(context.UserAchievementDetails.FirstOrDefault(achi => achi.Achievement == achievement) != null)
+                if (context.UserAchievementDetails.FirstOrDefault(achi => achi.Achievement == achievement) != null)
                 {
                     return BadRequest("Már megszerezted ezt a teljesítményt.");
                 }
@@ -152,6 +152,65 @@ namespace SyntaxBackEnd.Controllers
                 context.SaveChanges();
 
                 return Ok(achievement.AchievementName + " teljesítmény sikeresen létrehozva.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+
+            }
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("updateAchievement")]
+        public ActionResult UpdateAchievement(Achievement achievement)
+        {
+            try
+            {
+                using var context = new GameContext();
+
+                var requestAchi = context.Achievements.FirstOrDefault(a => a.Id == achievement.Id);
+
+                if (context.Achievements.Contains(context.Achievements.FirstOrDefault(a => a.Id == achievement.Id)) && !requestAchi!.AchievementName.Equals(achievement!.AchievementName))
+                {
+                    return NotFound("Már létezik ilyen nevű teljesítmény");
+                }
+
+                requestAchi!.AchievementName = achievement.AchievementName;
+                requestAchi.UserAchievementDetails = achievement.UserAchievementDetails;
+                requestAchi.Id = achievement.Id;
+
+                context.Update(requestAchi);
+                context.SaveChanges();
+
+                return Ok("A teljesítmény sikeresen frissítve!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("deleteAchievement")]
+        public ActionResult DeleteAchievement(int id)
+        {
+            try
+            {
+                using var context = new GameContext();
+
+                var requestAchi = context.Achievements.FirstOrDefault(a => a.Id == id);
+
+                if (requestAchi == null)
+                {
+                    return NotFound("A keresett eredmény nem található!");
+                }
+
+                context.Remove(requestAchi);
+                context.SaveChanges();
+
+                return Ok("A teljesítmény sikeresen törölve!");
             }
             catch (Exception ex)
             {

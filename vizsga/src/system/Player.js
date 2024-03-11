@@ -7,7 +7,7 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import idle from "../Assets/characters/noBKG_KnightIdle_strip.png"
 import "../system/Math";
-import { Clamp, Normalise,GetDirection, GetDirRad } from "../system/Math";
+import { Clamp, Normalise,GetDirection, GetDirRad, getRandomRange,CreateProjectile } from "../system/Math";
 import { Slime } from "./Slime";
 import { Arrow } from "./Projectile";
 
@@ -21,20 +21,29 @@ const Player = {
 
   rotation : 0,
 
-  x : 0,
+  x : 1,
   y : 0,
+
+  xcenter : 0,
+  ycenter : 0,
 
   renderx:0,
   rendery:0,
+
+  team:1,
+
+  xhitbox:32,
+  yhitbox:32,
 
   mapsize : [0,0],
   offset : [0,0],
   renderoffset : [0,0],
 
-  width : 39,
+  width : 64,
   height : 64,
   
   speed : 300,
+  
   health : 100,
 
   UpState : false,
@@ -44,71 +53,70 @@ const Player = {
 
   frame : 0,
 
+  canvasRef :0,
+
   drawing : new Image(),
   entityRef:[],
-  update:Update
+  update : Update,
+  keyhandler : keyhandler,
+  shoot : shoot
 
 }
 
-document.addEventListener("keydown", keyhandler);
-document.addEventListener("keyup", keyhandler);
 
-document.addEventListener("mousedown",shoot);
+function shoot(e,obj){
+  
+  let direction = GetDirection([obj.x, obj.y], [e.pageX - obj.renderoffset[0], e.pageY - obj.renderoffset[1]])
+  let normalised = Normalise(direction);
 
-function shoot(e){
-  let entities = Player.entityRef;
+  let xd = Object.create(Arrow);
 
-  let temp = Object.create(Arrow);
-  temp.x=Player.x;
-  temp.y=Player.y;
-  temp.direction=Normalise(GetDirection([Player.x,Player.y],[e.pageX-Player.renderoffset[0],e.pageY-Player.renderoffset[1]]));
-  temp.rotation = GetDirRad(temp.direction);
-  console.log(temp.rotation)
-  console.log(Player.renderoffset);
-
-  entities.projectileList.push(temp);
-
-  console.log(entities);
+  let temp = CreateProjectile([obj.x,obj.y], normalised, xd);
+  return temp
 }
+
 
 //irány state, billentyű lenyomás és felengedés alapján
 function keyhandler(e) {
+
+
+
   if (e.type === "keydown") {
     if (e.key === "w") {
 
-      Player.UpState = true;
+      this.UpState = true;
     }
     if (e.key === "s") {
 
-      Player.DownState = true;
+      this.DownState = true;
     }
     if (e.key === "a") {
 
-      Player.LeftState = true;
+      this.LeftState = true;
     }
     if (e.key === "d") {
 
-      Player.RightState = true;
+      this.RightState = true;
     }
   }
 
   // felengedésen kinyitja az irány lock-ot, rendereléshez kell
   if (e.type === "keyup") {
     if (e.key === "w") {
-      Player.UpState = false;
-      if (Player.direction === "up") Player.direction = "none";
+      this.UpState = false;
+      if (this.direction === "up") this.direction = "none";
     }
     if (e.key === "s") {
-      Player.DownState = false;
-      if (Player.direction === "down") Player.direction = "none";
+      this.DownState = false;
+      if (this.direction === "down") this.direction = "none";
     }
     if (e.key === "a") {
-      Player.LeftState = false;
-      if (Player.direction === "left") Player.direction = "none";
+      this.LeftState = false;
+      if (this.direction === "left") this.direction = "none";
     }
     if (e.key === "d") {
-      Player.RightState = false;
-      if (Player.direction === "right") Player.direction = "none";
+      this.RightState = false;
+      if (this.direction === "right") this.direction = "none";
     }
   }
 }
@@ -119,19 +127,15 @@ function Update(deltaTime, frameCount) {
   if (this.state === "moving") {
     if (this.direction === "left") {
       this.drawing.src = left;
-      this.width = 64;
     }
     if (this.direction === "right") {
       this.drawing.src = right;
-      this.width = 64;
     }
     if (this.direction === "up") {
       this.drawing.src = up;
-      this.width = 53;
     }
     if (this.direction === "down") {
       this.drawing.src = down;
-      this.width = 53;
     }
 
     if (frameCount % this.frameDelay === 0) {
@@ -185,8 +189,11 @@ function Update(deltaTime, frameCount) {
   }
 
 
-  this.x = Clamp(this.x, 0, this.mapsize[0]-this.width);
-  this.y = Clamp(this.y, 0, this.mapsize[1]-this.height);
+  this.x = Clamp(this.x, 0, this.mapsize[0]+this.width);
+  this.y = Clamp(this.y, 0, this.mapsize[1]+this.height);
+
+  this.xcenter = this.x-this.width/2;
+  this.ycenter = this.y-this.height/2;
 
 };
 
