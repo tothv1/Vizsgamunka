@@ -82,6 +82,59 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("updateRole")]
+        public async Task<ActionResult> UpdateRole(Models.Role role)
+        {
+            try
+            {
+                var context = new AuthContext();
+                var requestRole = context.Roles.FirstOrDefault(r => r.Roleid == role.Roleid);
 
+                if (requestRole == null)
+                {
+                    return NotFound("A kért szerepkör nem létezik!");
+                }
+
+                requestRole.RoleName = role.RoleName;
+                requestRole.RegisteredUsers = role.RegisteredUsers.ToList();
+                requestRole.Roleid = role.Roleid;
+
+                context.Update(requestRole);
+                await context.SaveChangesAsync();
+
+                return Ok("Sikeresen szerkesztetted a szerepkört!");
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("deleteRole")]
+        public async Task<ActionResult> DeleteRole(int roleId)
+        {
+            try
+            {
+                var context = new AuthContext();
+                var requestRole = context.Roles.FirstOrDefault(r => r.Roleid == roleId);
+
+                if (requestRole == null)
+                {
+                    return NotFound("A kért szerepkör nem létezik!");
+                }
+
+                context.Remove(requestRole);
+                await context.SaveChangesAsync();
+
+                return Ok("Sikeresen törölted a kívánt a szerepkört!");
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
