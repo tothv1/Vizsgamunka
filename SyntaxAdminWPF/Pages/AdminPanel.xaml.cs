@@ -86,12 +86,10 @@ namespace SyntaxAdminWPF.Pages
                             temp.UserStatsId = 0;
                             MainPage.FelhasznaloLista.Add(temp); 
                         }
-                        MessageBox.Show(""+MainPage.FelhasznaloLista.Count);
                         foreach (var gameUser in game_users)
                         {
                            
                             var user = gameUser;
-                            MessageBox.Show(user.ToString());
                             foreach (var authUser in MainPage.FelhasznaloLista)
                             {
                                 if(user.id == authUser.Id)
@@ -100,7 +98,6 @@ namespace SyntaxAdminWPF.Pages
                                 }
                             }
                         }
-
                     }
                     catch (Exception ex)
                     {

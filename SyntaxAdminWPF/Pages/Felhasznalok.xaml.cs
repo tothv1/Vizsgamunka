@@ -1,4 +1,5 @@
 ﻿using SyntaxAdminWPF.Models;
+using SyntaxAdminWPF.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,16 +28,47 @@ namespace SyntaxAdminWPF.Pages
 
             FillFelhasznaloLista();
 
+            DG_Felhasznalok.IsReadOnly = true;
         }
 
         private void FillFelhasznaloLista()
         {
             DG_Felhasznalok.ItemsSource = MainPage.FelhasznaloLista;
+
+            DG_Felhasznalok.Items.Refresh();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
+        }
+
+        private void DG_Felhasznalok_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            try
+            {
+                UserUpdate updateWindow = new UserUpdate();
+
+                User selectedUser = (User)DG_Felhasznalok.SelectedItem;
+
+                updateWindow.TB_Email.Text = selectedUser.Email;
+                updateWindow.TB_Fullname.Text = selectedUser.FullName;
+                updateWindow.TB_Username.Text = selectedUser.Username;
+                updateWindow.TB_Regdate.Text = selectedUser.RegDate.ToString();
+                updateWindow.TB_Isloggedin.Text = selectedUser.IsLoggedIn.ToString();
+
+                updateWindow.ShowDialog();
+                
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+           
+
+           
         }
     }
 }

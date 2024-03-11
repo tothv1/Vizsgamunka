@@ -12,6 +12,7 @@ namespace SyntaxAdminWPF.Models
         public string FullName { get; set; } = null!;
         public string Username { get; set; } = null!;
         public string Email { get; set; } = null!;
+        public bool IsLoggedIn { get; set; }
         public DateTime RegDate { get; set; }
         public DateTime LastLogin { get; set; }
         public int RoleId { get; set; }
