@@ -1,4 +1,13 @@
-body{
+@font-face {
+    font-family: "Joystix Monospace";
+    src:
+        local("Joystix Monospace"),
+        url("joystix.otf") format("opentype"),
+}
+
+div {
     margin: 0px;
     overflow: hidden;
+    font-family: "Joystix Monospace";
 }
+

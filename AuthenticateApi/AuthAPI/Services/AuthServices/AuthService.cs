@@ -19,14 +19,14 @@ namespace AuthAPI.Services.AuthServices
     {
 
         private readonly ITokenManager _tokenManager;
-        private readonly IPasswordManager _passwordStrengthChecker;
+        private readonly IPasswordManager _passwordManager;
         private readonly IConfirmationKeyGenerate _confirmationKeyGenerate;
         private readonly IEmailSenderService _emailSenderService;
 
-        public AuthService(ITokenManager tokenManager, IPasswordManager passwordStrengthChecker, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
+        public AuthService(ITokenManager tokenManager, IPasswordManager passwordManager, IConfirmationKeyGenerate confirmationKeyGenerate, IEmailSenderService emailSenderService)
         {
             this._tokenManager = tokenManager;
-            this._passwordStrengthChecker = passwordStrengthChecker;
+            this._passwordManager = passwordManager;
             this._confirmationKeyGenerate = confirmationKeyGenerate;
             this._emailSenderService = emailSenderService;
         }
@@ -90,6 +90,31 @@ namespace AuthAPI.Services.AuthServices
             }
         }
 
+        //Fiók megerősítés ellenőrzés
+        public async Task<Object> IsValidKey(string confirmKey)
+        {
+            try
+            {
+                var context = new AuthContext();
+
+                var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
+
+                if (keyCheck == null)
+                {
+                    return ResponseObject.create("Hibás kulcs, vagy nem létező fiók!", 400);
+                }
+
+                return ResponseObject.create("A megadott kulcs helyes!", keyCheck, 200);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create(ex.Message, 400);
+            }
+        }
+
+
+
         //Bejelentkezés logika
         public async Task<Object> Login(LoginDTO loginDto)
         {
@@ -101,6 +126,11 @@ namespace AuthAPI.Services.AuthServices
                 await using (var context = new AuthContext())
                 {
                     var user = context.RegisteredUsers.FirstOrDefault(user => user.Username == loginDto.UserName);
+                    
+                    if(user == null)
+                    {
+                        return ResponseObject.create("Hibás felhasználónév, vagy jelszó!", null!, 400);
+                    }
 
                     if (user!.Hash == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Hash))
                     {
@@ -188,7 +218,11 @@ namespace AuthAPI.Services.AuthServices
             {
                 var context = new AuthContext();
 
-                if (!_passwordStrengthChecker.CheckPassword(register.Password))
+                if (!_passwordManager.PasswordMatch(register.Password, register.PasswordRepeate))
+                {
+                    return ResponseObject.create("A két jelszó nem egyezik!", "null pass", 400);
+                }
+                if (!_passwordManager.CheckPassword(register.Password))
                 {
                     return ResponseObject.create("Nem elég erős a jelszó!", "null pass", 400);
                 }
@@ -219,11 +253,11 @@ namespace AuthAPI.Services.AuthServices
                     TempRegdate = DateTime.UtcNow,
                     TempRoleid = 1,
                     TempUserExpire = expireDate.AddHours(24),
-                    TempConfirmationKey = _confirmationKeyGenerate.GenerateConfirmationKey(register.Email, passwordHash)
+                    TempConfirmationKey = _tokenManager.GenerateConfirmationToken(new ConfirmationUserDTO { UserId=userId, Email=register.Email, Fullname=register.Fullname, Username = register.Username })
                 };
 
 
-                string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:5159/Auth/confirmAccount?confirmKey={registry.TempConfirmationKey}";
+                string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:3000/confirm/{registry.TempConfirmationKey}";
 
                 if (!_emailSenderService.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email", message)) {
                     return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", "null email", 400);
