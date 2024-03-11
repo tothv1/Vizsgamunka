@@ -227,7 +227,7 @@ const Canvas = props => {
 
 
         if (item.dead && item.ID!=1000) {
-          console.log("spawning XP...")
+          
           var xpDrop = new XP();
           xpDrop.value = item.xpValue;
           xpDrop.x = item.x;
