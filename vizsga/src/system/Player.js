@@ -9,12 +9,15 @@ import "../system/Math";
 import { Clamp } from "../system/Math";
 import { HPbar } from "../render/HPBar";
 import { StatCard } from "./StatCard";
+import { Bow } from "./Weapons/Bow";
 
 class Player {
   ID = 0;
 
   level=1;
   currrentXP = 0;
+  requiredXP = 10;
+  XPRatio = 0;
 
   frameDelay = 20; //every x updates; the sprite turns over to the next frame
   frameLength = 10; // frames in the spritesheet
@@ -47,7 +50,7 @@ class Player {
   team = 1;
   shooting = false;
   aimPoint = [0, 0];
-  aimOffset = [0, 0];
+  windowSize = [0, 0];
   weapons = [];
 
   damagable=true;
@@ -68,9 +71,23 @@ class Player {
 
   Update(deltaTime, frameCount) {
 
-    if (this.currrentXP>this.level*10){
+    if (this.currrentXP>=this.requiredXP){
+      
+      this.currrentXP-=this.requiredXP;
       this.level+=1;
+
+      let obj = new Bow();
+      obj.owner=this;
+
+
+      this.weapons.push(obj)
+
+      this.requiredXP=Math.floor(this.requiredXP*1.1);    //exponential scale
+      this.requiredXP=+this.level*10;                     //linear scale
     }
+
+    this.XPRatio = this.currrentXP/this.requiredXP;
+    
 
     if (this.state === "moving") {
       if (this.direction === "left") {
@@ -80,10 +97,10 @@ class Player {
         this.drawing.src = right;
       }
       if (this.direction === "up") {
-        this.drawing.src = up;
+        //this.drawing.src = up;
       }
       if (this.direction === "down") {
-        this.drawing.src = down;
+        //this.drawing.src = down;
       }
 
       if (frameCount % this.frameDelay === 0) {
@@ -155,8 +172,6 @@ class Player {
     }
   }
   keyhandler(e) {
-
-    console.log(this.entityRef);
 
     if (e.type === "mouseup") {
       this.weapons.forEach(weapon => {

@@ -1,7 +1,7 @@
 import render from "../Assets/nyil.png"
 
 import "./Math";
-import { GetDirection, Normalise,Translate } from "./Math";
+import { GetDirection, Normalise,Translate, getRandomRange } from "./Math";
 
 function Update(deltaTime, frameCount) {
 
@@ -61,7 +61,7 @@ const Arrow = {
     width: 64,
     height: 64,
 
-    speed: 1000,
+    speed: 1000*getRandomRange(0.9,1.1),
 
     frame: 0,
 

@@ -10,10 +10,12 @@ import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
+import { IntervalSpawner } from '../system/IntervalSpawner';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
-let aimOffset = [0, 0];
+let windowSize = [0, 0];
+
 let aimpoint = [0, 0];
 let entities = [];
 
@@ -92,14 +94,48 @@ const Canvas = props => {
     ctx.fillStyle = 'black';
   }
 
+  const drawXPBar = (ctx, object) => {
 
+
+    ctx.font = `20px Joystix Monospace`;
+
+    ctx.fillStyle = 'yellow';
+    ctx.fillText(`Lv.${object.level}`, 10, 30);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`Lv.${object.level}`, 10, 30);
+    ctx.globalAlpha = 1.0;
+
+    ctx.font = `15px Joystix Monospace`;
+
+    ctx.fillStyle = 'yellow';
+    ctx.fillText(`XP:${object.requiredXP}/${object.currrentXP}`, 10, 50);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`XP:${object.requiredXP}/${object.currrentXP}`, 10, 50);
+    ctx.globalAlpha = 1.0;
+
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.rect(100, 20, (props.style.width - 120), 10);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = 'yellow';
+    ctx.beginPath();
+    ctx.rect(100, 20, (props.style.width - 120) * object.XPRatio, 10);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = 'black';
+  }
 
   useEffect(() => {
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
     var rect = canvas.getBoundingClientRect();
-    aimOffset = [rect.left, rect.top]
+    windowSize = [rect.left, rect.top]
 
     // init
 
@@ -116,7 +152,7 @@ const Canvas = props => {
     playerRef.y = 600;
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
-    playerRef.aimOffset = aimOffset;
+    playerRef.windowSize = windowSize;
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -139,32 +175,17 @@ const Canvas = props => {
         }
         if (rawmap[i][j] === 2) {
 
-          const temp = new Slime();
+          const temp = new IntervalSpawner();
 
           temp.x = j * 64;
           temp.y = i * 64;
           temp.entityRef = entities;
-          temp.aimOffset = aimOffset;
+          temp.windowSize = windowSize;
 
           entities.entityList.push(temp);
         }
       }
     }
-
-    entities.entityList.forEach(entity => {
-
-      if (entity.ID === 1) {
-
-        let temp = new Bow();
-        temp.owner = entity;
-        temp.firerate = 1;
-        temp.active = true;
-        entity.weapons.push(temp);
-
-        //entity.init(temp);
-      }
-
-    });
 
     //eventek playernek
 
@@ -185,10 +206,6 @@ const Canvas = props => {
       playerRef.aimPoint = aimpoint;
     });
 
-    //entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))
-
-    console.log(rect.top, rect.right, rect.bottom, rect.left);
-
     //console.log(entities)
 
     let animationFrameId = 0
@@ -208,6 +225,13 @@ const Canvas = props => {
       renderOffset = [-renderOffset[0], -renderOffset[1]]
       let playerrenderpos = [playerRef.x - renderOffset[0], playerRef.y - renderOffset[1]]
 
+      // tile update
+      entities.tileList.forEach(item => {
+        item.update(deltaTime, frameCount);
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        draw(context, item, item.offset)
+      });
+
       //entity update
       entities.entityList.forEach(item => {
 
@@ -216,23 +240,19 @@ const Canvas = props => {
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset);
 
-        if(item.damagable){
+        if (item.damagable) {
           drawHPBar(context, item.hpbar, item.offset);
           item.hpbar.setval(item.maxHealth, item.health);
 
         }
 
+        if (item.dead && item.ID != 1000) {
 
-
-
-
-        if (item.dead && item.ID!=1000) {
-          
           var xpDrop = new XP();
           xpDrop.value = item.xpValue;
           xpDrop.x = item.x;
           xpDrop.y = item.y;
-          
+
           entities.entityList.push(xpDrop);
 
         }
@@ -240,12 +260,6 @@ const Canvas = props => {
 
       });
 
-      // tile update
-      entities.tileList.forEach(item => {
-        item.update(deltaTime, frameCount);
-        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
-        draw(context, item, item.offset)
-      });
 
 
       //projectile update
@@ -257,8 +271,6 @@ const Canvas = props => {
 
           if (CheckCollision(item, element) && item.hitlimit > 0) {
 
-
-
             item.hitlimit--;
             element.takeDamage(item.damage);
             let temp = Object.create(DMGpopup);
@@ -268,7 +280,6 @@ const Canvas = props => {
             temp.size = Math.sqrt(item.damage) + 20;
             temp.drift = [getRandomRange(-100, 100), -500];
             temp.critLevel = item.critLevel;
-
 
             entities.effectList.push(temp);
             if (item.hitlimit <= 0) {
@@ -296,6 +307,11 @@ const Canvas = props => {
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         drawText(context, item, item.offset);
       });
+
+      //UI Update
+
+      drawXPBar(context, playerRef)
+
 
       lastUpdateTime = window.performance.now();
       frameCount++

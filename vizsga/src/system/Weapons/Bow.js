@@ -41,8 +41,9 @@ class Bow {
     
         if (this.active && this.nextfire<=0)
         {
-            this.nextfire=this.firerate;
-            this.owner.entityRef.projectileList.push(this.Shoot(this.owner.aimPoint,this.owner,this.owner.aimOffset))
+            this.nextfire=this.firerate*getRandomRange(0.9,1.1);
+
+            this.owner.entityRef.projectileList.push(this.Shoot(this.owner.aimPoint,this.owner,this.owner.windowSize))
         }
     
         if (this.frameLength > 1) {

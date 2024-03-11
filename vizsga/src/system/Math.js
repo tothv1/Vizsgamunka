@@ -24,8 +24,6 @@ export function LerpNum(num, target, rate) {
 
 export function Distance(point1,point2){
     let dist = Math.hypot(point1[0] - point2[0], point1[1] - point2[1]);
-    
-    console.log(dist)
     return dist;
 }
 
