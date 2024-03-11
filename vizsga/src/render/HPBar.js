@@ -1,6 +1,3 @@
-
-
-
 const HPbar = {
     ID : 60,
 
@@ -8,7 +5,6 @@ const HPbar = {
     rendery:0,
 
     offset : [0,0],
-
     
     renderoffset : [0,0],
   
@@ -23,7 +19,6 @@ const HPbar = {
     setval : setVal,
     owner : Object,
     
-  
   }
   
   function setVal (maxHP,currentHP){

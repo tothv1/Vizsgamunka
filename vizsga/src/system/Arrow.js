@@ -1,7 +1,7 @@
 import render from "../Assets/nyil.png"
 
-import "../system/Math";
-import { GetDirection, Normalise,Translate } from "../system/Math";
+import "./Math";
+import { GetDirection, Normalise,Translate } from "./Math";
 
 function Update(deltaTime, frameCount) {
 

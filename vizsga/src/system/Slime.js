@@ -8,12 +8,7 @@ import { Bow } from "./Weapons/Bow";
 
 
 
-function takeDamage(damage){
-  this.health-=damage;
-  if (this.health<=0){
-    this.dead=true;
-  }
-}
+
 
 function init(obj){
 
@@ -35,10 +30,13 @@ const getImg = () =>{
 
 class Slime {
   ID = 1;
+  frame = 0;
   frameDelay = 10; //every x updates; the sprite turns over to the next frame
   frameLength = 8; // frames in the spritesheet
   state = "idle";
   mirror = false;
+
+  xpValue = 3;
 
   dead=false;
   
@@ -58,12 +56,13 @@ class Slime {
   xhitbox=32;
   yhitbox=32;
 
+  damagable=true;
+
   renderoffset = [0,0];
 
   speed = 100;
   health = 100;
 
-  frame = 0;
 
   xcenter = 0;
   ycenter = 0;
@@ -76,11 +75,10 @@ class Slime {
 
   drawing = getImg();
   init=init;
-  takeDamage=takeDamage;
   hpbar = Object.create(HPbar)
 
 
-  update(deltaTime, frameCount,target) {
+  Update(deltaTime, frameCount,target) {
 
     this.aimPoint = [target.x,target.y]
   
@@ -109,9 +107,16 @@ class Slime {
   
     
     this.weapons.forEach(weapon => {
-      weapon.update(deltaTime,frameCount)
+      weapon.Update(deltaTime,frameCount)
     });
   };
+
+  takeDamage(damage){
+    this.health-=damage;
+    if (this.health<=0){
+      this.dead=true;
+    }
+  }
   
 }
 

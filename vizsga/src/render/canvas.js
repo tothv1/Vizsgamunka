@@ -9,7 +9,7 @@ import '../system/Math';
 import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math';
 import { Bow } from '../system/Weapons/Bow';
 
-
+import { XP } from '../system/Pickups/Experience';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -29,18 +29,13 @@ const Canvas = props => {
 
   const draw = (ctx, object, offset) => {
     ctx.save();
-    if (object.rotation != undefined || object.rotation != 0) {
-      ctx.translate(offset[0] + object.width / 2, offset[1] + object.height / 2);
 
-      ctx.rotate(object.rotation);
-      ctx.translate(-offset[0] - object.width / 2, -offset[1] - object.height / 2);
-      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
-      ctx.rotate(-object.rotation);
+    ctx.translate(offset[0] + object.width / 2, offset[1] + object.height / 2);
+    ctx.rotate(object.rotation);
+    ctx.translate(-offset[0] - object.width / 2, -offset[1] - object.height / 2);
+    ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
+    ctx.rotate(-object.rotation);
 
-    } else {
-      ctx.drawImage(object.drawing, object.frame * object.width, 0, object.width, object.height, offset[0], offset[1], object.width, object.height);
-
-    }
     ctx.restore();
   }
 
@@ -116,14 +111,14 @@ const Canvas = props => {
 
     let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
 
-    const playerRef = Object.create(Player);
+    const playerRef = new Player();
     playerRef.x = 600;
     playerRef.y = 600;
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.aimOffset = aimOffset;
 
-    let wep = Object.create(Bow);
+    let wep = new Bow();
     wep.owner = playerRef;
     playerRef.weapons.push(wep);
     playerRef.canvasRef = canvasRef.current;
@@ -145,7 +140,7 @@ const Canvas = props => {
         if (rawmap[i][j] === 2) {
 
           const temp = new Slime();
-          
+
           temp.x = j * 64;
           temp.y = i * 64;
           temp.entityRef = entities;
@@ -157,12 +152,10 @@ const Canvas = props => {
     }
 
     entities.entityList.forEach(entity => {
-      
-
 
       if (entity.ID === 1) {
 
-        let temp = Object.create(Bow);
+        let temp = new Bow();
         temp.owner = entity;
         temp.firerate = 1;
         temp.active = true;
@@ -171,12 +164,7 @@ const Canvas = props => {
         //entity.init(temp);
       }
 
-      console.log(entity)
-
     });
-
-    console.log(entities)
-    console.log(playerRef)
 
     //eventek playernek
 
@@ -199,8 +187,6 @@ const Canvas = props => {
 
     //entities.projectileList.push(playerRef.shoot(event, playerRef, aimOffset))
 
-
-
     console.log(rect.top, rect.right, rect.bottom, rect.left);
 
     //console.log(entities)
@@ -216,21 +202,41 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
+      // setting offsets
+      renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
+
+      renderOffset = [-renderOffset[0], -renderOffset[1]]
+      let playerrenderpos = [playerRef.x - renderOffset[0], playerRef.y - renderOffset[1]]
 
       //entity update
       entities.entityList.forEach(item => {
-        item.update(deltaTime, frameCount, playerRef);
+
         item.renderoffset = renderOffset;
-        if (item.ID === 1) {
-          item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
-          draw(context, item, item.offset);
-          item.hpbar.setval(item.maxHealth, item.health);
+        item.Update(deltaTime, frameCount, playerRef);
+        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
+        draw(context, item, item.offset);
+
+        if(item.damagable){
           drawHPBar(context, item.hpbar, item.offset);
+          item.hpbar.setval(item.maxHealth, item.health);
 
         }
-        if (item.dead) {
-          entities.entityList = entities.entityList.filter((xd) => !xd.dead);
+
+
+
+
+
+        if (item.dead && item.ID!=1000) {
+          console.log("spawning XP...")
+          var xpDrop = new XP();
+          xpDrop.value = item.xpValue;
+          xpDrop.x = item.x;
+          xpDrop.y = item.y;
+          
+          entities.entityList.push(xpDrop);
+
         }
+        entities.entityList = entities.entityList.filter((xd) => !xd.dead);
 
       });
 
@@ -247,6 +253,8 @@ const Canvas = props => {
         item.update(deltaTime, frameCount);
 
         entities.entityList.forEach(element => {
+          if (!element.damagable) { return; }
+
           if (CheckCollision(item, element) && item.hitlimit > 0) {
 
 
@@ -288,14 +296,6 @@ const Canvas = props => {
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         drawText(context, item, item.offset);
       });
-
-
-
-      renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
-      renderOffset = [-renderOffset[0], -renderOffset[1]]
-
-      let playerrenderpos = [playerRef.x + renderOffset[0], playerRef.y + renderOffset[1]]
-      draw(context, playerRef, [playerrenderpos[0] - Player.width / 2, playerrenderpos[1] - Player.height / 2]);
 
       lastUpdateTime = window.performance.now();
       frameCount++
