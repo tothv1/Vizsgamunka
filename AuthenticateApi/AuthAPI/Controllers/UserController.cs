@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using SyntaxBackEnd.Models;
 
 namespace AuthAPI.Controllers
 {
@@ -18,7 +19,8 @@ namespace AuthAPI.Controllers
         private IConfirmationKeyGenerate confirmationKeyGenerate;
         private IPasswordManager passwordManager;
 
-        public UserController(IEmailSenderService emailSenderService, IConfirmationKeyGenerate confirmationKeyGenerate, IPasswordManager passwordManager) { 
+        public UserController(IEmailSenderService emailSenderService, IConfirmationKeyGenerate confirmationKeyGenerate, IPasswordManager passwordManager)
+        {
             this.emailSenderService = emailSenderService;
             this.confirmationKeyGenerate = confirmationKeyGenerate;
             this.passwordManager = passwordManager;
@@ -87,7 +89,7 @@ namespace AuthAPI.Controllers
         }
 
         [HttpPut("resetPasswordRequest")]
-        public async Task<ActionResult> ResetPasswordRequest([FromBody]string email)
+        public async Task<ActionResult> ResetPasswordRequest([FromBody] string email)
         {
             try
             {
@@ -95,7 +97,7 @@ namespace AuthAPI.Controllers
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == email);
 
-                if(selectedUser == null)
+                if (selectedUser == null)
                 {
                     return Ok("A jelszó visszaállító email elküldve, ha érvényes a megadott email cím!");
                 }
@@ -169,12 +171,12 @@ namespace AuthAPI.Controllers
 
                 var oldHash = BCrypt.Net.BCrypt.Verify(changePasswordDTO.OldPassword, selectedUser!.Hash);
 
-                if(!oldHash)
+                if (!oldHash)
                 {
                     return BadRequest("A régi jelszó helytelen!");
                 }
 
-                if(!changePasswordDTO.NewPassword.Equals(changePasswordDTO.NewPasswordAgain))
+                if (!changePasswordDTO.NewPassword.Equals(changePasswordDTO.NewPasswordAgain))
                 {
                     return BadRequest("A két jelszó nem egyezik!");
                 }
@@ -204,7 +206,7 @@ namespace AuthAPI.Controllers
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changeEmailDTO.OldEmail);
 
-                if(selectedUser == null)
+                if (selectedUser == null)
                 {
                     return BadRequest("Hibás a megadott email!");
                 }
@@ -220,8 +222,8 @@ namespace AuthAPI.Controllers
                 {
                     return BadRequest("Nem lehet ugyaz az email");
                 }
-                
-                if(context.RegisteredUsers.FirstOrDefault(u => u.Email == changeEmailDTO.NewEmail) != null)
+
+                if (context.RegisteredUsers.FirstOrDefault(u => u.Email == changeEmailDTO.NewEmail) != null)
                 {
                     return BadRequest("Ez az email már foglalt!");
                 }
@@ -238,5 +240,58 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Admin")]
+        [HttpPut("updateUser")]
+        public async Task<ActionResult> UpdateUser(UpdateUserDTO updateUserDTO)
+        {
+            try
+            {
+                var context = new AuthContext();
+                var gameContext = new GameContext();
+
+                var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Userid == updateUserDTO.userid);
+                var selectedGameUser = await gameContext.Users.FirstOrDefaultAsync(user => user.Id == updateUserDTO.userid);
+
+                if (selectedUser == null || selectedGameUser == null)
+                {
+                    return NotFound("A kért felhasználó nem található!");
+                }
+
+                if (context.RegisteredUsers.FirstOrDefault(u => u.Email == updateUserDTO.Email) != null && !selectedUser!.Email.Equals(updateUserDTO.Email))
+                {
+                    return BadRequest("Ez az email már foglalt!");
+                }
+
+                if (context.RegisteredUsers.FirstOrDefault(u => u.Username == updateUserDTO.Username) != null && !selectedUser!.Username.Equals(updateUserDTO.Username))
+                {
+                    return BadRequest("Ez a felhasználónév már foglalt!");
+                }
+
+                selectedUser.Email = updateUserDTO.Email;
+                selectedUser.Username = updateUserDTO.Username;
+                selectedUser.Roleid = updateUserDTO.Roleid;
+                selectedUser.Fullname = updateUserDTO.Fullname;
+                selectedUser.Regdate = updateUserDTO.Regdate;
+                selectedUser.IsLoggedIn = updateUserDTO.IsLoggedIn;
+
+                selectedGameUser.Regdate = updateUserDTO.Regdate;
+                selectedGameUser.Username = updateUserDTO.Username;
+                selectedGameUser.Email = updateUserDTO.Email;
+
+                context.Update(selectedUser);
+                await context.SaveChangesAsync();
+
+                gameContext.Update(selectedGameUser);
+                await gameContext.SaveChangesAsync();
+
+                return Ok("A felhasználó szerkesztése sikeresen mgtörtént!");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
