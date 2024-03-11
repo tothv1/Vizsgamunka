@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 //import Canvas from "./render/canvas";
-import { useHistory, useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import AuthPage from "./pages/AuthPage";
