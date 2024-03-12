@@ -1,6 +1,6 @@
 import left from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
 import right from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
-import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 
@@ -100,9 +100,13 @@ class Slime {
     this.ycenter = this.y - (this.height / 2);
 
     if(target.x > this.x) {
-      this.drawing.src=right;
+      if (this.drawing.src!=right){
+        this.drawing.src=right;
+      }
     } else {
-      this.drawing.src=left;
+      if (this.drawing.src!=left){
+        this.drawing.src=left;
+      }
     }
 
     this.weapons.forEach(weapon => {
