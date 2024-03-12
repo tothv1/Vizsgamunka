@@ -1,39 +1,17 @@
 import React, { useState } from "react";
-import Canvas from "./render/canvas";
-import { useHistory } from 'react-router-dom';
-import { Link } from "react-router-dom";
+//import Canvas from "./render/canvas";
+import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
+import AuthPage from "./pages/AuthPage";
 
-const Menu = () => {
+const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
   //bootstrapet, react-router-dom -ot majd installálni
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUserName] = useState("");
+  const navigate = useNavigate();
+  
   const [showAchievements, setShowAchievements] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-
-  const handleLogin = () => {
-    // Ha rákattint akkor bejelentkezik és a login helyén a player neve lesz, mellette a kijelentkezés
-    setIsLoggedIn(true);
-    setUserName("UserName");
-  };
-
-  const handleLogout = () => {
-    // Kijelentkezés
-    setIsLoggedIn(false);
-    setUserName("");
-  };
-
-  //login/logout button
-  const handleLoginButtonClick = () => {
-    if (isLoggedIn) {
-      handleLogout();
-    } else {
-      handleLogin();
-    }
-  };
-
 
   //az achievement jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
   const handleAchievement = () => {
@@ -51,17 +29,34 @@ const Menu = () => {
   }
 
   //style={{ position: 'fixed', top: '50%', right: '10px', transform: 'translateY(-50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)', zIndex: 999 }}
+ 
 
   return (
-    <div className="container">
+
+    (role !== "Visitor" && isLoggedIn) ?
+    (<div className="container">
       <div className="row">
         <div className="col border border-primary">
         <h1>Játék Menü</h1>
         <img src="https://via.placeholder.com/300x300" alt="LOGÓ" title="LOGÓ" />
           <div className="mb-3 p-2">
             {/* Gombok */}
-            <button className="btn btn-primary mb-2" onClick={handleLoginButtonClick}>
-              {isLoggedIn ? `Kijelentkezés (${username})` : "Bejelentkezés"}
+            <button className="btn btn-primary mb-2" onClick={ async () => {
+                var response = await axios.put(`https://localhost:7096/Auth/logout?token=${token}`, {},{
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                  }
+                });
+                console.log(response.data);
+                if(response.data.status == 200) {
+                  setIsLoggedIn(false);
+                  localStorage.removeItem('token');
+                  navigate('/');
+                  console.log("Sikeres kijelentkezés");
+                }
+            }}> 
+              {isLoggedIn ? `Kijelentkezés (${tokenData.username})` : "Bejelentkezés"}
             </button>
             <br />
             <Link to="/game" className="btn btn-primary mb-2">Play</Link>
@@ -113,7 +108,10 @@ const Menu = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>) : 
+    (<div>
+      <AuthPage />
+    </div>)
   );
 };
 
