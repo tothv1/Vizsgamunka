@@ -11,6 +11,7 @@ import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
 import { IntervalSpawner } from '../system/IntervalSpawner';
+import { Spawner } from '../system/Spawner';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -175,11 +176,12 @@ const Canvas = props => {
         }
         if (rawmap[i][j] === 2) {
 
-          const temp = new IntervalSpawner();
+          const temp = new Spawner();
 
           temp.x = j * 64;
           temp.y = i * 64;
           temp.entityRef = entities;
+          temp.playerRef=playerRef;
           temp.windowSize = windowSize;
 
           entities.entityList.push(temp);

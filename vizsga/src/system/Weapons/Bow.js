@@ -1,9 +1,7 @@
-import { Normalise,GetDirection,CreateProjectile, getRandomRange, GetDirRad } from "../Math";
+import { Normalise,GetDirection,CreateProjectile, getRandomRange } from "../Math";
 import { Arrow } from "../Arrow";
 
-
 class Bow {
-
 
     ID= 60;
 
@@ -26,6 +24,7 @@ class Bow {
     firerate= 0.1; //másodperc
     nextfire= 0;
     spread = 0.1;
+    projectileSpeed = 1000;
 
     damage = 10;
     critChance = 20;
@@ -60,8 +59,6 @@ class Bow {
     
     };
 
-
-
     Shoot(aimPoint,source,aimOffset) {
 
         let direction = [0,0];
@@ -83,7 +80,6 @@ class Bow {
 
         normalised = [tempp[0]*c + tempp[1]*-s,tempp[0]*s+tempp[1]*c];
 
-
         let critRoll = getRandomRange(0,100);
         
         let localCrit = this.critChance
@@ -95,11 +91,14 @@ class Bow {
         }
         xd.critLevel = critLevel;
         xd.damage=xd.damage*Math.pow(this.critDamageMult,critLevel);
+        xd.projectileSpeed = getRandomRange(this.projectileSpeed*0.9,this.projectileSpeed*1.1);
     
         let temp = CreateProjectile([source.x,source.y], normalised, xd, this.owner.team);
+
+        
+
         return temp
     }
-
 
 }
 

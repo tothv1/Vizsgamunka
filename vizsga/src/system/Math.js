@@ -39,11 +39,11 @@ export function Translate(num, translation) {
     return [num[0] - translation[0], num[1] - translation[1]]
 }
 
-export function RadToDegrees(radian) {
+export function RadianToDegrees(radian) {
     return radian * (180 / Math.PI);
 }
 
-export function GetDirRad(direction) {
+export function GetDirectionRadian(direction) {
     return Math.atan2(direction[1], direction[0]) - Math.PI / 2;
 }
 
@@ -89,11 +89,20 @@ export function CreateProjectile(position, direction, object,team) {
     temp.x=position[0];
     temp.y=position[1];
     temp.direction=direction;
-    temp.rotation=GetDirRad(direction);
+    temp.rotation=GetDirectionRadian(direction);
     temp.team=team;
 
     temp.damage = Math.round(getRandomRange(object.damage*0.8,object.damage*1.2));
 
-
     return temp;
+}
+
+export function CreateRandomDirection(){
+    let the = 2*Math.PI*Math.random()
+
+    let c = Math.cos(the);
+    let s = Math.sin(the);
+
+    return [c,s];
+
 }

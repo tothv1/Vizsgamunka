@@ -1,5 +1,5 @@
 import render from "../../Assets/XP.png"
-import { Distance, Lerp2D, LerpNum, GetDirection, Normalise, Translate, getRandomRange } from "../Math";
+import { Distance, LerpNum, GetDirection, Normalise, Translate, getRandomRange } from "../Math";
 
 const getImg = () => {
 

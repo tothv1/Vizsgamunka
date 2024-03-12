@@ -1,12 +1,10 @@
-import { GameLoop } from "react-game-engine";
-import { useState } from "react";
 import right from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-right.png"
 import left from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-left.png"
-import up from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-up.png"
-import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
+//import up from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-up.png"
+//import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import "../system/Math";
-import { Clamp } from "../system/Math";
+import { Clamp, CreateRandomDirection } from "../system/Math";
 import { HPbar } from "../render/HPBar";
 import { StatCard } from "./StatCard";
 import { Bow } from "./Weapons/Bow";
@@ -73,6 +71,7 @@ class Player {
 
     if (this.currrentXP>=this.requiredXP){
       
+
       this.currrentXP-=this.requiredXP;
       this.level+=1;
 
@@ -82,8 +81,16 @@ class Player {
 
       this.weapons.push(obj)
 
-      this.requiredXP=Math.floor(this.requiredXP*1.1);    //exponential scale
-      this.requiredXP=+this.level*10;                     //linear scale
+      //let linearNext = this.level*5; 
+      //let exponentialNext = Math.floor(this.requiredXP*1.1);
+
+      //console.log(linearNext);
+      //console.log(exponentialNext);
+
+      //linearNext > exponentialNext ? this.requiredXP=linearNext : this.requiredXP = exponentialNext;
+
+      this.requiredXP=Math.ceil(this.requiredXP*1.1);    //exponential scale
+      //this.requiredXP=this.level*10;                     //linear scale
     }
 
     this.XPRatio = this.currrentXP/this.requiredXP;

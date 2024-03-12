@@ -1,5 +1,5 @@
 import rightIdle from "../Assets/characters/slime.png"
-import { Distance, GetDirAngle, GetDirection, LerpNum, Normalise, RadToDegrees, Translate, getRandomRange } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { Bow } from "./Weapons/Bow";
 
@@ -31,9 +31,6 @@ class Slime {
 
   team = 2;
 
-  maxHealth = 100;
-  health = 100;
-
   width = 64;
   height = 64;
 
@@ -45,6 +42,7 @@ class Slime {
   renderoffset = [0, 0];
 
   speed = 100 * getRandomRange(0.9, 1.1);
+  maxHealth = 100;
   health = 100;
 
   xcenter = 0;

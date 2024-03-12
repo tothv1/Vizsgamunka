@@ -1,7 +1,7 @@
 import render from "../Assets/nyil.png"
 
 import "./Math";
-import { GetDirection, Normalise,Translate, getRandomRange } from "./Math";
+import { Translate, getRandomRange } from "./Math";
 
 function Update(deltaTime, frameCount) {
 
@@ -16,7 +16,7 @@ function Update(deltaTime, frameCount) {
         }
     }
 
-    let translation = Translate([this.x, this.y], [this.direction[0] * this.speed * deltaTime, this.direction[1] * this.speed * deltaTime]);
+    let translation = Translate([this.x, this.y], [this.direction[0] * this.projectileSpeed * deltaTime, this.direction[1] * this.projectileSpeed * deltaTime]);
 
     this.x = translation[0];
     this.y = translation[1];
@@ -61,7 +61,7 @@ const Arrow = {
     width: 64,
     height: 64,
 
-    speed: 1000*getRandomRange(0.9,1.1),
+    projectileSpeed: 100,
 
     frame: 0,
 

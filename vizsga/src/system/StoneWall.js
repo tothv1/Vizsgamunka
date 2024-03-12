@@ -1,4 +1,3 @@
-
 import render from "../Assets/map/tiles/ezegyfal.jpg"
 
 const getImg = () =>{
