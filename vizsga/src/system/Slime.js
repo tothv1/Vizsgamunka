@@ -1,11 +1,6 @@
-<<<<<<< Updated upstream
 import left from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
 import right from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
-=======
-import rightIdle from "../Assets/characters/slime.png"
-import { Distance, GetDirection, Normalise, Translate, getRandomRange } from "./Math";
->>>>>>> Stashed changes
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 
@@ -104,15 +99,12 @@ class Slime {
     this.xcenter = this.x - (this.width / 2);
     this.ycenter = this.y - (this.height / 2);
 
-<<<<<<< Updated upstream
     if(target.x > this.x) {
       this.drawing.src=right;
     } else {
       this.drawing.src=left;
     }
 
-=======
->>>>>>> Stashed changes
     this.weapons.forEach(weapon => {
       weapon.Update(deltaTime, frameCount)
     });
