@@ -92,7 +92,7 @@ export function CreateProjectile(position, direction, object,team) {
     temp.rotation=GetDirectionRadian(direction);
     temp.team=team;
 
-    temp.damage = Math.round(getRandomRange(object.damage*0.8,object.damage*1.2));
+    temp.Damage = Math.round(getRandomRange(object.Damage*0.8,object.Damage*1.2));
 
     return temp;
 }

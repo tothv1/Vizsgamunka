@@ -1,13 +1,14 @@
 import right from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-right.png"
 import left from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-left.png"
-//import up from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-up.png"
-//import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
+import up from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-up.png"
+import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 
 import "../system/Math";
-import { Clamp, CreateRandomDirection } from "../system/Math";
+import { Clamp, getRandomRange } from "../system/Math";
 import { HPbar } from "../render/HPBar";
 import { StatCard } from "./StatCard";
 import { Bow } from "./Weapons/Bow";
+import { DMGpopup } from "../render/DmgPopup";
 
 class Player {
   ID = 0;
@@ -104,10 +105,10 @@ class Player {
         this.drawing.src = right;
       }
       if (this.direction === "up") {
-        //this.drawing.src = up;
+        this.drawing.src = up;
       }
       if (this.direction === "down") {
-        //this.drawing.src = down;
+        this.drawing.src = down;
       }
 
       if (frameCount % this.frameDelay === 0) {
@@ -172,8 +173,18 @@ class Player {
 
 
   };
-  takeDamage(damage) {
-    this.health -= damage;
+  takeDamage(source) {
+
+    let temp =new DMGpopup();
+    temp.x = this.x;
+    temp.y = this.y;
+    temp.Damage = source.Damage;
+    temp.size = Math.sqrt(source.Damage) + 20;
+    temp.drift = [getRandomRange(-100, 100), -500];
+    temp.critLevel = source.critLevel;
+    this.entityRef.effectList.push(temp);
+
+    this.health -= source.Damage;
     if (this.health <= 0) {
       this.dead = true;
     }
