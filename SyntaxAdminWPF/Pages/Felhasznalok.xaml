@@ -10,7 +10,21 @@
 
     <Grid>
         <Button Content="↩ Vissza" HorizontalAlignment="Left" VerticalAlignment="Top" Width="102" Height="29" Click="Button_Click"/>
-        <DataGrid Name="DG_Felhasznalok" Margin="102,0,0,0" SelectionChanged="DG_Felhasznalok_SelectionChanged"/>
+        <DataGrid Name="DG_Felhasznalok" Margin="102,0,0,0" SelectionChanged="DG_Felhasznalok_SelectionChanged" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="UserId" Binding="{Binding Path=Id}" />
+                <DataGridTextColumn Header="FullName" Binding="{Binding Path=FullName}" />
+                <DataGridTextColumn Header="Username" Binding="{Binding Path=Username}" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Path=Email}" />
+                <DataGridTextColumn Header="IsLoggedIn" Binding="{Binding Path=IsLoggedIn}" />
+                <DataGridTextColumn Header="RegDate" Binding="{Binding Path=RegDate}" />
+                <DataGridTextColumn Header="LastLogin" Binding="{Binding Path=LastLogin}" />
+                <DataGridTextColumn Header="Role" Binding="{Binding Path=UserRole}" />
+                <DataGridTextColumn Header="Kills" Binding="{Binding Path=Kills}" />
+                <DataGridTextColumn Header="Deaths" Binding="{Binding Path=Deaths}" />
+                <DataGridTextColumn Header="TimesPlayed" Binding="{Binding Path=TimesPlayed}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Page>

@@ -23,5 +23,7 @@ namespace SyntaxAdminWPF.Models
         public DateTime regdate { get; set; }
         public int roleid { get; set; } = -1;
 
+
+
     }
 }

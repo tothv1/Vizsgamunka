@@ -105,7 +105,6 @@ namespace SyntaxAdminWPF.Pages
 
                 foreach (var authUser in auth_users)
                 {
-
                     User temp = new User();
                     temp.Id = authUser.userid;
                     temp.Username = authUser.username;
@@ -116,9 +115,10 @@ namespace SyntaxAdminWPF.Pages
                     int roleId = authUser["roleid"];
                     temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.Id == roleId)!.RoleName;
                     temp.IsLoggedIn = authUser.isLoggedIn;
+                    temp.UserStatsId = 0;
                     temp.Kills = 0;
                     temp.Deaths = 0;
-                    temp.TimesPlayed = 20;
+                    temp.TimesPlayed = 0;
                     MainPage.FelhasznaloLista.Add(temp);
                     //MessageBox.Show(temp.ToString() + "");
                 }
@@ -134,15 +134,14 @@ namespace SyntaxAdminWPF.Pages
                             authUser.Deaths = userStats.deaths;
                             authUser.TimesPlayed = userStats.timesplayed;
                             authUser.LastLogin = gameUser.lastlogin;
+                            authUser.UserStatsId = gameUser.userStatsId;
                             //MessageBox.Show(gameUser + "");
                         }
                     }
-
                 }
                 Felhasznalok.instance.DG_Felhasznalok.ItemsSource = MainPage.FelhasznaloLista;
                 CollectionViewSource.GetDefaultView(Felhasznalok.instance.DG_Felhasznalok.ItemsSource).Refresh();
                 Felhasznalok.instance.DG_Felhasznalok.Items.Refresh();
-
             }
             catch (Exception ex)
             {

@@ -16,6 +16,7 @@ namespace SyntaxAdminWPF.Models
         public DateTime RegDate { get; set; }
         public DateTime LastLogin { get; set; }
         public string UserRole { get; set; } = null!;
+        public int UserStatsId { get; set; }
         public int Kills { get; set; }
         public int Deaths { get; set; }
         public int TimesPlayed { get; set; }

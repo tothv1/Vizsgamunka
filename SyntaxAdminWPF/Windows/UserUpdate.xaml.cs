@@ -46,6 +46,7 @@ namespace SyntaxAdminWPF.Windows
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {MainPage.ResponseToken}");
 
                     User selectedUser = (User)selectedItem;
+
                     UpdateUserDTO updateUserDTO = new UpdateUserDTO();
                     updateUserDTO.username = TB_Username.Text;
                     updateUserDTO.roleid = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.RoleName == TB_Role.Text)!.Id;
@@ -55,12 +56,22 @@ namespace SyntaxAdminWPF.Windows
                     updateUserDTO.isLoggedIn = bool.Parse(TB_Isloggedin.Text);
                     updateUserDTO.userid = selectedUser.Id;
 
+                    UserStats userStats = new UserStats();
+                    userStats.userStatId = selectedUser.UserStatsId;
+                    userStats.Kills = int.Parse(TB_Kills.Text);
+                    userStats.Deaths = int.Parse(TB_Deaths.Text);
+                    userStats.TimesPlayed = int.Parse(TB_TimesPlayed.Text);
+
+
                     StringContent stringContent = new(JsonConvert.SerializeObject(updateUserDTO), Encoding.UTF8, "application/json");
                     HttpResponseMessage respone = client.PutAsync(API_PATH + "/User/updateUser", stringContent).Result;
                     string responseBody = respone.Content.ReadAsStringAsync().Result;
 
-                    MessageBox.Show(responseBody+"");
+                    StringContent stringContentStats = new(JsonConvert.SerializeObject(userStats), Encoding.UTF8, "application/json");
+                    HttpResponseMessage responseStats = client.PutAsync(API_PATH + "/Game/updateAccountStats", stringContentStats).Result;
+                    string responseStatsBody = responseStats.Content.ReadAsStringAsync().Result;
 
+                    MessageBox.Show(responseBody+""+ stringContentStats);
                 } 
                 
                 //Adatok frissítése a datagridben is
