@@ -21,6 +21,8 @@ const DMGpopup = {
     fade:true,
     opacity:1,
 
+    critLevel : 0,
+
     offset : [0,0],
   
     entityRef:[],

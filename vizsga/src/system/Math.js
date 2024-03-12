@@ -1,9 +1,8 @@
-import { Arrow } from "./Projectile";
+import { Arrow } from "./Arrow";
 
 export function Clamp(num, min, max) {
     if (num < min) return min;
     if (num > max) return max;
-    if (min > max) return min;
     return num;
 }
 
@@ -23,6 +22,11 @@ export function LerpNum(num, target, rate) {
     return num + lerp;
 }
 
+export function Distance(point1,point2){
+    let dist = Math.hypot(point1[0] - point2[0], point1[1] - point2[1]);
+    return dist;
+}
+
 export function Lerp2D(num, target, rate) {
     let diffx = num[0] - target[0];
     let diffy = num[1] - target[1];
@@ -35,11 +39,11 @@ export function Translate(num, translation) {
     return [num[0] - translation[0], num[1] - translation[1]]
 }
 
-export function RadToDegrees(radian) {
+export function RadianToDegrees(radian) {
     return radian * (180 / Math.PI);
 }
 
-export function GetDirRad(direction) {
+export function GetDirectionRadian(direction) {
     return Math.atan2(direction[1], direction[0]) - Math.PI / 2;
 }
 
@@ -78,21 +82,27 @@ export function getRandomRange(min, max) {
     return num;
 }
 
-export function CreateProjectile(position, direction, object) {
+export function CreateProjectile(position, direction, object,team) {
 
     const temp = object;
-
-    console.log()
     
     temp.x=position[0];
     temp.y=position[1];
     temp.direction=direction;
-    temp.rotation=GetDirRad(direction);
+    temp.rotation=GetDirectionRadian(direction);
+    temp.team=team;
 
-    //temp.direction = Normalise(GetDirection([Player.x, Player.y], [e.pageX - Player.renderoffset[0], e.pageY - Player.renderoffset[1]]));
-    //temp.rotation = GetDirRad(temp.direction);
     temp.damage = Math.round(getRandomRange(object.damage*0.8,object.damage*1.2));
 
-
     return temp;
+}
+
+export function CreateRandomDirection(){
+    let the = 2*Math.PI*Math.random()
+
+    let c = Math.cos(the);
+    let s = Math.sin(the);
+
+    return [c,s];
+
 }
