@@ -1,15 +1,9 @@
-import rightIdle from "../Assets/characters/slime.png"
+import left from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
+import right from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { Bow } from "./Weapons/Bow";
 
-
-const getImg = () => {
-
-  var temp = new Image();
-  temp.src = rightIdle;
-  return temp;
-}
 
 
 class Slime {
@@ -54,7 +48,7 @@ class Slime {
   windowSize = [0, 0];
   weapons = [];
 
-  drawing = getImg();
+  drawing = new Image();
   hpbar = Object.create(HPbar)
 
 
@@ -95,9 +89,11 @@ class Slime {
     this.xcenter = this.x - (this.width / 2);
     this.ycenter = this.y - (this.height / 2);
 
-
-
-
+    if(target.x > this.x) {
+      this.drawing.src=right;
+    } else {
+      this.drawing.src=left;
+    }
 
     this.weapons.forEach(weapon => {
       weapon.Update(deltaTime, frameCount)
