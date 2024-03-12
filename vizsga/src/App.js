@@ -3,8 +3,8 @@ import { GameEngine } from "react-game-engine";
 import Canvas from "./render/canvas";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Menu from "./menu";
-import AuthPage from "./AuthPage";
-import Login from "./login";
+import AuthPage from "./pages/AuthPage";
+import Login from "./pages/login";
 
 
 export default function App() {
