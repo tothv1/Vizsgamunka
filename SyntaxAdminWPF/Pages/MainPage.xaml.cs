@@ -28,6 +28,8 @@ namespace SyntaxAdminWPF.Pages
 
         public static List<User> FelhasznaloLista = new List<User>();
 
+        public static List<Role> FelhasznaloRoleok = new List<Role>();
+
         public MainPage()
         {
             InitializeComponent();

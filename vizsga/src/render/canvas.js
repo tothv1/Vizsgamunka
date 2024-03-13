@@ -20,6 +20,8 @@ let windowSize = [0, 0];
 let aimpoint = [0, 0];
 let entities = [];
 
+let gameStartTime = 0;
+
 const Canvas = props => {
 
   const canvasRef = useRef(null)
@@ -47,34 +49,34 @@ const Canvas = props => {
     ctx.globalAlpha = object.opacity;
     ctx.font = `${object.size}px Joystix Monospace`;
 
-    if (object.damage < 0) {
+    if (object.Damage < 0) {
       ctx.fillStyle = '#00ff66';
-      ctx.fillText(`${object.damage.toString().substring(1)}`, offset[0], offset[1]);
+      ctx.fillText(`${object.Damage.toString().substring(1)}`, offset[0], offset[1]);
 
       ctx.strokeStyle = 'black';
-      ctx.strokeText(`${object.damage.toString().substring(1)}`, offset[0], offset[1]);
+      ctx.strokeText(`${object.Damage.toString().substring(1)}`, offset[0], offset[1]);
       ctx.globalAlpha = 1.0;
     } else {
 
       if (object.critLevel == 0) {
         ctx.fillStyle = 'white';
-        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+        ctx.fillText(`${object.Damage}`, offset[0], offset[1]);
       }
       if (object.critLevel == 1) {
         ctx.fillStyle = 'yellow';
-        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+        ctx.fillText(`${object.Damage}`, offset[0], offset[1]);
       }
       if (object.critLevel == 2) {
         ctx.fillStyle = 'orange';
-        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+        ctx.fillText(`${object.Damage}`, offset[0], offset[1]);
       }
       if (object.critLevel >= 3) {
         ctx.fillStyle = 'red';
-        ctx.fillText(`${object.damage}`, offset[0], offset[1]);
+        ctx.fillText(`${object.Damage}`, offset[0], offset[1]);
       }
 
       ctx.strokeStyle = 'black';
-      ctx.strokeText(`${object.damage}`, offset[0], offset[1]);
+      ctx.strokeText(`${object.Damage}`, offset[0], offset[1]);
       ctx.globalAlpha = 1.0;
     }
   }
@@ -129,9 +131,26 @@ const Canvas = props => {
     ctx.fill();
 
     ctx.fillStyle = 'black';
+
+    ctx.font = `15px Joystix Monospace`;
+
+    var sec = Math.floor((Date.now()-gameStartTime)/1000)
+    var min = Math.floor(sec/60);
+    sec-=min*60;
+
+
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`${min}:${sec}`, 10, 70);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`${min}:${sec}`, 10, 70);
+    ctx.globalAlpha = 1.0;
+
   }
 
   useEffect(() => {
+    gameStartTime = Date.now();
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -266,24 +285,15 @@ const Canvas = props => {
 
       //projectile update
       entities.projectileList.forEach(item => {
-        item.update(deltaTime, frameCount);
+        item.Update(deltaTime, frameCount);
 
         entities.entityList.forEach(element => {
           if (!element.damagable) { return; }
 
           if (CheckCollision(item, element) && item.hitlimit > 0) {
-
             item.hitlimit--;
-            element.takeDamage(item.damage);
-            let temp = Object.create(DMGpopup);
-            temp.x = element.x;
-            temp.y = element.y;
-            temp.damage = item.damage;
-            temp.size = Math.sqrt(item.damage) + 20;
-            temp.drift = [getRandomRange(-100, 100), -500];
-            temp.critLevel = item.critLevel;
-
-            entities.effectList.push(temp);
+            element.takeDamage(item);
+            
             if (item.hitlimit <= 0) {
               item.dead = true;
             }
@@ -302,7 +312,7 @@ const Canvas = props => {
 
       //effect update
       entities.effectList.forEach(item => {
-        item.update(deltaTime, frameCount);
+        item.Update(deltaTime, frameCount);
         if (item.frame > item.maxFrame) {
           entities.effectList.splice(item, 1);
         }

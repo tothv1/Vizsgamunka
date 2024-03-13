@@ -41,13 +41,7 @@ class Spawner {
 
             let instanceSpawnDistance = getRandomRange(this.spawnDistanceAvg* 0.9,this.spawnDistanceAvg* 1.1);
 
-            console.log(instanceSpawnDistance)
-
             let dir = CreateRandomDirection();
-
-            console.log("x "+dir[0]*instanceSpawnDistance)
-            console.log("y "+dir[1]*instanceSpawnDistance)
-
 
             spawn.x = this.playerRef.x+(dir[0]*instanceSpawnDistance);
             spawn.y = this.playerRef.y+(dir[1]*instanceSpawnDistance);

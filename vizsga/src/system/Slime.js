@@ -1,8 +1,8 @@
 import left from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
 import right from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
-import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
 import { HPbar } from "../render/HPBar";
-import { Bow } from "./Weapons/Bow";
+import { DMGpopup } from "../render/DmgPopup";
 
 
 
@@ -33,6 +33,14 @@ class Slime {
 
   damagable = true;
 
+  Damage = Math.round(getRandomRange(10*0.8,10*1.2));
+  collisionDamageDelay = 0.5;
+  nextCollisionDamage = 0;
+
+  critChance = 0;
+  critLevel=0;
+
+
   renderoffset = [0, 0];
 
   speed = 100 * getRandomRange(0.9, 1.1);
@@ -54,15 +62,17 @@ class Slime {
 
   init() {
 
-    let temp = new Bow();
-    temp.owner = this;
-    temp.firerate = 1;
-    temp.active = true;
-    this.weapons.push(temp);
+   //let temp = new Bow();
+   //temp.owner = this;
+   //temp.firerate = 1;
+   //temp.active = true;
+   //this.weapons.push(temp);
 
   }
 
   Update(deltaTime, frameCount, target) {
+
+    this.nextCollisionDamage-=deltaTime;
 
     this.aimPoint = [target.x, target.y]
 
@@ -90,18 +100,40 @@ class Slime {
     this.ycenter = this.y - (this.height / 2);
 
     if(target.x > this.x) {
-      this.drawing.src=right;
+      if (this.drawing.src!=right){
+        this.drawing.src=right;
+      }
     } else {
-      this.drawing.src=left;
+      if (this.drawing.src!=left){
+        this.drawing.src=left;
+      }
     }
 
     this.weapons.forEach(weapon => {
       weapon.Update(deltaTime, frameCount)
     });
+
+    if(Distance([this.x,this.y],[target.x,target.y])<=20 && this.nextCollisionDamage<=0){
+      target.takeDamage(this);
+      this.nextCollisionDamage=this.collisionDamageDelay;
+    }
+
   };
 
-  takeDamage(damage) {
-    this.health -= damage;
+  takeDamage(source) {
+    console.log(source.Damage)
+
+    let temp = new DMGpopup();
+    temp.x = this.x;
+    temp.y = this.y;
+    temp.Damage = source.Damage;
+    temp.size = Math.sqrt(source.Damage) + 20;
+    temp.drift = [getRandomRange(-100, 100), -500];
+    temp.critLevel = source.critLevel;
+    this.entityRef.effectList.push(temp);
+
+
+    this.health -= source.Damage;
     if (this.health <= 0) {
       this.dead = true;
     }

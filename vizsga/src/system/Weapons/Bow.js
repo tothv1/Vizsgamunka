@@ -26,7 +26,7 @@ class Bow {
     spread = 0.1;
     projectileSpeed = 1000;
 
-    damage = 10;
+    Damage = 10;
     critChance = 20;
     critDamageMult=2;
 
@@ -63,8 +63,8 @@ class Bow {
 
         let direction = [0,0];
 
-        let xd = Object.create(Arrow);
-        xd.damage = this.damage;
+        let xd = new Arrow();
+        xd.Damage = this.Damage;
 
         if(source.ID===0){
             direction = GetDirection([source.x, source.y], [aimPoint[0] - source.renderoffset[0]-aimOffset[0], aimPoint[1] - source.renderoffset[1]-aimOffset[1]])
@@ -90,12 +90,10 @@ class Bow {
             critLevel++;
         }
         xd.critLevel = critLevel;
-        xd.damage=xd.damage*Math.pow(this.critDamageMult,critLevel);
+        xd.Damage=xd.Damage*Math.pow(this.critDamageMult,critLevel);
         xd.projectileSpeed = getRandomRange(this.projectileSpeed*0.9,this.projectileSpeed*1.1);
     
         let temp = CreateProjectile([source.x,source.y], normalised, xd, this.owner.team);
-
-        
 
         return temp
     }
