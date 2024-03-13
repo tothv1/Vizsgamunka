@@ -18,6 +18,7 @@ class Player {
   requiredXP = 10;
   XPRatio = 0;
 
+  frameCount = 0;
   frameDelay = 20; //every x updates; the sprite turns over to the next frame
   frameLength = 10; // frames in the spritesheet
   state = "moving";
@@ -66,8 +67,6 @@ class Player {
   drawing = new Image();
   entityRef = [];
   canvasRed = [];
-  setPaused = Function;
-  isPaused = false;
 
   hpbar = Object.create(HPbar)
 
@@ -182,7 +181,7 @@ class Player {
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
-    temp.size = Math.sqrt(source.Damage) + 20;
+    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
@@ -224,10 +223,7 @@ class Player {
 
         this.RightState = true;
       }
-      if (e.key === "Escape") {
-        this.setPaused(!this.isPaused);
-        this.isPaused = !this.isPaused;
-      }
+
     }
 
     // felengedésen kinyitja az irány lock-ot, rendereléshez kell

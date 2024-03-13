@@ -10,9 +10,8 @@ import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
-import { IntervalSpawner } from '../system/IntervalSpawner';
 import { Spawner } from '../system/Spawner';
-import { useState } from 'react';
+import { Potion } from '../system/Pickups/Medkit';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -22,10 +21,9 @@ let aimpoint = [0, 0];
 let entities = [];
 
 let gameStartTime = 0;
+let paused = false;
 
 const Canvas = props => {
-
-  const [paused, setPaused] = useState(false);
 
   const canvasRef = useRef(null)
   gameSize = [props.style.width, props.style.height]
@@ -176,7 +174,6 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
-    playerRef.setPaused = setPaused;
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -186,6 +183,8 @@ const Canvas = props => {
     entities.entityList.push(playerRef);
 
     console.log(playerRef);
+
+
 
 
     const rawmap = rawMaps[0];
@@ -212,12 +211,27 @@ const Canvas = props => {
 
           entities.entityList.push(temp);
         }
+
+        if (rawmap[i][j] === 3) {
+
+          const temp = new Potion();
+
+          temp.x = j * 64;
+          temp.y = i * 64;
+
+          entities.entityList.push(temp);
+          console.log(entities)
+        }
       }
     }
 
     //eventek playernek
 
     document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        paused = !paused;
+      }
+
       playerRef.keyhandler(event)
     });
     document.addEventListener("keyup", (event) => {
@@ -254,6 +268,8 @@ const Canvas = props => {
 
       // tile update
       entities.tileList.forEach(item => {
+
+
         item.update(deltaTime, frameCount);
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         draw(context, item, item.offset)
@@ -261,17 +277,20 @@ const Canvas = props => {
 
       //entity update
       entities.entityList.forEach(item => {
-
-        item.renderoffset = renderOffset;
-        item.Update(deltaTime, frameCount, playerRef);
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset);
-
         if (item.damagable) {
           drawHPBar(context, item.hpbar, item.offset);
           item.hpbar.setval(item.maxHealth, item.health);
-
         }
+
+        if(paused){return;}
+
+        item.renderoffset = renderOffset;
+        item.Update(deltaTime, frameCount, playerRef);
+        
+
+
 
         if (item.dead && item.ID != 1000) {
 
@@ -291,6 +310,13 @@ const Canvas = props => {
 
       //projectile update
       entities.projectileList.forEach(item => {
+
+        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
+        draw(context, item, item.offset)
+
+        if(paused){return;}
+
+
         item.Update(deltaTime, frameCount);
 
         entities.entityList.forEach(element => {
@@ -312,18 +338,20 @@ const Canvas = props => {
         }
         entities.projectileList = entities.projectileList.filter((xd) => !xd.dead);
 
-        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
-        draw(context, item, item.offset)
       });
 
       //effect update
       entities.effectList.forEach(item => {
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        drawText(context, item, item.offset);
+
+        if(paused){return;}
+
+
         item.Update(deltaTime, frameCount);
         if (item.frame > item.maxFrame) {
           entities.effectList.splice(item, 1);
         }
-        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
-        drawText(context, item, item.offset);
       });
 
       //UI Update
