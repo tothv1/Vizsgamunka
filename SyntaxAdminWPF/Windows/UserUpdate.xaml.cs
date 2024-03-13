@@ -71,7 +71,7 @@ namespace SyntaxAdminWPF.Windows
                     HttpResponseMessage responseStats = client.PutAsync(API_PATH + "/Game/updateAccountStats", stringContentStats).Result;
                     string responseStatsBody = responseStats.Content.ReadAsStringAsync().Result;
 
-                    MessageBox.Show(responseBody+""+ stringContentStats);
+                    MessageBox.Show(responseBody);
                 } 
                 
                 //Adatok frissítése a datagridben is
@@ -80,11 +80,28 @@ namespace SyntaxAdminWPF.Windows
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
+        }
 
-            
+        //Felhasználó törlése
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+           /* HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {MainPage.ResponseToken}");
+
+            LoginDTO unregisterObject = new LoginDTO();
+            unregisterObject.Username = string.Empty;
+            unregisterObject.Password = string.Empty;
+
+            StringContent stringContentStats = new(JsonConvert.SerializeObject(unregisterObject), Encoding.UTF8, "application/json");
+            HttpResponseMessage responseStats = client.PutAsync(API_PATH + "/Game/updateAccountStats", stringContentStats).Result;
+            string responseStatsBody = responseStats.Content.ReadAsStringAsync().Result;*/
+
+            MessageBox.Show("A felhasználót sikeresen tudod majd nemsokára törölni xd!");
+
+            Close();
         }
     }
 }

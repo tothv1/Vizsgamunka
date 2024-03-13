@@ -11,5 +11,8 @@
             Username = username;
             Password = password;
         }
+
+        public LoginDTO() { }
+
     }
 }

@@ -30,6 +30,8 @@ namespace SyntaxAdminWPF.Pages
 
         public static List<Role> FelhasznaloRoleok = new List<Role>();
 
+        public static List<Achievement> Teljesitmenyek = new List<Achievement>();
+
         public MainPage()
         {
             InitializeComponent();

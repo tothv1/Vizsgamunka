@@ -141,7 +141,6 @@ namespace SyntaxAdminWPF.Pages
                 }
                 Felhasznalok.instance.DG_Felhasznalok.ItemsSource = MainPage.FelhasznaloLista;
                 CollectionViewSource.GetDefaultView(Felhasznalok.instance.DG_Felhasznalok.ItemsSource).Refresh();
-                Felhasznalok.instance.DG_Felhasznalok.Items.Refresh();
             }
             catch (Exception ex)
             {
@@ -151,6 +150,46 @@ namespace SyntaxAdminWPF.Pages
 
         private void ButtonAchievements(object sender, RoutedEventArgs e)
         {
+
+            try
+            {
+                if (MainPage.ResponseToken != null)
+                {
+                    NavigationService.Navigate(new Uri(".\\Pages\\Teljesitmenyek.xaml", UriKind.RelativeOrAbsolute));
+
+                    GenerateAchiData();
+                }
+                else
+                {
+                    MessageBox.Show("Sikertelen adatlekérés! Jelentkezz be újra!");
+                    NavigationService.Navigate(new Uri(".\\Pages\\Login.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Váratlan hiba: " + ex.Message);
+            }
+        }
+
+        private void GenerateAchiData()
+        {
+            //MainPage.Teljesitmenyek.Clear();
+
+            HttpResponseMessage resultGame = GetFromGame("/Game/achievements");
+            string responseGameAchievement = resultGame.Content.ReadAsStringAsync().Result;
+
+            dynamic achievements = JsonConvert.DeserializeObject(responseGameAchievement)!;
+
+            foreach (var achi in achievements)
+            {
+                MainPage.Teljesitmenyek.Add(new Achievement
+                {
+                    Id = achi.id,
+                    AchievementName = achi.achievementName,
+                });
+            }
+            Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource = MainPage.Teljesitmenyek;
+            CollectionViewSource.GetDefaultView(Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource).Refresh();
 
         }
 

@@ -70,7 +70,6 @@ namespace SyntaxAdminWPF.Pages
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
 
