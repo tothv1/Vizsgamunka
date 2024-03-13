@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-import left from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
-import right from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
-import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
-=======
 import leftEnemy1 from "../Assets/enemy/enemy1/ENEMY1-spritesheet-left.png";
 import rightEnemy1 from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 
@@ -10,7 +5,6 @@ import leftEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-left.png";
 import rightEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-right.png";
 
 import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
->>>>>>> Stashed changes
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 
@@ -110,21 +104,11 @@ class Slime {
     this.ycenter = this.y - (this.height / 2);
 
     if(target.x > this.x) {
-<<<<<<< Updated upstream
-      if (this.drawing.src!=right){
-        this.drawing.src=right;
-      }
-    } else {
-      if (this.drawing.src!=left){
-        this.drawing.src=left;
-      }
-=======
       this.drawing.src=rightEnemy1;
       //this.drawing.src=rightEnemy2;
     } else {
       this.drawing.src=leftEnemy1;
       //this.drawing.src=leftEnemy2;
->>>>>>> Stashed changes
     }
 
     this.weapons.forEach(weapon => {
