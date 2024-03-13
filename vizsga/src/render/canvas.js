@@ -12,6 +12,7 @@ import { Bow } from '../system/Weapons/Bow';
 import { XP } from '../system/Pickups/Experience';
 import { IntervalSpawner } from '../system/IntervalSpawner';
 import { Spawner } from '../system/Spawner';
+import { useState } from 'react';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -23,6 +24,8 @@ let entities = [];
 let gameStartTime = 0;
 
 const Canvas = props => {
+
+  const [paused, setPaused] = useState(false);
 
   const canvasRef = useRef(null)
   gameSize = [props.style.width, props.style.height]
@@ -134,9 +137,9 @@ const Canvas = props => {
 
     ctx.font = `15px Joystix Monospace`;
 
-    var sec = Math.floor((Date.now()-gameStartTime)/1000)
-    var min = Math.floor(sec/60);
-    sec-=min*60;
+    var sec = Math.floor((Date.now() - gameStartTime) / 1000)
+    var min = Math.floor(sec / 60);
+    sec -= min * 60;
 
 
 
@@ -173,6 +176,7 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
+    playerRef.setPaused = setPaused;
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -180,6 +184,9 @@ const Canvas = props => {
     playerRef.canvasRef = canvasRef.current;
 
     entities.entityList.push(playerRef);
+
+    console.log(playerRef);
+
 
     const rawmap = rawMaps[0];
 
@@ -200,7 +207,7 @@ const Canvas = props => {
           temp.x = j * 64;
           temp.y = i * 64;
           temp.entityRef = entities;
-          temp.playerRef=playerRef;
+          temp.playerRef = playerRef;
           temp.windowSize = windowSize;
 
           entities.entityList.push(temp);
@@ -244,7 +251,6 @@ const Canvas = props => {
       renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
 
       renderOffset = [-renderOffset[0], -renderOffset[1]]
-      let playerrenderpos = [playerRef.x - renderOffset[0], playerRef.y - renderOffset[1]]
 
       // tile update
       entities.tileList.forEach(item => {
@@ -293,7 +299,7 @@ const Canvas = props => {
           if (CheckCollision(item, element) && item.hitlimit > 0) {
             item.hitlimit--;
             element.takeDamage(item);
-            
+
             if (item.hitlimit <= 0) {
               item.dead = true;
             }
@@ -326,9 +332,12 @@ const Canvas = props => {
 
 
       lastUpdateTime = window.performance.now();
-      frameCount++
+      if (!paused) {
+        frameCount++
+      }
       animationFrameId = window.requestAnimationFrame(render)
     }
+
     render()
 
     return () => {

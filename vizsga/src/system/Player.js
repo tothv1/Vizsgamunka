@@ -13,7 +13,7 @@ import { DMGpopup } from "../render/DmgPopup";
 class Player {
   ID = 0;
 
-  level=1;
+  level = 1;
   currrentXP = 0;
   requiredXP = 10;
   XPRatio = 0;
@@ -52,7 +52,7 @@ class Player {
   windowSize = [0, 0];
   weapons = [];
 
-  damagable=true;
+  damagable = true;
 
   UpState = false;
   DownState = false;
@@ -65,19 +65,22 @@ class Player {
 
   drawing = new Image();
   entityRef = [];
+  canvasRed = [];
+  setPaused = Function;
+  isPaused = false;
 
   hpbar = Object.create(HPbar)
 
   Update(deltaTime, frameCount) {
 
-    if (this.currrentXP>=this.requiredXP){
-      
+    if (this.currrentXP >= this.requiredXP) {
 
-      this.currrentXP-=this.requiredXP;
-      this.level+=1;
+
+      this.currrentXP -= this.requiredXP;
+      this.level += 1;
 
       let obj = new Bow();
-      obj.owner=this;
+      obj.owner = this;
 
 
       this.weapons.push(obj)
@@ -90,12 +93,12 @@ class Player {
 
       //linearNext > exponentialNext ? this.requiredXP=linearNext : this.requiredXP = exponentialNext;
 
-      this.requiredXP=Math.ceil(this.requiredXP*1.1);    //exponential scale
+      this.requiredXP = Math.ceil(this.requiredXP * 1.1);    //exponential scale
       //this.requiredXP=this.level*10;                     //linear scale
     }
 
-    this.XPRatio = this.currrentXP/this.requiredXP;
-    
+    this.XPRatio = this.currrentXP / this.requiredXP;
+
 
     if (this.state === "moving") {
       if (this.direction === "left") {
@@ -175,7 +178,7 @@ class Player {
   };
   takeDamage(source) {
 
-    let temp =new DMGpopup();
+    let temp = new DMGpopup();
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
@@ -190,6 +193,8 @@ class Player {
     }
   }
   keyhandler(e) {
+
+
 
     if (e.type === "mouseup") {
       this.weapons.forEach(weapon => {
@@ -218,6 +223,10 @@ class Player {
       if (e.key === "d") {
 
         this.RightState = true;
+      }
+      if (e.key === "Escape") {
+        this.setPaused(!this.isPaused);
+        this.isPaused = !this.isPaused;
       }
     }
 
