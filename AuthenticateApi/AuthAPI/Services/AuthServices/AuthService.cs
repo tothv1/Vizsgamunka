@@ -220,23 +220,23 @@ namespace AuthAPI.Services.AuthServices
 
                 if (!_passwordManager.PasswordMatch(register.Password, register.PasswordRepeate))
                 {
-                    return ResponseObject.create("A két jelszó nem egyezik!", "null pass", 400);
+                    return ResponseObject.create("A két jelszó nem egyezik!", 400);
                 }
                 if (!_passwordManager.CheckPassword(register.Password))
                 {
-                    return ResponseObject.create("Nem elég erős a jelszó!", "null pass", 400);
+                    return ResponseObject.create("Nem elég erős a jelszó!", 400);
                 }
                 if (context.Registries.FirstOrDefault(user => user.TempUsername == register.Username) != null || context.RegisteredUsers.FirstOrDefault(user => user.Username == register.Username) != null)
                 {
-                    return ResponseObject.create("Ez a felhasználónév már foglalt!", "null user", 400);
+                    return ResponseObject.create("Ez a felhasználónév már foglalt!", 400);
                 }
                 if (!_emailSenderService.isValidEmail(register.Email))
                 {
-                    return ResponseObject.create("Érvényes emailt adj meg!", "null email", 400);
+                    return ResponseObject.create("Érvényes emailt adj meg!", 400);
                 }
                 if (context.Registries.FirstOrDefault(user => user.TempEmail == register.Email) != null || context.RegisteredUsers.FirstOrDefault(user => user.Email == register.Email) != null)
                 {
-                    return ResponseObject.create("Ez az email cím már foglalt!", "null email", 400);
+                    return ResponseObject.create("Ez az email cím már foglalt!", 400);
                 }
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(register.Password);
                 string userId = Guid.NewGuid().ToString();
@@ -260,7 +260,7 @@ namespace AuthAPI.Services.AuthServices
                 string message = "A fiókját megerősítheti a következő linken:"+$"http://localhost:3000/confirm/{registry.TempConfirmationKey}";
 
                 if (!_emailSenderService.sendMailWithFropsiEmailServer(register.Email, "Megerősítő email", message)) {
-                    return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", "null email", 400);
+                    return ResponseObject.create("Erre az emailre nem tudunk levelet küldeni!", 400);
                 }
 
                 await context.AddAsync(registry);
@@ -313,5 +313,40 @@ namespace AuthAPI.Services.AuthServices
                 return ResponseObject.create("Sikertelen felhasználó törlés!", ex.Message, 400);
             }
         }
+
+        //[Admin]Unregister logika
+        public async Task<object> DeleteUser(string userId)
+        {
+            try
+            {
+                await using var context = new AuthContext();
+
+                var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Userid == userId);
+
+                if (requestedUser == null)
+                {
+                    return ResponseObject.create("A kért felhasználó nem található", 404);
+                }
+                var gameContext = new GameContext();
+
+                var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
+
+                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserStatId == requestedGameUser!.UserStatsId);
+
+                gameContext!.Remove(requestedStat);
+                gameContext!.Remove(requestedGameUser);
+                gameContext.SaveChanges();
+
+                context.Remove(requestedUser);
+                await context.SaveChangesAsync();
+
+                return ResponseObject.create("Sikeresen törölted a kért felhasználót!", 200);
+            }
+            catch (Exception ex)
+            {
+                return ResponseObject.create("Sikertelen felhasználó törlés!", ex.Message, 400);
+            }
+        }
+
     }
 }

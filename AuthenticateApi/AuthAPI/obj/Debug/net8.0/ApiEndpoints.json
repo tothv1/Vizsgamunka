@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "AuthAPI.Controllers.AuthController",
+    "Method": "DeleteUser",
+    "RelativePath": "Auth/deleteUser",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.AuthController",
     "Method": "IsValidKey",
     "RelativePath": "Auth/keyValidate",
     "HttpMethod": "GET",
@@ -185,6 +201,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "DeleteAchievement",
+    "RelativePath": "Game/deleteAchievement",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GameController.Controllers.GameController",
     "Method": "GetUserStatsById",
     "RelativePath": "Game/getStats/user",
@@ -259,6 +291,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SyntaxBackEnd.Controllers.AchievementController",
+    "Method": "UpdateAchievement",
+    "RelativePath": "Game/updateAchievement",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "achievement",
+        "Type": "SyntaxBackEnd.Models.Achievement",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "AuthAPI.Controllers.RoleController",
     "Method": "AssignRole",
     "RelativePath": "Role/assignrole/user",
@@ -281,12 +329,60 @@
   },
   {
     "ContainingType": "AuthAPI.Controllers.RoleController",
+    "Method": "CreateNewRole",
+    "RelativePath": "Role/createRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "role",
+        "Type": "AuthAPI.Models.Role",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.RoleController",
+    "Method": "DeleteRole",
+    "RelativePath": "Role/deleteRole",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.RoleController",
     "Method": "GetAllRoles",
     "RelativePath": "Role/roles",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.RoleController",
+    "Method": "UpdateRole",
+    "RelativePath": "Role/updateRole",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "role",
+        "Type": "AuthAPI.Models.Role",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -348,6 +444,22 @@
       {
         "Name": "email",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthAPI.Controllers.UserController",
+    "Method": "UpdateUser",
+    "RelativePath": "User/updateUser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateUserDTO",
+        "Type": "AuthAPI.DTOs.UpdateUserDTO",
         "IsRequired": true
       }
     ],

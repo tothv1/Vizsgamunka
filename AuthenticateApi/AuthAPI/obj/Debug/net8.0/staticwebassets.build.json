@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "TGZAbta2d0ImwgGQxj0+zTzZl7zqcUSwOSa5p8lxYmM=",
+  "Hash": "DsWKt58i7v6dAyBK0Vc65WexxlKwtYmZ6ud00RQIhMM=",
   "Source": "AuthAPI",
   "BasePath": "_content/AuthAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "C:\\Users\\tviktor\\Desktop\\Gitek\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
+      "Identity": "E:\\GitRepok\\Vizsgamunka\\AuthenticateApi\\SyntaxBackend\\SyntaxBackEnd.csproj",
       "Version": 2,
       "Source": "SyntaxBackEnd",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
