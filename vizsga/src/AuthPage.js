@@ -8,7 +8,7 @@ const AuthPage = () => {
                 <button className='btn btn-primary'>Regisztráció</button><br />
                 <Link to='/login'>Már van felhasználója? Bejelentkezés</Link>
                 <br />
-                <Link className='btn btn-primary' to='/game'>gameszkó teszteléshez gomb</Link>
+                <Link className='btn btn-primary' to='/game' >gameszkó teszteléshez gomb</Link>
             </div>
         </div>
     )
