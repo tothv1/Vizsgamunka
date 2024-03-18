@@ -10,8 +10,10 @@ public partial class Userstat
 
     public int Kills { get; set; }
 
+    [JsonIgnore]
     public int Deaths { get; set; }
 
+    [JsonIgnore]
     public int Timesplayed { get; set; }
 
     [JsonIgnore]
