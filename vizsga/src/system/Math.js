@@ -82,7 +82,7 @@ export function getRandomRange(min, max) {
     return num;
 }
 
-export function CreateProjectile(position, direction, object,team) {
+export function CreateProjectile(position, direction, object, source) {
 
     const temp = object;
     
@@ -90,7 +90,8 @@ export function CreateProjectile(position, direction, object,team) {
     temp.y=position[1];
     temp.direction=direction;
     temp.rotation=GetDirectionRadian(direction);
-    temp.team=team;
+    temp.source=source;
+    temp.team = source.team;
 
     temp.Damage = Math.round(getRandomRange(object.Damage*0.8,object.Damage*1.2));
 

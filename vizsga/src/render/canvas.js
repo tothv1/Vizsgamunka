@@ -11,7 +11,7 @@ import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
-import { Potion } from '../system/Pickups/Medkit';
+import { Potion } from '../system/Pickups/Potion';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -20,7 +20,7 @@ let windowSize = [0, 0];
 let aimpoint = [0, 0];
 let entities = [];
 
-let gameStartTime = 0;
+let gameTime = 0;
 let paused = false;
 
 const Canvas = props => {
@@ -135,7 +135,7 @@ const Canvas = props => {
 
     ctx.font = `15px Joystix Monospace`;
 
-    var sec = Math.floor((Date.now() - gameStartTime) / 1000)
+    var sec = Math.floor(gameTime)
     var min = Math.floor(sec / 60);
     sec -= min * 60;
 
@@ -150,8 +150,26 @@ const Canvas = props => {
 
   }
 
+  const drawPausedUI = (ctx, object, offset) => {
+    ctx.save();
+
+
+    ctx.globalAlpha = 0.5;
+
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalAlpha = 1.0;
+
+
+    ctx.restore();
+  }
+
+
   useEffect(() => {
-    gameStartTime = Date.now();
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -212,16 +230,6 @@ const Canvas = props => {
           entities.entityList.push(temp);
         }
 
-        if (rawmap[i][j] === 3) {
-
-          const temp = new Potion();
-
-          temp.x = j * 64;
-          temp.y = i * 64;
-
-          entities.entityList.push(temp);
-          console.log(entities)
-        }
       }
     }
 
@@ -261,6 +269,14 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
+      if  (playerRef.dead){
+        paused=true;
+      }
+
+      if (!paused){
+        gameTime += deltaTime;
+      }
+      
       // setting offsets
       renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
 
@@ -290,9 +306,7 @@ const Canvas = props => {
         item.Update(deltaTime, frameCount, playerRef);
         
 
-
-
-        if (item.dead && item.ID != 1000) {
+        if (item.dead && item.xpValue != undefined) {
 
           var xpDrop = new XP();
           xpDrop.value = item.xpValue;
@@ -323,6 +337,7 @@ const Canvas = props => {
           if (!element.damagable) { return; }
 
           if (CheckCollision(item, element) && item.hitlimit > 0) {
+
             item.hitlimit--;
             element.takeDamage(item);
 
@@ -345,7 +360,7 @@ const Canvas = props => {
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         drawText(context, item, item.offset);
 
-        if(paused){return;}
+        if (paused) {return;}
 
 
         item.Update(deltaTime, frameCount);
@@ -358,6 +373,10 @@ const Canvas = props => {
 
       drawXPBar(context, playerRef)
 
+      //paused UI
+
+      if(paused){
+      drawPausedUI(context,playerRef)}
 
       lastUpdateTime = window.performance.now();
       if (!paused) {

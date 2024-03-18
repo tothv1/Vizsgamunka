@@ -27,8 +27,7 @@ class Arrow {
     renderx = 0;
     rendery = 0;
 
-    team = 1;
-
+    source = Object;
 
     offset = [0, 0];
 
@@ -52,9 +51,6 @@ class Arrow {
     direction = [0, 0];
     drawing = getImg();
 
-    init() {
-
-    }
 
     Update(deltaTime, frameCount) {
 

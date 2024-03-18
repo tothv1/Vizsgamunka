@@ -9,6 +9,7 @@ import { HPbar } from "../render/HPBar";
 import { StatCard } from "./StatCard";
 import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
+import { putStats } from "./Hooks/PutStats";
 
 class Player {
   ID = 0;
@@ -40,12 +41,12 @@ class Player {
   offset = [0, 0];
   renderoffset = [0, 0];
 
-  statcard = new StatCard();
+  statCard = new StatCard();
 
   speed = 300;
 
-  maxHealth = 10000;
-  health = 10000;
+  maxHealth = 100;
+  health = 100;
 
   team = 1;
   shooting = false;
@@ -62,6 +63,10 @@ class Player {
 
   frame = 0;
 
+  Damage = 10;
+  critChance = 20;
+  critDamageMult=2;
+
   canvasRef = 0;
 
   drawing = new Image();
@@ -77,12 +82,13 @@ class Player {
 
       this.currrentXP -= this.requiredXP;
       this.level += 1;
+      this.Damage+=1;
+      this.critChance+=3;
+      this.critDamageMult+=0.05;
 
-      let obj = new Bow();
-      obj.owner = this;
-
-
-      this.weapons.push(obj)
+      //let obj = new Bow();
+      //obj.owner = this;
+      //this.weapons.push(obj)
 
       //let linearNext = this.level*5; 
       //let exponentialNext = Math.floor(this.requiredXP*1.1);
@@ -188,12 +194,12 @@ class Player {
 
     this.health -= source.Damage;
     if (this.health <= 0) {
+
+      putStats(this.statCard);
       this.dead = true;
     }
   }
   keyhandler(e) {
-
-
 
     if (e.type === "mouseup") {
       this.weapons.forEach(weapon => {
@@ -247,10 +253,5 @@ class Player {
     }
   }
 }
-
-//irány state, billentyű lenyomás és felengedés alapján
-
-
-
 
 export { Player };

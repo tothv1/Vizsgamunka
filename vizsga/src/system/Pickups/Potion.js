@@ -11,8 +11,6 @@ const getImg = () => {
 class Potion {
   ID = 1001;
 
-  value = 0;
-
   frame = 0;
   frameDelay = 10; //every x updates; the sprite turns over to the next frame
   frameLength = 8; // frames in the spritesheet
@@ -26,6 +24,9 @@ class Potion {
   damagable = false;
   Damage =Math.round(getRandomRange(-20*0.8,-20*1.2))
 
+  xcenter = 0;
+  ycenter = 0;
+
   xhitbox = 32;
   yhitbox = 32;
 
@@ -36,6 +37,9 @@ class Potion {
   drawing = getImg();
 
   Update(deltaTime, frameCount, target) {
+
+    this.xcenter = this.x - (this.width / 2);
+    this.ycenter = this.y - (this.height / 2);
 
     this.frameLength = this.drawing.width / this.width;
 
@@ -48,7 +52,7 @@ class Potion {
       }
     }
 
-    if (Distance([this.x, this.y], [target.x, target.y]) < this.xhitbox) {
+    if (Distance([this.xcenter, this.ycenter], [target.xcenter, target.ycenter]) < this.xhitbox) {
       
       this.dead = true;
       target.takeDamage(this)

@@ -7,6 +7,7 @@ import rightEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-right.png";
 import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
+import { Potion } from "./Pickups/Potion";
 
 
 
@@ -176,7 +177,19 @@ class Slime {
 
     this.health -= source.Damage;
     if (this.health <= 0) {
+      let roll = Math.random()*100;
+      if(roll<20){
+        let h = new Potion();
+
+        h.x = this.x;
+        h.y = this.y;
+
+        this.entityRef.entityList.push(h);
+        console.log(this.entityRef)
+      }
       this.dead = true;
+      source.source.statCard.killCount++;
+      console.log(source)
     }
   }
 
