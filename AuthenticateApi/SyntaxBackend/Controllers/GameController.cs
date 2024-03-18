@@ -177,7 +177,10 @@ namespace GameController.Controllers
                     return NotFound("A kért statisztika nem található!");
                 }
 
-                requestedStat!.Kills = userstat.Kills;
+                requestedStat!.Kills += userstat.Kills;
+                requestedStat.HighestLevel = Math.Max(userstat.HighestLevel, requestedStat.HighestLevel);
+                requestedStat.HighestKillCount = Math.Max(userstat.HighestKillCount, requestedStat.HighestKillCount);
+
                 requestedStat!.Deaths += 1;
                 requestedStat!.Timesplayed += 1;
 
