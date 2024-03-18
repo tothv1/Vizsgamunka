@@ -178,8 +178,8 @@ namespace GameController.Controllers
                 }
 
                 requestedStat!.Kills = userstat.Kills;
-                requestedStat!.Deaths = userstat.Deaths;
-                requestedStat!.Timesplayed = userstat.Timesplayed;
+                requestedStat!.Deaths += 1;
+                requestedStat!.Timesplayed += 1;
 
                 context.Update(requestedStat);
                 await context.SaveChangesAsync();
