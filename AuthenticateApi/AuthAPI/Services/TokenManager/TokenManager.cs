@@ -70,7 +70,7 @@ namespace AuthAPI.Services.TokenManager
                 new Claim("userid",registeredUser.UserId),
                 new Claim("username",registeredUser.Username),
                 new Claim("fullname", registeredUser.Fullname),
-                new Claim("Email", registeredUser.Email),
+                new Claim("email", registeredUser.Email),
             };
 
             var tokenDescription = new SecurityTokenDescriptor
