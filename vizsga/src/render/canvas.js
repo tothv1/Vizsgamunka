@@ -193,7 +193,7 @@ const Canvas = props => {
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
     playerRef.tokenData=props.tokendata;
-    console.log(props)
+    playerRef.statCard.userStatId=props.tokendata.userStatId;
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -241,7 +241,6 @@ const Canvas = props => {
       if (event.key === "Escape") {
         paused = !paused;
       }
-
       playerRef.keyhandler(event)
     });
     document.addEventListener("keyup", (event) => {

@@ -18,6 +18,7 @@ const Register = () => {
           fullname: e.target.fullname.value,
           email: e.target.email.value,
           password: e.target.password.value,
+          passwordRepeat: e.target.passwordre.value,
         })
         .then(async (response) => {
           if (response.data.status == 200) {

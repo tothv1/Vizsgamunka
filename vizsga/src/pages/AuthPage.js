@@ -6,8 +6,8 @@ const AuthPage = () => {
     return (
         <div className='container-fluid d-flex align-items-center justify-content-md-center text-center vh-100'>
             <div>
-                <Link to={'/login'} className='btn btn-primary'>Bejelentkezés</Link><br />
-                <Link to='/register'>Még nincs fiókod? Regisztrálj a szövegre kattintva.</Link>
+                <Link to={'/login'} className='btn btn-primary'>Bejelentkezés</Link><br /> <br/>
+                <Link to='/register'>Még nincs fiókod?</Link>
             </div>
         </div>
     )

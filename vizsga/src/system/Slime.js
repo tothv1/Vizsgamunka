@@ -188,6 +188,7 @@ class Slime {
         console.log(this.entityRef)
       }
       this.dead = true;
+      console.log(source.source.statCard)
       source.source.statCard.kills++;
       console.log(source)
     }
