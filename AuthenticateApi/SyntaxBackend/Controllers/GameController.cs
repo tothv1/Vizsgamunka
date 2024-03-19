@@ -34,7 +34,7 @@ namespace GameController.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Sikertelen lekérdezés: " + ex.Message);
+                return BadRequest("Sikertelen lekï¿½rdezï¿½s: " + ex.Message);
 
             }
         }
@@ -57,13 +57,13 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A kért felhasználó nem található.");
+                    return NotFound("A kï¿½rt felhasznï¿½lï¿½ nem talï¿½lhatï¿½.");
                 }
                 return Ok(requestedUser);
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+                return BadRequest(("Sikertelen lekï¿½rdezï¿½s: {0}", ex.Message));
 
             }
         }
@@ -80,19 +80,19 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A keresett felhasználó nem létezik!");
+                    return NotFound("A keresett felhasznï¿½lï¿½ nem lï¿½tezik!");
                 }
                 var requestedStats = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser!.UserStatsId);
 
                 if (requestedUser == null)
                 {
-                    return Ok("A kért felhasználó nem található.");
+                    return Ok("A kï¿½rt felhasznï¿½lï¿½ nem talï¿½lhatï¿½.");
                 }
                 return Ok(requestedStats);
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
+                return BadRequest(("Sikertelen lekï¿½rdezï¿½s: {0}", ex.Message));
 
             }
         }
@@ -119,7 +119,7 @@ namespace GameController.Controllers
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
 
-                return Ok("Felhasználó létrehozva.");
+                return Ok("Felhasznï¿½lï¿½ lï¿½trehozva.");
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A kért felhasználó nem található!");
+                    return NotFound("A kï¿½rt felhasznï¿½lï¿½ nem talï¿½lhatï¿½!");
                 }
 
                 var requestedStat = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser.UserStatsId);
@@ -152,7 +152,7 @@ namespace GameController.Controllers
 
                 await context.SaveChangesAsync();
 
-                return Ok("Sikeresen resetelted a fiókodat!");
+                return Ok("Sikeresen resetelted a fiï¿½kodat!");
             }
             catch (Exception ex)
             {
@@ -174,7 +174,7 @@ namespace GameController.Controllers
 
                 if (requestedStat == null)
                 {
-                    return NotFound("A kért statisztika nem található!");
+                    return NotFound("A kï¿½rt statisztika nem talï¿½lhatï¿½!");
                 }
 
                 requestedStat!.Kills += userstat.Kills;
@@ -187,7 +187,7 @@ namespace GameController.Controllers
                 context.Update(requestedStat);
                 await context.SaveChangesAsync();
 
-                return Ok("Frissültek a statisztikáid!");
+                return Ok("Frissï¿½ltek a statisztikï¿½id!");
             }
             catch (Exception ex)
             {
