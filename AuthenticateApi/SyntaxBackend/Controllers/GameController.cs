@@ -34,7 +34,7 @@ namespace GameController.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Sikertelen lek�rdez�s: " + ex.Message);
+                return BadRequest("Sikertelen lekérdezés: " + ex.Message);
 
             }
         }
@@ -57,13 +57,13 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A k�rt felhaszn�l� nem tal�lhat�.");
+                    return NotFound("A kért felhasználó nem található.");
                 }
                 return Ok(requestedUser);
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lek�rdez�s: {0}", ex.Message));
+                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
 
             }
         }
@@ -80,19 +80,19 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A keresett felhaszn�l� nem l�tezik!");
+                    return NotFound("A keresett felhasználó nem létezik!");
                 }
                 var requestedStats = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser!.UserStatsId);
 
                 if (requestedUser == null)
                 {
-                    return Ok("A k�rt felhaszn�l� nem tal�lhat�.");
+                    return Ok("A kért felhasználó nem található.");
                 }
                 return Ok(requestedStats);
             }
             catch (Exception ex)
             {
-                return BadRequest(("Sikertelen lek�rdez�s: {0}", ex.Message));
+                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
 
             }
         }
@@ -119,7 +119,7 @@ namespace GameController.Controllers
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
 
-                return Ok("Felhaszn�l� l�trehozva.");
+                return Ok("Felhasználó létrehozva.");
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace GameController.Controllers
 
                 if (requestedUser == null)
                 {
-                    return NotFound("A k�rt felhaszn�l� nem tal�lhat�!");
+                    return NotFound("A kért felhasználó nem található!");
                 }
 
                 var requestedStat = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser.UserStatsId);
@@ -152,7 +152,7 @@ namespace GameController.Controllers
 
                 await context.SaveChangesAsync();
 
-                return Ok("Sikeresen resetelted a fi�kodat!");
+                return Ok("Sikeresen resetelted a fiókodat!");
             }
             catch (Exception ex)
             {
@@ -174,7 +174,7 @@ namespace GameController.Controllers
 
                 if (requestedStat == null)
                 {
-                    return NotFound("A k�rt statisztika nem tal�lhat�!");
+                    return NotFound("A kért statisztika nem található!");
                 }
 
                 requestedStat!.Kills += userstat.Kills;
@@ -187,7 +187,7 @@ namespace GameController.Controllers
                 context.Update(requestedStat);
                 await context.SaveChangesAsync();
 
-                return Ok("Friss�ltek a statisztik�id!");
+                return Ok("Frissültek a statisztikáid!");
             }
             catch (Exception ex)
             {
@@ -195,6 +195,41 @@ namespace GameController.Controllers
                 throw;
             }
         }
+
+        [Authorize(Roles = "Admin")]
+[HttpPut("adminUpdateAccountStats")]
+public async Task<ActionResult> AdminUpdateUserStat([FromBody] Userstat userstat)
+{
+    try
+    {
+
+        var context = new GameContext();
+
+        var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+
+        if (requestedStat == null)
+        {
+            return NotFound("A kért statisztika nem található!");
+        }
+
+        requestedStat!.Kills = userstat.Kills;
+        requestedStat.HighestLevel = userstat.HighestLevel;
+        requestedStat.HighestKillCount = userstat.HighestKillCount;
+
+        requestedStat!.Deaths = userstat.Deaths;
+        requestedStat!.Timesplayed = userstat.Timesplayed;
+
+        context.Update(requestedStat);
+        await context.SaveChangesAsync();
+
+        return Ok("Sikeresen frissítetted a statisztikákat!");
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+        throw;
+    }
+}
 
 
 

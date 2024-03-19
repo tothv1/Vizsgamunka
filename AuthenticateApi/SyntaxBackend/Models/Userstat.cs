@@ -11,12 +11,10 @@ public partial class Userstat
     public int Kills { get; set; }
     
     public int HighestKillCount { get; set; }
-
-    [JsonIgnore]
+    
     public int Deaths { get; set; }
 
     public int HighestLevel { get; set; }
-    [JsonIgnore]
 
     public int Timesplayed { get; set; }
 
