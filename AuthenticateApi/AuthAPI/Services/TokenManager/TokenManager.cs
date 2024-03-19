@@ -32,18 +32,18 @@ namespace AuthAPI.Services.TokenManager
 
             var roles = context.Roles;
 
-           var gameContext = new GameContext();
+            var gameContext = new GameContext();
 
-var claimList = new List<Claim>
-{
+            var claimList = new List<Claim>
+            {
     
-    //Token tartalma
-    new Claim("userId",registeredUser.Userid),
-    new Claim("userStatId",gameContext.Users.Include(s => s.UserStats).FirstOrDefault(s => s.Id == registeredUser.Userid)!.UserStatsId.ToString()),
-    new Claim("username",registeredUser.Username),
-    new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
-    new Claim("userRegdate",registeredUser.Regdate.ToString())
-};
+                //Token tartalma
+                new Claim("userId",registeredUser.Userid),
+                new Claim("userStatId",gameContext.Users.Include(s => s.UserStats).FirstOrDefault(s => s.Id == registeredUser.Userid)!.UserStatsId.ToString()),
+                new Claim("username",registeredUser.Username),
+                new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
+                new Claim("userRegdate",registeredUser.Regdate.ToString())
+            };
 
             var tokenDescription = new SecurityTokenDescriptor
             {
