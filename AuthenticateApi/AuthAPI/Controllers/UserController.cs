@@ -44,7 +44,7 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
         [Authorize(Roles = "Admin, User")]
         [HttpGet("users/user")]
         public async Task<ActionResult> GetUserById([FromQuery] string id)
