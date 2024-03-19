@@ -7,14 +7,8 @@ namespace AuthAPI.Models;
 
 public partial class AuthContext : DbContext
 {
-    private IConfiguration _configuration;
     public AuthContext()
     {
-    }
-
-    public AuthContext(IConfiguration configuration)
-    {
-        this._configuration = configuration;
     }
 
     public AuthContext(DbContextOptions<AuthContext> options)
@@ -35,13 +29,8 @@ public partial class AuthContext : DbContext
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    
-
-        /*string connectionString = _configuration.GetConnectionString("Connection")!;
-        optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));*/
-        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
-
-    
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
