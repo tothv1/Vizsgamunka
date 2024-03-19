@@ -44,30 +44,6 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-         [Authorize(Roles = "Admin, User")]
-         [HttpGet("statid/user")]
-         public async Task<ActionResult> GetUserStatById([FromQuery] string id)
-         {
-             try
-             {
-                 var gameContext = new GameContext();
-        
-                 var selectedUser = gameContext.Users.Include(s => s.UserStats).FirstOrDefault(s => s.Id == id)!;
-        
-                 if (selectedUser == null)
-                 {
-                     return NotFound("A kért felhasználó nem található");
-                 }
-        
-                 return Ok(selectedUser.UserStatsId);
-        
-             }
-             catch (Exception ex)
-             {
-                 return BadRequest(ex.Message);
-             }
-         }
         
         [Authorize(Roles = "Admin, User")]
         [HttpGet("users/user")]
