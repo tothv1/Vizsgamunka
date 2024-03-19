@@ -29,7 +29,7 @@ export default function App() {
           <Route path="/menu" element={<Menu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} role={role} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} />} />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} token={token} setToken={setToken} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/game" element={isLoggedIn ? <Canvas style= {{width:800, height:800, backgroundColor : "lightblue"}}/> : <Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} token={token} setToken={setToken} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} />} />
+          <Route path="/game" element={isLoggedIn ? <Canvas tokendata={tokenData} style= {{width:800, height:800, backgroundColor : "lightblue"}}/> : <Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} token={token} setToken={setToken} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/confirm/:confirmKey" element={<ConfirmPage />} />
 

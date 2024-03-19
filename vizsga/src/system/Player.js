@@ -72,6 +72,7 @@ class Player {
   drawing = new Image();
   entityRef = [];
   canvasRed = [];
+  tokenData = null;
 
   hpbar = Object.create(HPbar)
 

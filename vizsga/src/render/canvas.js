@@ -192,6 +192,8 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
+    playerRef.tokenData=props.tokendata;
+    console.log(props)
 
     let wep = new Bow();
     wep.owner = playerRef;
