@@ -26,7 +26,7 @@ namespace SyntaxAdminWPF.Pages
     public partial class AdminPanel : Page
     {
         private string AUTH_API_PATH = "https://localhost:7096";
-        private string GAME_API_PATH = "https://localhost:7275";
+        private string GAME_API_PATH = "https://localhost:7096";
 
         public static AdminPanel instance { get; private set; } = new AdminPanel();
 
@@ -117,6 +117,8 @@ namespace SyntaxAdminWPF.Pages
                     temp.IsLoggedIn = authUser.isLoggedIn;
                     temp.UserStatsId = 0;
                     temp.Kills = 0;
+                    temp.HighestKills = 0;
+                    temp.HighestLevel = 0;
                     temp.Deaths = 0;
                     temp.TimesPlayed = 0;
                     MainPage.FelhasznaloLista.Add(temp);
@@ -131,6 +133,8 @@ namespace SyntaxAdminWPF.Pages
                         if (gameUser.id == authUser.Id)
                         {
                             authUser.Kills = userStats.kills;
+                            authUser.HighestKills = userStats.highestKillCount;
+                            authUser.HighestLevel = userStats.highestLevel;
                             authUser.Deaths = userStats.deaths;
                             authUser.TimesPlayed = userStats.timesplayed;
                             authUser.LastLogin = gameUser.lastlogin;
@@ -150,7 +154,6 @@ namespace SyntaxAdminWPF.Pages
 
         private void ButtonAchievements(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 if (MainPage.ResponseToken != null)

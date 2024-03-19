@@ -59,8 +59,10 @@ namespace SyntaxAdminWPF.Pages
                     updateWindow.TB_Username.Text = selectedUser.Username;
                     updateWindow.TB_Regdate.Text = selectedUser.RegDate.ToString();
                     updateWindow.TB_Isloggedin.Text = selectedUser.IsLoggedIn.ToString();
-                    updateWindow.TB_Role.Text = selectedUser.UserRole.ToString();
+                    updateWindow.CB_Role.Text = selectedUser.UserRole.ToString();
                     updateWindow.TB_Kills.Text = selectedUser.Kills.ToString();
+                    updateWindow.TB_HighestKills.Text = selectedUser.HighestKills.ToString();
+                    updateWindow.TB_HighestLevel.Text = selectedUser.HighestLevel.ToString();
                     updateWindow.TB_Deaths.Text = selectedUser.Deaths.ToString();
                     updateWindow.TB_TimesPlayed.Text = selectedUser.TimesPlayed.ToString();
 

@@ -18,12 +18,14 @@ namespace SyntaxAdminWPF.Models
         public string UserRole { get; set; } = null!;
         public int UserStatsId { get; set; }
         public int Kills { get; set; }
+        public int HighestKills { get; set; }
+        public int HighestLevel { get; set; }
         public int Deaths { get; set; }
         public int TimesPlayed { get; set; }
 
         public override string ToString()
         {
-            return $"Id: {Id},\n FullName: {FullName},\n Username: {Username},\n Email: {Email},\n IsLoggedIn: {IsLoggedIn},\n RegDate: {RegDate},\n LastLogin: {LastLogin},\n UserRole: {UserRole},\n Kills: {Kills},\n Deaths: {Deaths},\n TimesPlayed: {TimesPlayed}";
+            return $"Id: {Id},\n FullName: {FullName},\n Username: {Username},\n Email: {Email},\n IsLoggedIn: {IsLoggedIn},\n RegDate: {RegDate},\n LastLogin: {LastLogin},\n UserRole: {UserRole},\n Kills: {Kills},\n HighestKills: {HighestKills},\n HighestLevel: {HighestLevel},\n Deaths: {Deaths},\n TimesPlayed: {TimesPlayed}";
         }
     }
 }

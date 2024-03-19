@@ -21,6 +21,8 @@
                 <DataGridTextColumn Header="LastLogin" Binding="{Binding Path=LastLogin}" />
                 <DataGridTextColumn Header="Role" Binding="{Binding Path=UserRole}" />
                 <DataGridTextColumn Header="Kills" Binding="{Binding Path=Kills}" />
+                <DataGridTextColumn Header="HighestKills" Binding="{Binding Path=HighestKills}" />
+                <DataGridTextColumn Header="HighestLevel" Binding="{Binding Path=HighestLevel}" />
                 <DataGridTextColumn Header="Deaths" Binding="{Binding Path=Deaths}" />
                 <DataGridTextColumn Header="TimesPlayed" Binding="{Binding Path=TimesPlayed}" />
             </DataGrid.Columns>
