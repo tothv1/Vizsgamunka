@@ -85,6 +85,7 @@ class Player {
       this.Damage+=1;
       this.critChance+=3;
       this.critDamageMult+=0.05;
+      this.statCard.highestLevel=this.level;
 
       //let obj = new Bow();
       //obj.owner = this;

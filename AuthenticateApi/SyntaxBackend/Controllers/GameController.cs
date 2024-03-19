@@ -179,7 +179,7 @@ namespace GameController.Controllers
 
                 requestedStat!.Kills += userstat.Kills;
                 requestedStat.HighestLevel = Math.Max(userstat.HighestLevel, requestedStat.HighestLevel);
-                requestedStat.HighestKillCount = Math.Max(userstat.HighestKillCount, requestedStat.HighestKillCount);
+                requestedStat.HighestKillCount = Math.Max(userstat.Kills, requestedStat.HighestKillCount);
 
                 requestedStat!.Deaths += 1;
                 requestedStat!.Timesplayed += 1;

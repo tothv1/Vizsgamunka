@@ -1,5 +1,6 @@
 class StatCard{
 
+    highestLevel = 1;
     userStatId = 2;
     kills = 0;
     //shootCount = 0;
