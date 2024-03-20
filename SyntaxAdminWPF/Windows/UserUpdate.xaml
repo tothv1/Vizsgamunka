@@ -18,16 +18,16 @@
         <TextBox x:Name="TB_Email" HorizontalAlignment="Left" Margin="167,107,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
         <Label Content="IsLoggedIn" HorizontalAlignment="Left" Margin="42,141,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Isloggedin" HorizontalAlignment="Left" Margin="167,141,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <ComboBox x:Name="CB_Isloggedin" HorizontalAlignment="Left" Margin="167,141,0,0" Text="" VerticalAlignment="Top" Width="209" Height="29" SelectionChanged="TB_Isloggedin_SelectionChanged" FontFamily="Joystix Monospace"/>
 
         <Label Content="Regdate" HorizontalAlignment="Left" Margin="42,175,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Regdate" HorizontalAlignment="Left" Margin="167,175,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <DatePicker x:Name="TB_Regdate" HorizontalAlignment="Left" Margin="167,175,0,0" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
         <Label Content="Role" HorizontalAlignment="Left" Margin="42,211,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="CB_Role" HorizontalAlignment="Left" Margin="167,211,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ComboBox_SelectionChanged"/>
+        <ComboBox x:Name="CB_Role" HorizontalAlignment="Left" Margin="167,211,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ComboBox_SelectionChanged" FontFamily="Joystix Monospace"/>
 
         <Label Content="Kills" HorizontalAlignment="Left" Margin="42,245,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Kills" HorizontalAlignment="Left" Margin="167,243,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <TextBox  x:Name="TB_Kills" HorizontalAlignment="Left" Margin="167,243,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
         <Label Content="Deaths" HorizontalAlignment="Left" Margin="42,347,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TB_Deaths" HorizontalAlignment="Left" Margin="167,345,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>

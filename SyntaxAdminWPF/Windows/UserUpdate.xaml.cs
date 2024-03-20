@@ -32,6 +32,9 @@ namespace SyntaxAdminWPF.Windows
             InitializeComponent();
 
             CB_Role.ItemsSource = MainPage.FelhasznaloRoleok;
+            CB_Isloggedin.ItemsSource = new List<String> {
+                "True","False"
+            };
 
             ResizeMode = ResizeMode.NoResize;
         }
@@ -56,7 +59,7 @@ namespace SyntaxAdminWPF.Windows
                     updateUserDTO.fullname = TB_Fullname.Text;
                     updateUserDTO.email = TB_Email.Text;
                     updateUserDTO.regdate = DateTime.Parse(TB_Regdate.Text);
-                    updateUserDTO.isLoggedIn = bool.Parse(TB_Isloggedin.Text);
+                    updateUserDTO.isLoggedIn = bool.Parse(CB_Isloggedin.SelectedValue.ToString()!);
                     updateUserDTO.userid = selectedUser.Id;
 
                     UserStats userStats = new UserStats();
@@ -93,23 +96,26 @@ namespace SyntaxAdminWPF.Windows
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-           /* HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {MainPage.ResponseToken}");
+            
 
-            LoginDTO unregisterObject = new LoginDTO();
-            unregisterObject.Username = string.Empty;
-            unregisterObject.Password = string.Empty;
+            //StringContent stringContentStats = new(JsonConvert.SerializeObject(unregisterObject), Encoding.UTF8, "application/json");
+            HttpResponseMessage responseStats = client.DeleteAsync(API_PATH + $"/Auth/deleteUser?userId={((User)selectedItem).Id}").Result;
+            string responseStatsBody = responseStats.Content.ReadAsStringAsync().Result;
 
-            StringContent stringContentStats = new(JsonConvert.SerializeObject(unregisterObject), Encoding.UTF8, "application/json");
-            HttpResponseMessage responseStats = client.PutAsync(API_PATH + "/Game/updateAccountStats", stringContentStats).Result;
-            string responseStatsBody = responseStats.Content.ReadAsStringAsync().Result;*/
+            MessageBox.Show(responseStatsBody+" A felhasználót sikeresen tudod majd nemsokára törölni xd!");
 
-            MessageBox.Show("A felhasználót sikeresen tudod majd nemsokára törölni xd!");
-
+            AdminPanel.instance.GenerateData();
             Close();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void TB_Isloggedin_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
