@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SyntaxAdminWPF.Models;
+using SyntaxAdminWPF.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -222,5 +223,12 @@ namespace SyntaxAdminWPF.Pages
             return request.Result;
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            UserRegister userRegister = new UserRegister();
+
+            userRegister.ShowDialog();
+
+        }
     }
 }

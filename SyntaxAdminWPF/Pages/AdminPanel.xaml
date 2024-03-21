@@ -20,6 +20,6 @@
             <Button Content="Teljesítmények" Click="ButtonAchievements"/>
         </Button>
         <Button Content="Szerepkörök" HorizontalAlignment="Center" Margin="0,229,0,0" VerticalAlignment="Top" Width="160" Height="27" Click="ButtonRoles"/>
-        <Button Content="Felhasználó&#xD;&#xA;Regisztrálása" HorizontalAlignment="Center" Margin="0,261,0,0" VerticalAlignment="Top" Width="160" Height="54"/>
+        <Button Content="Felhasználó&#xD;&#xA;Regisztrálása" HorizontalAlignment="Center" Margin="0,261,0,0" VerticalAlignment="Top" Width="160" Height="54" Click="Button_Click_1"/>
     </Grid>
 </Page>
