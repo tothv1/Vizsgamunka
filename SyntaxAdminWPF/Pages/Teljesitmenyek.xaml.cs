@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SyntaxAdminWPF.Models;
+using SyntaxAdminWPF.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,11 +31,40 @@ namespace SyntaxAdminWPF.Pages
 
             DG_Teljesitmenyek.ItemsSource = MainPage.Teljesitmenyek;
 
+            DG_Teljesitmenyek.IsReadOnly = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
+        }
+
+        private void DG_Teljesitmenyek_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                AchievementUpdateWindow updateWindow = new AchievementUpdateWindow();
+                Achievement selectedAchi = (Achievement)DG_Teljesitmenyek.SelectedItem;
+                AchievementUpdateWindow.selectedItem = selectedAchi;
+
+                if (updateWindow != null && selectedAchi != null)
+                {
+                    updateWindow.TB_AchievementName.Text = selectedAchi.achievementName;
+                    updateWindow.ShowDialog();
+                }
+                DG_Teljesitmenyek.UnselectAllCells();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            UjTeljesitmenyWindow ujTeljesitmenyWindow = new UjTeljesitmenyWindow();
+
+            ujTeljesitmenyWindow.ShowDialog();
         }
     }
 }

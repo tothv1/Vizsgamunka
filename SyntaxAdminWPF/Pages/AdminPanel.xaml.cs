@@ -99,8 +99,8 @@ namespace SyntaxAdminWPF.Pages
                 foreach (var role in authroles)
                 {
                     Role temp = new Role();
-                    temp.Id = role.roleid;
-                    temp.RoleName = role.roleName;
+                    temp.roleid = role.roleid;
+                    temp.roleName = role.roleName;
                     MainPage.FelhasznaloRoleok.Add(temp);
                 }
 
@@ -114,7 +114,7 @@ namespace SyntaxAdminWPF.Pages
                     temp.RegDate = authUser.regdate;
                     temp.LastLogin = DateTime.Now;
                     int roleId = authUser["roleid"];
-                    temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.Id == roleId)!.RoleName;
+                    temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.roleid == roleId)!.roleName;
                     temp.IsLoggedIn = authUser.isLoggedIn;
                     temp.UserStatsId = 0;
                     temp.Kills = 0;
@@ -175,9 +175,32 @@ namespace SyntaxAdminWPF.Pages
             }
         }
 
-        private void GenerateAchiData()
+        private void ButtonRoles(object sender, RoutedEventArgs e)
         {
-            //MainPage.Teljesitmenyek.Clear();
+            try
+            {
+                if (MainPage.ResponseToken != null)
+                {
+                    NavigationService.Navigate(new Uri(".\\Pages\\Szerepkorok.xaml", UriKind.RelativeOrAbsolute));
+
+                    GenerateRoleData();
+                }
+                else
+                {
+                    MessageBox.Show("Sikertelen adatlekérés! Jelentkezz be újra!");
+                    NavigationService.Navigate(new Uri(".\\Pages\\Login.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Váratlan hiba: " + ex.Message);
+            }
+
+        }
+
+        public void GenerateAchiData()
+        {
+            MainPage.Teljesitmenyek.Clear();
 
             HttpResponseMessage resultGame = GetFromGame("/Game/achievements");
             string responseGameAchievement = resultGame.Content.ReadAsStringAsync().Result;
@@ -189,19 +212,33 @@ namespace SyntaxAdminWPF.Pages
                 MainPage.Teljesitmenyek.Add(new Achievement
                 {
                     Id = achi.id,
-                    AchievementName = achi.achievementName,
+                    achievementName = achi.achievementName,
                 });
             }
             Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource = MainPage.Teljesitmenyek;
             CollectionViewSource.GetDefaultView(Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource).Refresh();
-
         }
 
-        private void ButtonRoles(object sender, RoutedEventArgs e)
+        //Szerepkörök lekérése adatbázisból és tárolása listában.
+        public void GenerateRoleData()
         {
+            MainPage.FelhasznaloRoleok.Clear();
 
+            HttpResponseMessage resultRole = GetFromAuth("/Role/roles");
+            string responseRoles = resultRole.Content.ReadAsStringAsync().Result;
+
+            dynamic roles = JsonConvert.DeserializeObject(responseRoles)!;
+
+            foreach (var role in roles)
+            {
+                Role temp = new Role();
+                temp.roleid = role.roleid;
+                temp.roleName = role.roleName;
+                MainPage.FelhasznaloRoleok.Add(temp);
+            }
+            Szerepkorok.instance.DG_Szerepkorok.ItemsSource = MainPage.FelhasznaloRoleok;
+            CollectionViewSource.GetDefaultView(Szerepkorok.instance.DG_Szerepkorok.ItemsSource).Refresh();
         }
-
 
         private HttpResponseMessage GetFromAuth(string endpoint)
         {
@@ -225,7 +262,7 @@ namespace SyntaxAdminWPF.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            UserRegister userRegister = new UserRegister();
+            UserRegisterWindow userRegister = new UserRegisterWindow();
 
             userRegister.ShowDialog();
 

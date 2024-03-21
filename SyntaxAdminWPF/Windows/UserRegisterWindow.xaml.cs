@@ -20,11 +20,11 @@ namespace SyntaxAdminWPF.Windows
     /// <summary>
     /// Interaction logic for UserRegister.xaml
     /// </summary>
-    public partial class UserRegister : Window
+    public partial class UserRegisterWindow : Window
     {
+        public string API_PATH = "https://localhost:7096";
 
-
-        public UserRegister()
+        public UserRegisterWindow()
         {
             string randomPass = generateNewPassword(16);
 
@@ -33,32 +33,39 @@ namespace SyntaxAdminWPF.Windows
             TB_PasswordRepeatReg.IsEnabled = false;
             TB_PasswordReg.Password = randomPass;
             TB_PasswordRepeatReg.Password = randomPass;
-        }
 
-        public string API_PATH = "https://localhost:7096";
+            ResizeMode = ResizeMode.NoResize;
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            HttpClient client = new HttpClient();
-
-
-
-            RegisterDTO temp = new RegisterDTO
+            try
             {
+                HttpClient client = new HttpClient();
 
-                Username = TB_UsernameReg.Text,
-                Fullname = TB_FullnameReg.Text,
-                Email = TB_EmailReg.Text,
-                Password = TB_PasswordReg.Password,
-                PasswordRepeate = TB_PasswordRepeatReg.Password,
+                RegisterDTO temp = new RegisterDTO
+                {
 
-            };
-            StringContent stringContent = new(JsonConvert.SerializeObject(temp), Encoding.UTF8, "application/json");
-            HttpResponseMessage respone = client.PostAsync(API_PATH + "/Auth/Register", stringContent).Result;
-            string responseBody = respone.Content.ReadAsStringAsync().Result;
-            dynamic responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody)!;
+                    Username = TB_UsernameReg.Text,
+                    Fullname = TB_FullnameReg.Text,
+                    Email = TB_EmailReg.Text,
+                    Password = TB_PasswordReg.Password,
+                    PasswordRepeate = TB_PasswordRepeatReg.Password,
 
-            MessageBox.Show(responseObject+"");
+                };
+                StringContent stringContent = new(JsonConvert.SerializeObject(temp), Encoding.UTF8, "application/json");
+                HttpResponseMessage respone = client.PostAsync(API_PATH + "/Auth/Register", stringContent).Result;
+                string responseBody = respone.Content.ReadAsStringAsync().Result;
+                dynamic responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody)!;
+                string responseMessage = responseObject["responseMessage"];
+                MessageBox.Show(responseMessage);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         public string generateNewPassword(int length)
