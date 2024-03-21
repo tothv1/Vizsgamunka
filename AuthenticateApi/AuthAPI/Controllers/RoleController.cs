@@ -169,7 +169,7 @@ namespace AuthAPI.Controllers
                 gameContext!.Remove(requestGameRole);
                 context.Remove(requestRole);
                 await context.SaveChangesAsync();
-
+                await gameContext.SaveChangesAsync();
                 return Ok("Sikeresen törölted a kívánt a szerepkört!");
             }
             catch (Exception ex)
