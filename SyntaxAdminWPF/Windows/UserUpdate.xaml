@@ -5,35 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SyntaxAdminWPF.Windows"
         mc:Ignorable="d"
-        Title="Felhasználó szerkesztése" Height="450" Width="400">
-    <Grid HorizontalAlignment="Center" Width="400" Height="434" VerticalAlignment="Bottom">
-        <Button Content="Mentés" HorizontalAlignment="Center" Margin="0,361,0,0" VerticalAlignment="Top" Height="40" Width="232" Click="Button_Click"/>
-        <Label Content="Username" HorizontalAlignment="Left" Margin="44,47,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Username" HorizontalAlignment="Left" Margin="169,47,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        Title="Felhasználó szerkesztése" Height="500" Width="400">
+    <Grid HorizontalAlignment="Center" Width="400" Height="524" VerticalAlignment="Center">
+        <Button Content="Mentés" HorizontalAlignment="Left" Margin="27,430,0,0" VerticalAlignment="Top" Height="40" Width="147" Click="Button_Click"/>
+        <Label Content="Username" HorizontalAlignment="Left" Margin="42,39,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_Username" HorizontalAlignment="Left" Margin="167,39,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
-        <Label Content="Fullname" HorizontalAlignment="Left" Margin="44,81,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Fullname" HorizontalAlignment="Left" Margin="169,81,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Fullname" HorizontalAlignment="Left" Margin="42,73,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_Fullname" HorizontalAlignment="Left" Margin="167,73,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
-        <Label Content="Email" HorizontalAlignment="Left" Margin="44,117,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Email" HorizontalAlignment="Left" Margin="169,115,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Email" HorizontalAlignment="Left" Margin="42,109,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_Email" HorizontalAlignment="Left" Margin="167,107,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
-        <Label Content="IsLoggedIn" HorizontalAlignment="Left" Margin="44,149,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Isloggedin" HorizontalAlignment="Left" Margin="169,149,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="IsLoggedIn" HorizontalAlignment="Left" Margin="42,141,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CB_Isloggedin" HorizontalAlignment="Left" Margin="167,141,0,0" Text="" VerticalAlignment="Top" Width="209" Height="29" SelectionChanged="TB_Isloggedin_SelectionChanged" FontFamily="Joystix Monospace"/>
 
-        <Label Content="Regdate" HorizontalAlignment="Left" Margin="44,183,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Regdate" HorizontalAlignment="Left" Margin="169,183,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Regdate" HorizontalAlignment="Left" Margin="42,175,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="TB_Regdate" HorizontalAlignment="Left" Margin="167,175,0,0" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
-        <Label Content="Role" HorizontalAlignment="Left" Margin="44,219,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Role" HorizontalAlignment="Left" Margin="169,217,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
-        
-        <Label Content="Kills" HorizontalAlignment="Left" Margin="44,253,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Kills" HorizontalAlignment="Left" Margin="169,251,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Role" HorizontalAlignment="Left" Margin="42,211,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="CB_Role" HorizontalAlignment="Left" Margin="167,211,0,0" VerticalAlignment="Top" Width="209" SelectionChanged="ComboBox_SelectionChanged" FontFamily="Joystix Monospace"/>
 
-        <Label Content="Deaths" HorizontalAlignment="Left" Margin="44,287,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_Deaths" HorizontalAlignment="Left" Margin="169,285,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Kills" HorizontalAlignment="Left" Margin="42,245,0,0" VerticalAlignment="Top"/>
+        <TextBox  x:Name="TB_Kills" HorizontalAlignment="Left" Margin="167,243,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
 
-        <Label Content="TimesPlayed" HorizontalAlignment="Left" Margin="44,316,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TB_TimesPlayed" HorizontalAlignment="Left" Margin="169,319,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+        <Label Content="Deaths" HorizontalAlignment="Left" Margin="42,347,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_Deaths" HorizontalAlignment="Left" Margin="167,345,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+
+        <Label Content="TimesPlayed" HorizontalAlignment="Left" Margin="41,379,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_TimesPlayed" HorizontalAlignment="Left" Margin="167,379,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+
+        <Label Content="HighestKills" HorizontalAlignment="Left" Margin="42,279,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_HighestKills" HorizontalAlignment="Left" Margin="167,277,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+
+        <Label Content="HighestLevel" HorizontalAlignment="Left" Margin="41,313,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_HighestLevel" HorizontalAlignment="Left" Margin="167,311,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="209" Height="29"/>
+
+        <Button Content="Felhasználó törlése" HorizontalAlignment="Left" Margin="179,430,0,0" VerticalAlignment="Top" Height="40" Width="197" Click="Button_Click_1"/>
 
     </Grid>
 </Window>
