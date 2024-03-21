@@ -48,16 +48,15 @@ namespace SyntaxAdminWPF.Pages
         {
             try
             {
-                UserUpdate updateWindow = new UserUpdate();
+                UserUpdateWindow updateWindow = new UserUpdateWindow();
                 User selectedUser = (User)DG_Felhasznalok.SelectedItem;
-                UserUpdate.selectedItem = selectedUser;
+                UserUpdateWindow.selectedItem = selectedUser;
 
                 if (updateWindow != null && selectedUser != null)
                 {
                     updateWindow.TB_Email.Text = selectedUser.Email;
                     updateWindow.TB_Fullname.Text = selectedUser.FullName;
                     updateWindow.TB_Username.Text = selectedUser.Username;
-                    updateWindow.TB_Regdate.Text = selectedUser.RegDate.ToString();
                     updateWindow.CB_Isloggedin.Text = selectedUser.IsLoggedIn.ToString();
                     updateWindow.CB_Role.Text = selectedUser.UserRole.ToString();
                     updateWindow.TB_Kills.Text = selectedUser.Kills.ToString();

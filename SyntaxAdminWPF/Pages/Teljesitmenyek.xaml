@@ -10,12 +10,13 @@
 
     <Grid>
         <Button Content="↩ Vissza" HorizontalAlignment="Left" VerticalAlignment="Top" Width="102" Height="29" Click="Button_Click"/>
-        <DataGrid x:Name="DG_Teljesitmenyek" Margin="102,0,0,0" AutoGenerateColumns="False">
+        <DataGrid x:Name="DG_Teljesitmenyek" Margin="102,0,0,0" AutoGenerateColumns="False" SelectionChanged="DG_Teljesitmenyek_SelectionChanged" FontSize="10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
-                <DataGridTextColumn Header="AchievementName" Binding="{Binding AchievementName}" />
+                <DataGridTextColumn Header="AchievementName" Binding="{Binding achievementName}" />
             </DataGrid.Columns>
         </DataGrid>
+        <Button Content="Teljesítmény&#xD;&#xA;Felvétel" HorizontalAlignment="Left" Margin="2,0,0,10" VerticalAlignment="Bottom" Width="98" Height="48" Click="Button_Click_1" FontSize="9"/>
 
     </Grid>
 </Page>

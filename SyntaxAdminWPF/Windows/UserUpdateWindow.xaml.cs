@@ -21,13 +21,13 @@ namespace SyntaxAdminWPF.Windows
     /// <summary>
     /// Interaction logic for UserUpdate.xaml
     /// </summary>
-    public partial class UserUpdate : Window
+    public partial class UserUpdateWindow : Window
     {
         public string API_PATH = "https://localhost:7096";
         private string GAME_API_PATH = "https://localhost:7096";
         public static object selectedItem = null!;
 
-        public UserUpdate()
+        public UserUpdateWindow()
         {
             InitializeComponent();
 
@@ -54,11 +54,9 @@ namespace SyntaxAdminWPF.Windows
 
                     UpdateUserDTO updateUserDTO = new UpdateUserDTO();
                     updateUserDTO.username = TB_Username.Text;
-                    //MessageBox.Show(CB_Role.SelectedValue.ToString()+"");
-                    updateUserDTO.roleid = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.RoleName == CB_Role!.SelectedValue.ToString())!.Id;
+                    updateUserDTO.roleid = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.roleName == CB_Role!.SelectedValue.ToString())!.roleid;
                     updateUserDTO.fullname = TB_Fullname.Text;
                     updateUserDTO.email = TB_Email.Text;
-                    updateUserDTO.regdate = DateTime.Parse(TB_Regdate.Text);
                     updateUserDTO.isLoggedIn = bool.Parse(CB_Isloggedin.SelectedValue.ToString()!);
                     updateUserDTO.userid = selectedUser.Id;
 

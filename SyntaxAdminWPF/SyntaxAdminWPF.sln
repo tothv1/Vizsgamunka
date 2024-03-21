@@ -3,18 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxAdminWPF", "SyntaxAdminWPF.csproj", "{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxAdminWPF", "SyntaxAdminWPF.csproj", "{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SyntaxAdminSetup", "..\SyntaxAdminSetup\SyntaxAdminSetup.vdproj", "{A94308FB-0E93-4AF5-88FB-86B3BB236A4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.All|Any CPU.Build.0 = Release|Any CPU
 		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3149CC3A-AFCE-4EFD-9531-BC698FD075B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A94308FB-0E93-4AF5-88FB-86B3BB236A4D}.All|Any CPU.ActiveCfg = Debug
+		{A94308FB-0E93-4AF5-88FB-86B3BB236A4D}.Debug|Any CPU.ActiveCfg = Debug
+		{A94308FB-0E93-4AF5-88FB-86B3BB236A4D}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
