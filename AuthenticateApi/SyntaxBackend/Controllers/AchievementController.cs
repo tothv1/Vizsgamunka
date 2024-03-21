@@ -171,9 +171,9 @@ namespace SyntaxBackEnd.Controllers
 
                 var requestAchi = context.Achievements.FirstOrDefault(a => a.Id == achievement.Id);
 
-                if (context.Achievements.Contains(context.Achievements.FirstOrDefault(a => a.Id == achievement.Id)) && !requestAchi!.AchievementName.Equals(achievement!.AchievementName))
+                if (context.Achievements.FirstOrDefault(a => a.AchievementName == achievement.AchievementName) != null && !requestAchi.AchievementName.Equals(achievement.AchievementName))
                 {
-                    return NotFound("Már létezik ilyen nevű teljesítmény");
+                    return BadRequest("Már létezik ilyen nevű teljesítmény");
                 }
 
                 requestAchi!.AchievementName = achievement.AchievementName;
