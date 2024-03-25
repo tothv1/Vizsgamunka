@@ -6,18 +6,22 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 import "../system/Math";
 import { Clamp, getRandomRange } from "../system/Math";
 import { HPbar } from "../render/HPBar";
-import { StatCard } from "./StatCard";
+import { GameStatCard } from "./GameStatCard";
 import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
 import { putStats } from "./Hooks/PutStats";
+import { StatCard } from "./StatCard";
 
 class Player {
   ID = 0;
 
   level = 1;
+  ItemPicks = 0;
   currrentXP = 0;
   requiredXP = 10;
   XPRatio = 0;
+
+
 
   frameCount = 0;
   frameDelay = 20; //every x updates; the sprite turns over to the next frame
@@ -41,7 +45,9 @@ class Player {
   offset = [0, 0];
   renderoffset = [0, 0];
 
-  statCard = new StatCard();
+  GameStatCard = new GameStatCard();
+  BaseStatCard = new StatCard();
+  StatCard = new StatCard();
 
   speed = 300;
 
@@ -52,7 +58,9 @@ class Player {
   shooting = false;
   aimPoint = [0, 0];
   windowSize = [0, 0];
+
   weapons = [];
+  items = [];
 
   damagable = true;
 
@@ -63,10 +71,6 @@ class Player {
 
   frame = 0;
 
-  Damage = 10;
-  critChance = 20;
-  critDamageMult=2;
-
   canvasRef = 0;
 
   drawing = new Image();
@@ -76,6 +80,19 @@ class Player {
 
   hpbar = Object.create(HPbar)
 
+  RecalcStats(){
+
+    this.StatCard=this.BaseStatCard;
+    this.items.forEach(item => {
+      item.RecalcStats(this);
+    });
+
+    this.weapons.forEach(weapon=>{
+      weapon.RecalculateStats(this);
+    })
+
+  }
+
   Update(deltaTime, frameCount) {
 
     if (this.currrentXP >= this.requiredXP) {
@@ -83,10 +100,11 @@ class Player {
 
       this.currrentXP -= this.requiredXP;
       this.level += 1;
-      this.Damage+=1;
-      this.critChance+=3;
-      this.critDamageMult+=0.05;
-      this.statCard.highestLevel=this.level;
+      this.Damage += 1;
+      this.critChance += 3;
+      this.critDamageMult += 0.05;
+      this.GameStatCard.highestLevel = this.level;
+      this.ItemPicks++;
 
       //let obj = new Bow();
       //obj.owner = this;
@@ -185,19 +203,28 @@ class Player {
   };
   takeDamage(source) {
 
+    let sourceDMG = source.Damage;
+
     let temp = new DMGpopup();
     temp.x = this.x;
     temp.y = this.y;
-    temp.Damage = source.Damage;
-    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
+    temp.Damage = sourceDMG;
+    temp.size = Math.sqrt(Math.abs(sourceDMG)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
-    this.health -= source.Damage;
+    
+
+    if (sourceDMG<=0) {
+      sourceDMG*=this.StatCard.HealMult;
+    } 
+
+    this.health=Clamp(this.health-sourceDMG,0,this.maxHealth)
+
     if (this.health <= 0) {
 
-      putStats(this.statCard);
+      putStats(this.GameStatCard);
       this.dead = true;
     }
   }

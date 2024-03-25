@@ -66,7 +66,7 @@ class XP {
 
     if (Distance([this.x, this.y], [target.x, target.y]) < this.xhitbox) {
       this.dead = true;
-      target.currrentXP += this.value;
+      target.currrentXP += this.value*target.StatCard.XPRate;
     }
 
 

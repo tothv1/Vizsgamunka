@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { rawMaps } from '../Assets/map/maps';
 
 import { Slime, xd } from '../system/Slime';
@@ -12,6 +12,8 @@ import { Bow } from '../system/Weapons/Bow';
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
 import { Potion } from '../system/Pickups/Potion';
+import { ItemCard } from './ItemCard';
+import { StatCard } from '../system/StatCard';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -22,6 +24,9 @@ let entities = [];
 
 let gameTime = 0;
 let paused = false;
+let pauseBlock = false;
+
+let lvlUpCards = [];
 
 const Canvas = props => {
 
@@ -168,6 +173,50 @@ const Canvas = props => {
     ctx.restore();
   }
 
+  const drawItemPickUI = (ctx, cards, statcard) => {
+
+    ctx.save();
+    
+    ctx.globalAlpha = 1.0;
+    
+    ctx.font = `15px Joystix Monospace`;
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`Damage Mult: ${statcard.DamageMult}`, 50, 300);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`Damage Mult: ${statcard.DamageMult}`, 50, 300);
+    
+
+
+
+
+    for (let index = 0; index < 3; index++) {
+
+      let objHeightOffset =200+ (cards[index].height + 30) * index;
+
+      ctx.fillStyle = 'gray';
+      ctx.beginPath();
+      ctx.rect(300, objHeightOffset, cards[index].width, cards[index].height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.drawImage(cards[index].icon, 310, objHeightOffset+10);
+
+      ctx.font = `15px Joystix Monospace`;
+
+      ctx.fillStyle = 'white';
+      ctx.fillText(`${cards[index].description}`, 380, objHeightOffset+30);
+  
+      ctx.strokeStyle = 'black'
+      ctx.strokeText(`${cards[index].description}`, 380, objHeightOffset+30);
+
+    }
+
+    ctx.restore();
+
+  }
+
 
   useEffect(() => {
 
@@ -177,6 +226,11 @@ const Canvas = props => {
     windowSize = [rect.left, rect.top]
 
     // init
+
+    lvlUpCards = [new ItemCard(),new ItemCard(),new ItemCard()]
+    lvlUpCards.forEach(card => {
+      card.init();
+    });
 
     entities.projectileList = [];
     entities.tileList = [];
@@ -192,8 +246,10 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
-    playerRef.tokenData=props.tokendata;
-    playerRef.statCard.userStatId=props.tokendata.userStatId;
+    playerRef.tokenData = props.tokendata;
+    playerRef.GameStatCard.userStatId = props.tokendata.userStatId;
+
+
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -201,6 +257,8 @@ const Canvas = props => {
     playerRef.canvasRef = canvasRef.current;
 
     entities.entityList.push(playerRef);
+
+    playerRef.RecalcStats();
 
     console.log(playerRef);
 
@@ -238,7 +296,7 @@ const Canvas = props => {
     //eventek playernek
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && !pauseBlock) {
         paused = !paused;
       }
       playerRef.keyhandler(event)
@@ -270,14 +328,14 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-      if  (playerRef.dead){
-        paused=true;
+      if (playerRef.dead) {
+        paused = true;
       }
 
-      if (!paused){
+      if (!paused) {
         gameTime += deltaTime;
       }
-      
+
       // setting offsets
       renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
 
@@ -301,11 +359,11 @@ const Canvas = props => {
           item.hpbar.setval(item.maxHealth, item.health);
         }
 
-        if(paused){return;}
+        if (paused) { return; }
 
         item.renderoffset = renderOffset;
         item.Update(deltaTime, frameCount, playerRef);
-        
+
 
         if (item.dead && item.xpValue != undefined) {
 
@@ -329,7 +387,7 @@ const Canvas = props => {
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset)
 
-        if(paused){return;}
+        if (paused) { return; }
 
 
         item.Update(deltaTime, frameCount);
@@ -361,7 +419,7 @@ const Canvas = props => {
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         drawText(context, item, item.offset);
 
-        if (paused) {return;}
+        if (paused) { return; }
 
 
         item.Update(deltaTime, frameCount);
@@ -374,10 +432,21 @@ const Canvas = props => {
 
       drawXPBar(context, playerRef)
 
-      //paused UI
 
-      if(paused){
-      drawPausedUI(context,playerRef)}
+
+
+      //paused UI
+      if (paused) {
+        drawPausedUI(context, playerRef)
+      }
+      if (playerRef.ItemPicks > 0) {
+        pauseBlock = true;
+        paused = true;
+        drawItemPickUI(context,lvlUpCards,playerRef.StatCard)
+      }
+
+
+
 
       lastUpdateTime = window.performance.now();
       if (!paused) {

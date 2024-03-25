@@ -170,6 +170,7 @@ class Slime {
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
+    console.log(source)
     temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
@@ -189,7 +190,7 @@ class Slime {
       }
       this.dead = true;
       console.log(source.source.statCard)
-      source.source.statCard.kills++;
+      source.source.GameStatCard.kills++;
       console.log(source)
     }
   }
