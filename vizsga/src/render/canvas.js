@@ -10,8 +10,8 @@ import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
-import { IntervalSpawner } from '../system/IntervalSpawner';
 import { Spawner } from '../system/Spawner';
+import { Potion } from '../system/Pickups/Potion';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -20,7 +20,8 @@ let windowSize = [0, 0];
 let aimpoint = [0, 0];
 let entities = [];
 
-let gameStartTime = 0;
+let gameTime = 0;
+let paused = false;
 
 const Canvas = props => {
 
@@ -134,9 +135,9 @@ const Canvas = props => {
 
     ctx.font = `15px Joystix Monospace`;
 
-    var sec = Math.floor((Date.now()-gameStartTime)/1000)
-    var min = Math.floor(sec/60);
-    sec-=min*60;
+    var sec = Math.floor(gameTime)
+    var min = Math.floor(sec / 60);
+    sec -= min * 60;
 
 
 
@@ -149,8 +150,26 @@ const Canvas = props => {
 
   }
 
+  const drawPausedUI = (ctx, object, offset) => {
+    ctx.save();
+
+
+    ctx.globalAlpha = 0.5;
+
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.rect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalAlpha = 1.0;
+
+
+    ctx.restore();
+  }
+
+
   useEffect(() => {
-    gameStartTime = Date.now();
 
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
@@ -173,6 +192,8 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
+    playerRef.tokenData=props.tokendata;
+    playerRef.statCard.userStatId=props.tokendata.userStatId;
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -180,6 +201,11 @@ const Canvas = props => {
     playerRef.canvasRef = canvasRef.current;
 
     entities.entityList.push(playerRef);
+
+    console.log(playerRef);
+
+
+
 
     const rawmap = rawMaps[0];
 
@@ -200,17 +226,21 @@ const Canvas = props => {
           temp.x = j * 64;
           temp.y = i * 64;
           temp.entityRef = entities;
-          temp.playerRef=playerRef;
+          temp.playerRef = playerRef;
           temp.windowSize = windowSize;
 
           entities.entityList.push(temp);
         }
+
       }
     }
 
     //eventek playernek
 
     document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        paused = !paused;
+      }
       playerRef.keyhandler(event)
     });
     document.addEventListener("keyup", (event) => {
@@ -240,14 +270,23 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
+      if  (playerRef.dead){
+        paused=true;
+      }
+
+      if (!paused){
+        gameTime += deltaTime;
+      }
+      
       // setting offsets
       renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
 
       renderOffset = [-renderOffset[0], -renderOffset[1]]
-      let playerrenderpos = [playerRef.x - renderOffset[0], playerRef.y - renderOffset[1]]
 
       // tile update
       entities.tileList.forEach(item => {
+
+
         item.update(deltaTime, frameCount);
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         draw(context, item, item.offset)
@@ -255,19 +294,20 @@ const Canvas = props => {
 
       //entity update
       entities.entityList.forEach(item => {
-
-        item.renderoffset = renderOffset;
-        item.Update(deltaTime, frameCount, playerRef);
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset);
-
         if (item.damagable) {
           drawHPBar(context, item.hpbar, item.offset);
           item.hpbar.setval(item.maxHealth, item.health);
-
         }
 
-        if (item.dead && item.ID != 1000) {
+        if(paused){return;}
+
+        item.renderoffset = renderOffset;
+        item.Update(deltaTime, frameCount, playerRef);
+        
+
+        if (item.dead && item.xpValue != undefined) {
 
           var xpDrop = new XP();
           xpDrop.value = item.xpValue;
@@ -285,15 +325,23 @@ const Canvas = props => {
 
       //projectile update
       entities.projectileList.forEach(item => {
+
+        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
+        draw(context, item, item.offset)
+
+        if(paused){return;}
+
+
         item.Update(deltaTime, frameCount);
 
         entities.entityList.forEach(element => {
           if (!element.damagable) { return; }
 
           if (CheckCollision(item, element) && item.hitlimit > 0) {
+
             item.hitlimit--;
             element.takeDamage(item);
-            
+
             if (item.hitlimit <= 0) {
               item.dead = true;
             }
@@ -306,29 +354,38 @@ const Canvas = props => {
         }
         entities.projectileList = entities.projectileList.filter((xd) => !xd.dead);
 
-        item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
-        draw(context, item, item.offset)
       });
 
       //effect update
       entities.effectList.forEach(item => {
+        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
+        drawText(context, item, item.offset);
+
+        if (paused) {return;}
+
+
         item.Update(deltaTime, frameCount);
         if (item.frame > item.maxFrame) {
           entities.effectList.splice(item, 1);
         }
-        item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
-        drawText(context, item, item.offset);
       });
 
       //UI Update
 
       drawXPBar(context, playerRef)
 
+      //paused UI
+
+      if(paused){
+      drawPausedUI(context,playerRef)}
 
       lastUpdateTime = window.performance.now();
-      frameCount++
+      if (!paused) {
+        frameCount++
+      }
       animationFrameId = window.requestAnimationFrame(render)
     }
+
     render()
 
     return () => {

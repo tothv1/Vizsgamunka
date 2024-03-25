@@ -9,7 +9,7 @@ const HPbar = {
     renderoffset : [0,0],
   
     width : 64,
-    height : 10,
+    height : 5,
 
     ratio : 0,
     

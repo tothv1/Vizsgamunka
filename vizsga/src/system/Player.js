@@ -9,15 +9,17 @@ import { HPbar } from "../render/HPBar";
 import { StatCard } from "./StatCard";
 import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
+import { putStats } from "./Hooks/PutStats";
 
 class Player {
   ID = 0;
 
-  level=1;
+  level = 1;
   currrentXP = 0;
   requiredXP = 10;
   XPRatio = 0;
 
+  frameCount = 0;
   frameDelay = 20; //every x updates; the sprite turns over to the next frame
   frameLength = 10; // frames in the spritesheet
   state = "moving";
@@ -39,12 +41,12 @@ class Player {
   offset = [0, 0];
   renderoffset = [0, 0];
 
-  statcard = new StatCard();
+  statCard = new StatCard();
 
   speed = 300;
 
-  maxHealth = 10000;
-  health = 10000;
+  maxHealth = 100;
+  health = 100;
 
   team = 1;
   shooting = false;
@@ -52,7 +54,7 @@ class Player {
   windowSize = [0, 0];
   weapons = [];
 
-  damagable=true;
+  damagable = true;
 
   UpState = false;
   DownState = false;
@@ -61,26 +63,34 @@ class Player {
 
   frame = 0;
 
+  Damage = 10;
+  critChance = 20;
+  critDamageMult=2;
+
   canvasRef = 0;
 
   drawing = new Image();
   entityRef = [];
+  canvasRed = [];
+  tokenData = null;
 
   hpbar = Object.create(HPbar)
 
   Update(deltaTime, frameCount) {
 
-    if (this.currrentXP>=this.requiredXP){
-      
-
-      this.currrentXP-=this.requiredXP;
-      this.level+=1;
-
-      let obj = new Bow();
-      obj.owner=this;
+    if (this.currrentXP >= this.requiredXP) {
 
 
-      this.weapons.push(obj)
+      this.currrentXP -= this.requiredXP;
+      this.level += 1;
+      this.Damage+=1;
+      this.critChance+=3;
+      this.critDamageMult+=0.05;
+      this.statCard.highestLevel=this.level;
+
+      //let obj = new Bow();
+      //obj.owner = this;
+      //this.weapons.push(obj)
 
       //let linearNext = this.level*5; 
       //let exponentialNext = Math.floor(this.requiredXP*1.1);
@@ -90,12 +100,12 @@ class Player {
 
       //linearNext > exponentialNext ? this.requiredXP=linearNext : this.requiredXP = exponentialNext;
 
-      this.requiredXP=Math.ceil(this.requiredXP*1.1);    //exponential scale
+      this.requiredXP = Math.ceil(this.requiredXP * 1.1);    //exponential scale
       //this.requiredXP=this.level*10;                     //linear scale
     }
 
-    this.XPRatio = this.currrentXP/this.requiredXP;
-    
+    this.XPRatio = this.currrentXP / this.requiredXP;
+
 
     if (this.state === "moving") {
       if (this.direction === "left") {
@@ -175,17 +185,19 @@ class Player {
   };
   takeDamage(source) {
 
-    let temp =new DMGpopup();
+    let temp = new DMGpopup();
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
-    temp.size = Math.sqrt(source.Damage) + 20;
+    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
     this.health -= source.Damage;
     if (this.health <= 0) {
+
+      putStats(this.statCard);
       this.dead = true;
     }
   }
@@ -219,6 +231,7 @@ class Player {
 
         this.RightState = true;
       }
+
     }
 
     // felengedésen kinyitja az irány lock-ot, rendereléshez kell
@@ -242,10 +255,5 @@ class Player {
     }
   }
 }
-
-//irány state, billentyű lenyomás és felengedés alapján
-
-
-
 
 export { Player };

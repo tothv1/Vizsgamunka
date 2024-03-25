@@ -57,6 +57,21 @@ namespace AuthAPI.Controllers
             }
         }
 
+        [HttpPost("confirmAccount")]
+        public async Task<ActionResult> ConfirmEmailAccount([FromQuery] string confirmKey)
+        {
+            try
+            {
+                var response = await authService.ConfirmAccount(confirmKey);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("keyValidate")]
         public async Task<ActionResult> IsValidKey([FromQuery] string confirmKey)
         {
@@ -65,6 +80,21 @@ namespace AuthAPI.Controllers
                 var response = await authService.IsValidKey(confirmKey);
 
                 return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("tempusers")]
+        public async Task<ActionResult> GetTempResult()
+        {
+            try
+            {
+                await using var context = new AuthContext();
+                return Ok(context.Registries.ToList());
             }
             catch (Exception ex)
             {
@@ -81,21 +111,6 @@ namespace AuthAPI.Controllers
             {
                 var response = await authService.Logout(token);
                 return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("confirmAccount")]
-        public async Task<ActionResult> ConfirmEmailAccount([FromQuery] string confirmKey)
-        {
-            try
-            {
-                var response = await authService.ConfirmAccount(confirmKey);
-                return Ok(response);
-
             }
             catch (Exception ex)
             {
@@ -120,19 +135,21 @@ namespace AuthAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("tempusers")]
-        public async Task<ActionResult> GetTempResult()
+        [HttpDelete("deleteUser")]
+        public async Task<ActionResult> DeleteUser([FromQuery] string userId)
         {
             try
             {
-                await using var context = new AuthContext();
-                return Ok(context.Registries.ToList());
+                var response = await authService.DeleteUser(userId);
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
     }
 
 }

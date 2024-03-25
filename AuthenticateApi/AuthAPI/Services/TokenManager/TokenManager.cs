@@ -2,8 +2,10 @@
 using AuthAPI.Models;
 using AuthAPI.Services.IServices;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SyntaxBackEnd.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -30,10 +32,14 @@ namespace AuthAPI.Services.TokenManager
 
             var roles = context.Roles;
 
+            var gameContext = new GameContext();
+
             var claimList = new List<Claim>
             {
+    
                 //Token tartalma
                 new Claim("userId",registeredUser.Userid),
+                new Claim("userStatId",gameContext.Users.Include(s => s.UserStats).FirstOrDefault(s => s.Id == registeredUser.Userid)!.UserStatsId.ToString()),
                 new Claim("username",registeredUser.Username),
                 new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
                 new Claim("userRegdate",registeredUser.Regdate.ToString())
@@ -70,7 +76,7 @@ namespace AuthAPI.Services.TokenManager
                 new Claim("userid",registeredUser.UserId),
                 new Claim("username",registeredUser.Username),
                 new Claim("fullname", registeredUser.Fullname),
-                new Claim("Email", registeredUser.Email),
+                new Claim("email", registeredUser.Email),
             };
 
             var tokenDescription = new SecurityTokenDescriptor

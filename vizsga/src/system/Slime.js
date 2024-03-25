@@ -4,19 +4,22 @@ import rightEnemy1 from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 import leftEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-left.png";
 import rightEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-right.png";
 
-import { GetDirection, Normalise, Translate, getRandomRange } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
+import { Potion } from "./Pickups/Potion";
 
 
 
 class Slime {
   ID = 1;
+  TextureID = Math.floor(getRandomRange(0, 2));
+
+  frameCount = 0;
   frame = 0;
   frameDelay = 10; //every x updates; the sprite turns over to the next frame
   frameLength = 8; // frames in the spritesheet
-  state = "idle";
-  mirror = false;
+  state = 0;
 
   xpValue = 3;
 
@@ -37,12 +40,12 @@ class Slime {
 
   damagable = true;
 
-  Damage = Math.round(getRandomRange(10*0.8,10*1.2));
+  Damage = Math.round(getRandomRange(10 * 0.8, 10 * 1.2));
   collisionDamageDelay = 0.5;
   nextCollisionDamage = 0;
 
   critChance = 0;
-  critLevel=0;
+  critLevel = 0;
 
 
   renderoffset = [0, 0];
@@ -66,17 +69,35 @@ class Slime {
 
   init() {
 
-   //let temp = new Bow();
-   //temp.owner = this;
-   //temp.firerate = 1;
-   //temp.active = true;
-   //this.weapons.push(temp);
+    if (this.state === 0) {
+      this.state = 1;
+
+      if (this.TextureID == 0) {
+        this.drawing.src = rightEnemy1;
+      }
+      if (this.TextureID == 1) {
+        this.drawing.src = rightEnemy2;
+      }
+    }
+
+    if (this.state === 1) {
+      this.state = 0;
+
+      if (this.TextureID == 0) {
+        this.drawing.src = leftEnemy1;
+      }
+      if (this.TextureID == 1) {
+        this.drawing.src = leftEnemy2;
+      }
+
+    }
 
   }
 
   Update(deltaTime, frameCount, target) {
 
-    this.nextCollisionDamage-=deltaTime;
+
+    this.nextCollisionDamage -= deltaTime;
 
     this.aimPoint = [target.x, target.y]
 
@@ -103,48 +124,76 @@ class Slime {
     this.xcenter = this.x - (this.width / 2);
     this.ycenter = this.y - (this.height / 2);
 
-    if(target.x > this.x) {
-      this.drawing.src=rightEnemy1;
-      //this.drawing.src=rightEnemy2;
-    } else {
-      this.drawing.src=leftEnemy1;
-      //this.drawing.src=leftEnemy2;
+
+    if (target.x > this.x) {
+
+      if (this.state === 0) {
+        this.state = 1;
+
+        if (this.TextureID == 0) {
+          this.drawing.src = rightEnemy1;
+        }
+        if (this.TextureID == 1) {
+          this.drawing.src = rightEnemy2;
+        }
+      }
+    }
+    if (target.x < this.x) {
+
+      if (this.state === 1) {
+        this.state = 0;
+
+        if (this.TextureID == 0) {
+          this.drawing.src = leftEnemy1;
+        }
+        if (this.TextureID == 1) {
+          this.drawing.src = leftEnemy2;
+        }
+
+      }
     }
 
     this.weapons.forEach(weapon => {
       weapon.Update(deltaTime, frameCount)
     });
 
-    if(Distance([this.x,this.y],[target.x,target.y])<=20 && this.nextCollisionDamage<=0){
+    if (Distance([this.x, this.y], [target.x, target.y]) <= 20 && this.nextCollisionDamage <= 0) {
       target.takeDamage(this);
-      this.nextCollisionDamage=this.collisionDamageDelay;
+      this.nextCollisionDamage = this.collisionDamageDelay;
     }
 
   };
 
   takeDamage(source) {
-    console.log(source.Damage)
 
     let temp = new DMGpopup();
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
-    temp.size = Math.sqrt(source.Damage) + 20;
+    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
-
     this.health -= source.Damage;
     if (this.health <= 0) {
+      let roll = Math.random()*100;
+      if(roll<20){
+        let h = new Potion();
+
+        h.x = this.x;
+        h.y = this.y;
+
+        this.entityRef.entityList.push(h);
+        console.log(this.entityRef)
+      }
       this.dead = true;
+      console.log(source.source.statCard)
+      source.source.statCard.kills++;
+      console.log(source)
     }
   }
 
 }
-
-
-
-
 
 export { Slime };

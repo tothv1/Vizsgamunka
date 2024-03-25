@@ -9,8 +9,12 @@ public partial class Userstat
     public int UserStatId { get; set; }
 
     public int Kills { get; set; }
-
+    
+    public int HighestKillCount { get; set; }
+    
     public int Deaths { get; set; }
+
+    public int HighestLevel { get; set; }
 
     public int Timesplayed { get; set; }
 

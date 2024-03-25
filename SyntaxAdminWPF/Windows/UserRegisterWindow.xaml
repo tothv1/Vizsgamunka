@@ -1,0 +1,28 @@
+﻿<Window x:Class="SyntaxAdminWPF.Windows.UserRegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SyntaxAdminWPF.Windows"
+        mc:Ignorable="d"
+        Title="UserRegister" Height="400" Width="400">
+    <Grid>
+        <Label Content="Username" HorizontalAlignment="Left" Margin="27,40,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_UsernameReg" HorizontalAlignment="Left" Margin="147,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="172" Height="20"/>
+
+        <Label Content="Fullname" HorizontalAlignment="Left" Margin="27,73,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="TB_FullnameReg" HorizontalAlignment="Left" Margin="147,77,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="172" Height="20"/>
+
+        <Label Content="Email" HorizontalAlignment="Left" Margin="27,108,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TB_EmailReg" HorizontalAlignment="Left" Margin="147,112,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="172" Height="20"/>
+
+        <Label Content="Password" HorizontalAlignment="Left" Margin="27,143,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="TB_PasswordReg" HorizontalAlignment="Left" Margin="147,147,0,0" VerticalAlignment="Top" Width="172" Height="20"/>
+
+        <Label Content="Password&#xD;&#xA;Repeat" HorizontalAlignment="Left" Margin="27,175,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="TB_PasswordRepeatReg" HorizontalAlignment="Left" Margin="147,184,0,0" VerticalAlignment="Top" Width="172" Height="20"/>
+
+        <Button Content="Felhasználó regisztrálásA" HorizontalAlignment="Left" Margin="57,286,0,0" VerticalAlignment="Top" Width="276" Height="47" Click="Button_Click"/>
+
+    </Grid>
+</Window>

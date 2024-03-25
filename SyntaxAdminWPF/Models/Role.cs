@@ -8,7 +8,13 @@ namespace SyntaxAdminWPF.Models
 {
     public class Role
     {
-        public int Id { get; set; }
-        public string RoleName { get; set; } = null!;
+        public int roleid { get; set; }
+        public string roleName { get; internal set; }
+
+        public override string ToString()
+        {
+            return $"{roleName}";
+        }
+
     }
 }

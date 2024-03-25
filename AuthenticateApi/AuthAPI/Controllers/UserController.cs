@@ -44,7 +44,7 @@ namespace AuthAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
         [Authorize(Roles = "Admin, User")]
         [HttpGet("users/user")]
         public async Task<ActionResult> GetUserById([FromQuery] string id)
@@ -271,12 +271,11 @@ namespace AuthAPI.Controllers
                 selectedUser.Username = updateUserDTO.Username;
                 selectedUser.Roleid = updateUserDTO.Roleid;
                 selectedUser.Fullname = updateUserDTO.Fullname;
-                selectedUser.Regdate = updateUserDTO.Regdate;
                 selectedUser.IsLoggedIn = updateUserDTO.IsLoggedIn;
 
-                selectedGameUser.Regdate = updateUserDTO.Regdate;
                 selectedGameUser.Username = updateUserDTO.Username;
                 selectedGameUser.Email = updateUserDTO.Email;
+                selectedGameUser.Roleid = updateUserDTO.Roleid;
 
                 context.Update(selectedUser);
                 await context.SaveChangesAsync();

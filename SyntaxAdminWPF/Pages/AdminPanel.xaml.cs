@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SyntaxAdminWPF.Models;
+using SyntaxAdminWPF.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace SyntaxAdminWPF.Pages
     public partial class AdminPanel : Page
     {
         private string AUTH_API_PATH = "https://localhost:7096";
-        private string GAME_API_PATH = "https://localhost:7275";
+        private string GAME_API_PATH = "https://localhost:7096";
 
         public static AdminPanel instance { get; private set; } = new AdminPanel();
 
@@ -98,14 +99,13 @@ namespace SyntaxAdminWPF.Pages
                 foreach (var role in authroles)
                 {
                     Role temp = new Role();
-                    temp.Id = role.roleid;
-                    temp.RoleName = role.roleName;
+                    temp.roleid = role.roleid;
+                    temp.roleName = role.roleName;
                     MainPage.FelhasznaloRoleok.Add(temp);
                 }
 
                 foreach (var authUser in auth_users)
                 {
-
                     User temp = new User();
                     temp.Id = authUser.userid;
                     temp.Username = authUser.username;
@@ -114,11 +114,14 @@ namespace SyntaxAdminWPF.Pages
                     temp.RegDate = authUser.regdate;
                     temp.LastLogin = DateTime.Now;
                     int roleId = authUser["roleid"];
-                    temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.Id == roleId)!.RoleName;
+                    temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.roleid == roleId)!.roleName;
                     temp.IsLoggedIn = authUser.isLoggedIn;
+                    temp.UserStatsId = 0;
                     temp.Kills = 0;
+                    temp.HighestKills = 0;
+                    temp.HighestLevel = 0;
                     temp.Deaths = 0;
-                    temp.TimesPlayed = 20;
+                    temp.TimesPlayed = 0;
                     MainPage.FelhasznaloLista.Add(temp);
                     //MessageBox.Show(temp.ToString() + "");
                 }
@@ -131,18 +134,18 @@ namespace SyntaxAdminWPF.Pages
                         if (gameUser.id == authUser.Id)
                         {
                             authUser.Kills = userStats.kills;
+                            authUser.HighestKills = userStats.highestKillCount;
+                            authUser.HighestLevel = userStats.highestLevel;
                             authUser.Deaths = userStats.deaths;
                             authUser.TimesPlayed = userStats.timesplayed;
                             authUser.LastLogin = gameUser.lastlogin;
+                            authUser.UserStatsId = gameUser.userStatsId;
                             //MessageBox.Show(gameUser + "");
                         }
                     }
-
                 }
                 Felhasznalok.instance.DG_Felhasznalok.ItemsSource = MainPage.FelhasznaloLista;
                 CollectionViewSource.GetDefaultView(Felhasznalok.instance.DG_Felhasznalok.ItemsSource).Refresh();
-                Felhasznalok.instance.DG_Felhasznalok.Items.Refresh();
-
             }
             catch (Exception ex)
             {
@@ -152,14 +155,90 @@ namespace SyntaxAdminWPF.Pages
 
         private void ButtonAchievements(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (MainPage.ResponseToken != null)
+                {
+                    NavigationService.Navigate(new Uri(".\\Pages\\Teljesitmenyek.xaml", UriKind.RelativeOrAbsolute));
 
+                    GenerateAchiData();
+                }
+                else
+                {
+                    MessageBox.Show("Sikertelen adatlekérés! Jelentkezz be újra!");
+                    NavigationService.Navigate(new Uri(".\\Pages\\Login.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Váratlan hiba: " + ex.Message);
+            }
         }
 
         private void ButtonRoles(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (MainPage.ResponseToken != null)
+                {
+                    NavigationService.Navigate(new Uri(".\\Pages\\Szerepkorok.xaml", UriKind.RelativeOrAbsolute));
+
+                    GenerateRoleData();
+                }
+                else
+                {
+                    MessageBox.Show("Sikertelen adatlekérés! Jelentkezz be újra!");
+                    NavigationService.Navigate(new Uri(".\\Pages\\Login.xaml", UriKind.RelativeOrAbsolute));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Váratlan hiba: " + ex.Message);
+            }
 
         }
 
+        public void GenerateAchiData()
+        {
+            MainPage.Teljesitmenyek.Clear();
+
+            HttpResponseMessage resultGame = GetFromGame("/Game/achievements");
+            string responseGameAchievement = resultGame.Content.ReadAsStringAsync().Result;
+
+            dynamic achievements = JsonConvert.DeserializeObject(responseGameAchievement)!;
+
+            foreach (var achi in achievements)
+            {
+                MainPage.Teljesitmenyek.Add(new Achievement
+                {
+                    Id = achi.id,
+                    achievementName = achi.achievementName,
+                });
+            }
+            Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource = MainPage.Teljesitmenyek;
+            CollectionViewSource.GetDefaultView(Teljesitmenyek.instance.DG_Teljesitmenyek.ItemsSource).Refresh();
+        }
+
+        //Szerepkörök lekérése adatbázisból és tárolása listában.
+        public void GenerateRoleData()
+        {
+            MainPage.FelhasznaloRoleok.Clear();
+
+            HttpResponseMessage resultRole = GetFromAuth("/Role/roles");
+            string responseRoles = resultRole.Content.ReadAsStringAsync().Result;
+
+            dynamic roles = JsonConvert.DeserializeObject(responseRoles)!;
+
+            foreach (var role in roles)
+            {
+                Role temp = new Role();
+                temp.roleid = role.roleid;
+                temp.roleName = role.roleName;
+                MainPage.FelhasznaloRoleok.Add(temp);
+            }
+            Szerepkorok.instance.DG_Szerepkorok.ItemsSource = MainPage.FelhasznaloRoleok;
+            CollectionViewSource.GetDefaultView(Szerepkorok.instance.DG_Szerepkorok.ItemsSource).Refresh();
+        }
 
         private HttpResponseMessage GetFromAuth(string endpoint)
         {
@@ -181,5 +260,12 @@ namespace SyntaxAdminWPF.Pages
             return request.Result;
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            UserRegisterWindow userRegister = new UserRegisterWindow();
+
+            userRegister.ShowDialog();
+
+        }
     }
 }
