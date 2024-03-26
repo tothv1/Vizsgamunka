@@ -89,13 +89,13 @@ namespace AuthAPI.Controllers
         }
 
         [HttpPut("resetPasswordRequest")]
-        public async Task<ActionResult> ResetPasswordRequest([FromBody] string email)
+        public async Task<ActionResult> ResetPasswordRequest([FromBody] ResetPasswordRequestDTO resetPasswordRequestDTO)
         {
             try
             {
                 var context = new AuthContext();
 
-                var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == email);
+                var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == resetPasswordRequestDTO.Email);
 
                 if (selectedUser == null)
                 {
@@ -106,7 +106,7 @@ namespace AuthAPI.Controllers
 
                 string mess = $"Megerősítő kód: {passwordResetKey}";
 
-                if (!emailSenderService.sendMailWithFropsiEmailServer(email, "Jelszó visszaállító", mess))
+                if (!emailSenderService.sendMailWithFropsiEmailServer(resetPasswordRequestDTO.Email, "Jelszó visszaállító", mess))
                 {
                     return Ok("A jelszó visszaállító email elküldve, ha érvényes a megadott email cím!");
                 }
@@ -126,7 +126,7 @@ namespace AuthAPI.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpPut("resetPassword")]
-        public async Task<ActionResult> ResetUserPassword([FromBody] string key)
+        public async Task<ActionResult> ResetUserPassword([FromQuery] string key)
         {
             try
             {
