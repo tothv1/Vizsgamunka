@@ -1,5 +1,5 @@
 import { Normalise, GetDirection, CreateProjectile, getRandomRange } from "../Math";
-import { Arrow } from "../Arrow";
+import { Arrow } from "../Projectiles/Arrow";
 import Render from "../../Assets/weapon/BOW1.png";
 
 class Bow {
@@ -37,7 +37,6 @@ class Bow {
 
     RecalculateStats() {
         this.Damage = this.owner.StatCard.BaseDamage * this.DamageMult * this.owner.StatCard.DamageMult;
-        console.log(this.owner)
         this.Firerate = this.BaseFirerate / (1 / this.owner.StatCard.FirerateMult);
     }
 

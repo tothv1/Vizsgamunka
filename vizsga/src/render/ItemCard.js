@@ -1,19 +1,19 @@
-import render from "../Assets/passive-items/Passive_item1.png"
 
 class ItemCard{
 
-    width = 400;
+    xOffset = 400;
+    yOffset = 200;
+
+    width = 600;
     height = 150;
 
     item = Object;
-    description = "example description";
+    card = Object;
 
     icon = new Image();
 
     init(){
-        this.icon.src = render;
-
-        
+        this.icon.src = this.card.render;
     }
 
 }

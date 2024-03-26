@@ -1,7 +1,7 @@
-import render from "../Assets/nyil.png"
+import render from "../../Assets/nyil.png"
 
-import "./Math";
-import { Translate, getRandomRange } from "./Math";
+import "../Math";
+import { Translate, getRandomRange } from "../Math";
 
 const getImg = () => {
 
@@ -42,15 +42,15 @@ class Arrow {
     frame = 0;
 
     Damage = 0;
+    Hits=[];
 
     dead = false;
 
     critLevel = 0;
-    hitlimit = 1;
+    hitlimit = 2;
 
     direction = [0, 0];
     drawing = getImg();
-
 
     Update(deltaTime, frameCount) {
 
@@ -70,12 +70,10 @@ class Arrow {
         this.x = translation[0];
         this.y = translation[1];
 
-
         this.xcenter = this.x - (this.width / 2);
         this.ycenter = this.y - (this.height / 2);
+
     };
-
-
 }
 
 export { Arrow }
