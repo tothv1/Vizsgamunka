@@ -20,4 +20,29 @@ public partial class Userstat
 
     [JsonIgnore]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+
+
+    public bool isValidName(string type)
+    {
+        return getByKey(type) != 0;
+    }
+
+    public int getByKey(string type)
+    {
+        switch (type)
+        {
+            case "kills":
+                return Kills;
+            case "deaths":
+                return Deaths;
+            case "highestkillcount":
+                return HighestKillCount;
+            case "highestlevel":
+                return HighestLevel;
+            case "timesplayed":
+                return Timesplayed;
+            default:
+                return 0;
+        }
+    }
 }
