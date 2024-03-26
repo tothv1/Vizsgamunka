@@ -97,7 +97,46 @@ namespace GameController.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, User")]
+        [HttpGet("getTopPlayers")]
+        public async Task<ActionResult> GetTopPlayersScoreboard([FromQuery] string statName, [FromQuery] int limit)
+        {
+            try
+            {
+                var context = new GameContext();
 
+                var requestedTopScoreboard = selectTopPlayers(statName, limit);
+
+                if (requestedTopScoreboard == null)
+                {
+                    return NotFound("A kért statisztika nem található");
+                }
+
+                return Ok(requestedTopScoreboard);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+        private List<User>? selectTopPlayers(string type, int limit)
+        {
+            var context = new GameContext();
+
+            var requestedUsers = context.Users.Include(s => s.UserStats).ToList();
+            
+            List<User> topPlayers = [.. requestedUsers.OrderByDescending(u => u.UserStats.getByKey(type))];
+            
+            
+
+            if (!requestedUsers[0].UserStats.isValidName(type))
+            {
+                return null;
+            }
+
+            return topPlayers.Take(limit).ToList();
+        }
 
         [HttpPost("addUser")]
         public async Task<ActionResult> AddUser(UserDTO userDTO)
@@ -197,39 +236,39 @@ namespace GameController.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-[HttpPut("adminUpdateAccountStats")]
-public async Task<ActionResult> AdminUpdateUserStat([FromBody] Userstat userstat)
-{
-    try
-    {
-
-        var context = new GameContext();
-
-        var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
-
-        if (requestedStat == null)
+        [HttpPut("adminUpdateAccountStats")]
+        public async Task<ActionResult> AdminUpdateUserStat([FromBody] Userstat userstat)
         {
-            return NotFound("A kért statisztika nem található!");
+            try
+            {
+
+                var context = new GameContext();
+
+                var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+
+                if (requestedStat == null)
+                {
+                    return NotFound("A kért statisztika nem található!");
+                }
+
+                requestedStat!.Kills = userstat.Kills;
+                requestedStat.HighestLevel = userstat.HighestLevel;
+                requestedStat.HighestKillCount = userstat.HighestKillCount;
+
+                requestedStat!.Deaths = userstat.Deaths;
+                requestedStat!.Timesplayed = userstat.Timesplayed;
+
+                context.Update(requestedStat);
+                await context.SaveChangesAsync();
+
+                return Ok("Sikeresen frissítetted a statisztikákat!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
         }
-
-        requestedStat!.Kills = userstat.Kills;
-        requestedStat.HighestLevel = userstat.HighestLevel;
-        requestedStat.HighestKillCount = userstat.HighestKillCount;
-
-        requestedStat!.Deaths = userstat.Deaths;
-        requestedStat!.Timesplayed = userstat.Timesplayed;
-
-        context.Update(requestedStat);
-        await context.SaveChangesAsync();
-
-        return Ok("Sikeresen frissítetted a statisztikákat!");
-    }
-    catch (Exception ex)
-    {
-        return BadRequest(ex.Message);
-        throw;
-    }
-}
 
 
 
