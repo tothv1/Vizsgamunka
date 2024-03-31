@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using SyntaxBackEnd.Models;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text.Json.Nodes;
@@ -36,7 +35,7 @@ namespace AuthAPI.Services.AuthServices
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
 
@@ -56,30 +55,20 @@ namespace AuthAPI.Services.AuthServices
                     Roleid = 2,
                 };
 
-                await context.AddAsync(RegisteredUser);
-                context.Registries.Remove(keyCheck);
-                await context.SaveChangesAsync();
-
-                var gameController = new GameController.Controllers.GameController();
-                var gameContext = new GameContext();
-
-                var userStat = new Userstat()
+                var userStat = new UserStat()
                 {
                     UserStatId = 0,
+                    Userid = keyCheck!.TempUserid,
                     Kills = 0,
                     Deaths = 0,
                     Timesplayed = 0,
                 };
-                var gameUser = new SyntaxBackEnd.DTOs.UserDTO()
-                {
-                    Id = keyCheck.TempUserid,
-                    Username = keyCheck.TempUsername,
-                    Email = keyCheck.TempEmail,
-                    Regdate = keyCheck.TempRegdate,
-                    UserStats = userStat,
-                };
 
-                var res =  await gameController.AddUser(gameUser);
+                await context.AddAsync(RegisteredUser);
+                await context.AddAsync(userStat);
+
+                context.Registries.Remove(keyCheck);
+                await context.SaveChangesAsync();
 
                 return ResponseObject.create("Sikeresen megerősítetted a fiókodat, mostmár beléphetsz!", 204);
 
@@ -95,7 +84,7 @@ namespace AuthAPI.Services.AuthServices
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var keyCheck = context.Registries.FirstOrDefault(key => key.TempConfirmationKey.Equals(confirmKey));
 
@@ -121,9 +110,8 @@ namespace AuthAPI.Services.AuthServices
             try
             {
                 var token = "";
-                var gameContext = new GameContext();
 
-                await using (var context = new AuthContext())
+                await using (var context = new SyntaxquestContext())
                 {
                     var user = context.RegisteredUsers.FirstOrDefault(user => user.Username == loginDto.UserName);
                     
@@ -139,12 +127,14 @@ namespace AuthAPI.Services.AuthServices
 
                     token = _tokenManager.GenerateToken(user);
                     var selectedLoggedInUser = context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid);
+                    var tokenData = _tokenManager.JwtDecode(token);
 
                     if (selectedLoggedInUser != null)
                     {
                         var oldToken = selectedLoggedInUser.Token;
                         _tokenManager.blackListToken(oldToken);
                         selectedLoggedInUser.Token = token;
+                        selectedLoggedInUser.SessionExpires = tokenData.ValidTo;
                         context.Update(selectedLoggedInUser);
                     } 
                     else
@@ -152,15 +142,13 @@ namespace AuthAPI.Services.AuthServices
                         user.IsLoggedIn = true;
                         await context.AddAsync(new LoggedInUser()
                         {
+                            LoggedIsUsersId = 0,
                             Userid = user.Userid,
+                            Username = user.Username,
+                            SessionExpires = tokenData.ValidTo,
                             Token = token
                         });
                     }
-                    var gameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email);
-                    
-                    gameUser!.Lastlogin = DateTime.Now;
-                    gameContext.Update(gameUser);
-                    gameContext.SaveChanges();
 
                     await context.SaveChangesAsync();
 
@@ -182,7 +170,7 @@ namespace AuthAPI.Services.AuthServices
             {
                 _tokenManager.blackListToken(token);
 
-                await using (var context = new AuthContext())
+                await using (var context = new SyntaxquestContext())
                 {
                     var loggedInUser = context.LoggedInUsers.FirstOrDefault(user => user.Token == token);
 
@@ -216,7 +204,7 @@ namespace AuthAPI.Services.AuthServices
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 if (!_passwordManager.PasswordMatch(register.Password, register.PasswordRepeate))
                 {
@@ -279,7 +267,7 @@ namespace AuthAPI.Services.AuthServices
         {
             try
             {
-                await using var context = new AuthContext();
+                await using var context = new SyntaxquestContext();
 
                 var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Email == unregisterDTO.Email);
 
@@ -292,16 +280,6 @@ namespace AuthAPI.Services.AuthServices
                 {
                     return ResponseObject.create("Hibás jelszó!", 400);
                 }
-
-                var gameContext = new GameContext();
-
-                var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
-
-                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserStatId == requestedGameUser!.UserStatsId);
-
-                gameContext!.Remove(requestedStat);
-                gameContext!.Remove(requestedGameUser);
-                gameContext.SaveChanges();
 
                 context.Remove(requestedUser);
                 await context.SaveChangesAsync();
@@ -319,7 +297,7 @@ namespace AuthAPI.Services.AuthServices
         {
             try
             {
-                await using var context = new AuthContext();
+                await using var context = new SyntaxquestContext();
 
                 var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Userid == userId);
 
@@ -327,15 +305,6 @@ namespace AuthAPI.Services.AuthServices
                 {
                     return ResponseObject.create("A kért felhasználó nem található", 404);
                 }
-                var gameContext = new GameContext();
-
-                var requestedGameUser = gameContext.Users.FirstOrDefault(u => u.Email == requestedUser.Email);
-
-                var requestedStat = gameContext.Userstats.FirstOrDefault(u => u.UserStatId == requestedGameUser!.UserStatsId);
-
-                gameContext!.Remove(requestedStat);
-                gameContext!.Remove(requestedGameUser);
-                gameContext.SaveChanges();
 
                 context.Remove(requestedUser);
                 await context.SaveChangesAsync();

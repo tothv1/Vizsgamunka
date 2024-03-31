@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using SyntaxBackEnd.Models;
 
 namespace AuthAPI.Controllers
 {
@@ -32,7 +31,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var users = await context.RegisteredUsers.Include(u => u.Role).ToListAsync();
 
@@ -51,7 +50,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.Include(u => u.Role).FirstOrDefaultAsync(user => user.Userid == id);
 
@@ -75,7 +74,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
 
@@ -93,7 +92,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == resetPasswordRequestDTO.Email);
 
@@ -130,7 +129,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.ChangePasswordConfirmationKey == key);
 
@@ -165,7 +164,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changePasswordDTO.Email);
 
@@ -202,7 +201,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Email == changeEmailDTO.OldEmail);
 
@@ -246,13 +245,11 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
-                var gameContext = new GameContext();
+                var context = new SyntaxquestContext();
 
                 var selectedUser = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Userid == updateUserDTO.userid);
-                var selectedGameUser = await gameContext.Users.FirstOrDefaultAsync(user => user.Id == updateUserDTO.userid);
 
-                if (selectedUser == null || selectedGameUser == null)
+                if (selectedUser == null)
                 {
                     return NotFound("A kért felhasználó nem található!");
                 }
@@ -273,15 +270,8 @@ namespace AuthAPI.Controllers
                 selectedUser.Fullname = updateUserDTO.Fullname;
                 selectedUser.IsLoggedIn = updateUserDTO.IsLoggedIn;
 
-                selectedGameUser.Username = updateUserDTO.Username;
-                selectedGameUser.Email = updateUserDTO.Email;
-                selectedGameUser.Roleid = updateUserDTO.Roleid;
-
                 context.Update(selectedUser);
                 await context.SaveChangesAsync();
-
-                gameContext.Update(selectedGameUser);
-                await gameContext.SaveChangesAsync();
 
                 return Ok("A felhasználó szerkesztése sikeresen mgtörtént!");
 

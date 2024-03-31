@@ -1,72 +1,18 @@
+using AuthAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SyntaxBackEnd.DTOs;
-using SyntaxBackEnd.Models;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace GameController.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("getUsers")]
-        public ActionResult getUsers()
-        {
-            try
-            {
-                using var context = new GameContext();
-
-                var requestedUsers = context.Users
-                    .Include(u => u.Role)
-                    .Include(s => s.UserStats)
-                    .Include(a => a.UserAchievements)
-                    .ThenInclude(a => a.UserAchievementDetails)
-                    .ThenInclude(a => a.Achievement);
-
-
-                return Ok(requestedUsers.ToList());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Sikertelen lekérdezés: " + ex.Message);
-
-            }
-        }
-
-        [Authorize(Roles = "Admin, User")]
-        [HttpGet("getUsers/user")]
-        public ActionResult GetUserById(string id)
-        {
-            try
-            {
-                using var context = new GameContext();
-
-                var requestedUser = context.Users
-                     .Include(u => u.Role)
-                     .Include(s => s.UserStats)
-                     .Include(a => a.UserAchievements)
-                     .ThenInclude(a => a.UserAchievementDetails)
-                     .ThenInclude(a => a.Achievement)
-                     .FirstOrDefault(user => user.Id == id);
-
-                if (requestedUser == null)
-                {
-                    return NotFound("A kért felhasználó nem található.");
-                }
-                return Ok(requestedUser);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(("Sikertelen lekérdezés: {0}", ex.Message));
-
-            }
-        }
 
         [Authorize(Roles = "Admin, User")]
         [HttpGet("getStats/user")]
@@ -74,15 +20,15 @@ namespace GameController.Controllers
         {
             try
             {
-                using var context = new GameContext();
+                using var context = new SyntaxquestContext();
 
-                var requestedUser = context.Users.FirstOrDefault(u => u.Id == id);
+                var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Userid == id);
 
                 if (requestedUser == null)
                 {
                     return NotFound("A keresett felhasználó nem létezik!");
                 }
-                var requestedStats = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser!.UserStatsId);
+                var requestedStats = context.UserStats.FirstOrDefault(s => s.Userid == requestedUser!.Userid);
 
                 if (requestedUser == null)
                 {
@@ -97,13 +43,12 @@ namespace GameController.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, User")]
         [HttpGet("getTopPlayers")]
         public async Task<ActionResult> GetTopPlayersScoreboard([FromQuery] string statName, [FromQuery] int limit)
         {
             try
             {
-                var context = new GameContext();
+                var context = new SyntaxquestContext();
 
                 var requestedTopScoreboard = selectTopPlayers(statName, limit);
 
@@ -120,47 +65,19 @@ namespace GameController.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        private List<User>? selectTopPlayers(string type, int limit)
+        private List<RegisteredUser>? selectTopPlayers(string type, int limit)
         {
-            var context = new GameContext();
-            var requestedUsers = context.Users.Include(s => s.UserStats).ToList();
-            
-            List<User> topPlayers = [.. requestedUsers.OrderByDescending(u => u.UserStats.getByKey(type))];
+            var context = new SyntaxquestContext();
+            var requestedUsers = context.RegisteredUsers.Include(s => s.UserStat).ToList();
 
-            if (!requestedUsers[0].UserStats.isValidName(type))
+            List<RegisteredUser> topPlayers = requestedUsers.OrderByDescending(s => s.UserStat!.GetByKey(type)).ToList();
+
+            if (!requestedUsers[0].UserStat!.IsValidName(type))
             {
                 return null;
             }
+
             return topPlayers.Take(limit).ToList();
-        }
-
-        [HttpPost("addUser")]
-        public async Task<ActionResult> AddUser(UserDTO userDTO)
-        {
-            try
-            {
-
-                var context = new GameContext();
-                var user = new User
-                {
-                    Id = userDTO.Id,
-                    Username = userDTO.Username,
-                    Email = userDTO.Email,
-                    Regdate = DateTime.Now,
-                    Role = context.Roles.First(s => s.RoleName == "User")!,
-                    UserStats = userDTO.UserStats,
-                    UserAchievements = []
-                };
-                await context.Users.AddAsync(user);
-                await context.SaveChangesAsync();
-
-                return Ok("Felhasználó létrehozva.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-                throw;
-            }
         }
 
         [Authorize(Roles = "Admin, User")]
@@ -170,18 +87,20 @@ namespace GameController.Controllers
             try
             {
 
-                var context = new GameContext();
+                var context = new SyntaxquestContext();
 
-                var requestedUser = context.Users.FirstOrDefault(u => u.Id == userId);
+                var requestedUser = context.RegisteredUsers.FirstOrDefault(u => u.Userid == userId);
 
                 if (requestedUser == null)
                 {
                     return NotFound("A kért felhasználó nem található!");
                 }
 
-                var requestedStat = context.Userstats.FirstOrDefault(s => s.UserStatId == requestedUser.UserStatsId);
+                var requestedStat = context.UserStats.FirstOrDefault(s => s.Userid == requestedUser.Userid);
 
                 requestedStat!.Kills = 0;
+                requestedStat.HighestLevel = 0;
+                requestedStat.HighestKillCount = 0;
                 requestedStat.Deaths = 0;
                 requestedStat.Timesplayed = 0;
 
@@ -198,19 +117,19 @@ namespace GameController.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpPut("updateAccountStats")]
-        public async Task<ActionResult> UpdateUserStat([FromBody] Userstat userstat)
+        public async Task<ActionResult> UpdateUserStat([FromBody] UserStat userstat)
         {
             try
             {
+                var context = new SyntaxquestContext();
 
-                var context = new GameContext();
-
-                var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+                var requestedStat = context.UserStats.FirstOrDefault(u => u.Userid == userstat.Userid);
 
                 if (requestedStat == null)
                 {
                     return NotFound("A kért statisztika nem található!");
                 }
+                userstat.UserStatId = requestedStat.UserStatId;
 
                 requestedStat!.Kills += userstat.Kills;
                 requestedStat.HighestLevel = Math.Max(userstat.HighestLevel, requestedStat.HighestLevel);
@@ -233,14 +152,14 @@ namespace GameController.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("adminUpdateAccountStats")]
-        public async Task<ActionResult> AdminUpdateUserStat([FromBody] Userstat userstat)
+        public async Task<ActionResult> AdminUpdateUserStat([FromBody] UserStat userstat)
         {
             try
             {
 
-                var context = new GameContext();
+                var context = new SyntaxquestContext();
 
-                var requestedStat = context.Userstats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+                var requestedStat = context.UserStats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
 
                 if (requestedStat == null)
                 {

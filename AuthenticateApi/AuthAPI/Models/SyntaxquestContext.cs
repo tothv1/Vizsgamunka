@@ -5,16 +5,18 @@ using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace AuthAPI.Models;
 
-public partial class AuthContext : DbContext
+public partial class SyntaxquestContext : DbContext
 {
-    public AuthContext()
+    public SyntaxquestContext()
     {
     }
 
-    public AuthContext(DbContextOptions<AuthContext> options)
+    public SyntaxquestContext(DbContextOptions<SyntaxquestContext> options)
         : base(options)
     {
     }
+
+    public virtual DbSet<Achievement> Achievements { get; set; }
 
     public virtual DbSet<BlacklistedToken> BlacklistedTokens { get; set; }
 
@@ -28,23 +30,51 @@ public partial class AuthContext : DbContext
 
     public virtual DbSet<TempRole> TempRoles { get; set; }
 
+    public virtual DbSet<UserAchievement> UserAchievements { get; set; }
+
+    public virtual DbSet<UserStat> UserStats { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;user id=root;database=auth", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+             .AddJsonFile("appsettings.json")
+             .Build();
+            string connectionString = configuration.GetConnectionString("Connection")!;
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_general_ci")
-            .HasCharSet("utf8mb4");
+            .UseCollation("utf8_hungarian_ci")
+            .HasCharSet("utf8");
+
+        modelBuilder.Entity<Achievement>(entity =>
+        {
+            entity.HasKey(e => e.AchievementId).HasName("PRIMARY");
+
+            entity.ToTable("achievements");
+
+            entity.HasIndex(e => e.AchievementName, "achievement_name").IsUnique();
+
+            entity.Property(e => e.AchievementId)
+                .HasColumnType("int(11)")
+                .HasColumnName("achievement_id");
+            entity.Property(e => e.AchievementName)
+                .HasMaxLength(254)
+                .HasColumnName("achievement_name");
+        });
 
         modelBuilder.Entity<BlacklistedToken>(entity =>
         {
             entity.HasKey(e => e.TokenId).HasName("PRIMARY");
 
-            entity
-                .ToTable("blacklisted_tokens")
-                .UseCollation("utf8mb4_hungarian_ci");
+            entity.ToTable("blacklisted_tokens");
 
             entity.HasIndex(e => e.Token, "token").IsUnique();
 
@@ -61,25 +91,38 @@ public partial class AuthContext : DbContext
 
         modelBuilder.Entity<LoggedInUser>(entity =>
         {
-            entity.HasKey(e => e.Userid).HasName("PRIMARY");
+            entity.HasKey(e => e.LoggedIsUsersId).HasName("PRIMARY");
 
             entity.ToTable("logged_in_users");
 
-            entity.Property(e => e.Userid)
-                .HasMaxLength(254)
-                .HasColumnName("userid");
+            entity.HasIndex(e => e.Userid, "userid");
+
+            entity.Property(e => e.LoggedIsUsersId)
+                .HasColumnType("int(11)")
+                .HasColumnName("logged_is_users_id");
+            entity.Property(e => e.SessionExpires)
+                .HasColumnType("datetime")
+                .HasColumnName("sessionExpires");
             entity.Property(e => e.Token)
                 .HasColumnType("text")
                 .HasColumnName("token");
+            entity.Property(e => e.Userid)
+                .HasMaxLength(254)
+                .HasColumnName("userid");
+            entity.Property(e => e.Username)
+                .HasMaxLength(254)
+                .HasColumnName("username");
+
+            entity.HasOne(d => d.User).WithMany(p => p.LoggedInUsers)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("logged_in_users_ibfk_1");
         });
 
         modelBuilder.Entity<RegisteredUser>(entity =>
         {
             entity.HasKey(e => e.Userid).HasName("PRIMARY");
 
-            entity
-                .ToTable("registered_users")
-                .UseCollation("utf8mb4_hungarian_ci");
+            entity.ToTable("registered_users");
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
@@ -89,28 +132,23 @@ public partial class AuthContext : DbContext
 
             entity.Property(e => e.Userid)
                 .HasMaxLength(254)
-                .HasColumnName("userid")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("userid");
             entity.Property(e => e.ChangePasswordConfirmationKey)
                 .HasColumnType("text")
                 .HasColumnName("change_password_confirmation_key");
             entity.Property(e => e.Email)
                 .HasMaxLength(64)
-                .HasColumnName("email")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("email");
             entity.Property(e => e.Fullname)
                 .HasMaxLength(254)
-                .HasColumnName("fullname")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("fullname");
             entity.Property(e => e.Hash)
                 .HasColumnType("text")
-                .HasColumnName("hash")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("hash");
             entity.Property(e => e.IsLoggedIn).HasColumnName("is_logged_in");
+            entity.Property(e => e.Lastlogin)
+                .HasColumnType("datetime")
+                .HasColumnName("lastlogin");
             entity.Property(e => e.Regdate)
                 .HasColumnType("datetime")
                 .HasColumnName("regdate");
@@ -120,9 +158,7 @@ public partial class AuthContext : DbContext
                 .HasColumnName("roleid");
             entity.Property(e => e.Username)
                 .HasMaxLength(64)
-                .HasColumnName("username")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("username");
 
             entity.HasOne(d => d.Role).WithMany(p => p.RegisteredUsers)
                 .HasForeignKey(d => d.Roleid)
@@ -134,9 +170,7 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.TempUserid).HasName("PRIMARY");
 
-            entity
-                .ToTable("registry")
-                .UseCollation("utf8mb4_hungarian_ci");
+            entity.ToTable("registry");
 
             entity.HasIndex(e => e.TempEmail, "temp_email").IsUnique();
 
@@ -152,19 +186,13 @@ public partial class AuthContext : DbContext
                 .HasColumnName("temp_confirmation_key");
             entity.Property(e => e.TempEmail)
                 .HasMaxLength(64)
-                .HasColumnName("temp_email")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("temp_email");
             entity.Property(e => e.TempFullname)
                 .HasMaxLength(254)
-                .HasColumnName("temp_fullname")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("temp_fullname");
             entity.Property(e => e.TempHash)
                 .HasColumnType("text")
-                .HasColumnName("temp_hash")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("temp_hash");
             entity.Property(e => e.TempRegdate)
                 .HasColumnType("datetime")
                 .HasColumnName("temp_regdate");
@@ -176,9 +204,7 @@ public partial class AuthContext : DbContext
                 .HasColumnName("temp_user_expire");
             entity.Property(e => e.TempUsername)
                 .HasMaxLength(64)
-                .HasColumnName("temp_username")
-                .UseCollation("utf8_hungarian_ci")
-                .HasCharSet("utf8");
+                .HasColumnName("temp_username");
 
             entity.HasOne(d => d.TempRole).WithMany(p => p.Registries)
                 .HasForeignKey(d => d.TempRoleid)
@@ -189,9 +215,7 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.Roleid).HasName("PRIMARY");
 
-            entity
-                .ToTable("roles")
-                .UseCollation("utf8mb4_hungarian_ci");
+            entity.ToTable("roles");
 
             entity.HasIndex(e => e.RoleName, "role_name").IsUnique();
 
@@ -207,9 +231,7 @@ public partial class AuthContext : DbContext
         {
             entity.HasKey(e => e.TempRoleId).HasName("PRIMARY");
 
-            entity
-                .ToTable("temp_roles")
-                .UseCollation("utf8mb4_hungarian_ci");
+            entity.ToTable("temp_roles");
 
             entity.Property(e => e.TempRoleId)
                 .HasColumnType("int(11)")
@@ -217,6 +239,73 @@ public partial class AuthContext : DbContext
             entity.Property(e => e.RoleName)
                 .HasMaxLength(16)
                 .HasColumnName("role_name");
+        });
+
+        modelBuilder.Entity<UserAchievement>(entity =>
+        {
+            entity.HasKey(e => e.UserAchievementId).HasName("PRIMARY");
+
+            entity.ToTable("user_achievements");
+
+            entity.HasIndex(e => e.AchievementId, "achievement_id");
+
+            entity.HasIndex(e => e.Userid, "userid");
+
+            entity.Property(e => e.UserAchievementId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_achievement_id");
+            entity.Property(e => e.AchievementDate)
+                .HasColumnType("datetime")
+                .HasColumnName("achievement_date");
+            entity.Property(e => e.AchievementId)
+                .HasColumnType("int(11)")
+                .HasColumnName("achievement_id");
+            entity.Property(e => e.Userid)
+                .HasMaxLength(254)
+                .HasColumnName("userid");
+
+            entity.HasOne(d => d.Achievement).WithMany(p => p.UserAchievements)
+                .HasForeignKey(d => d.AchievementId)
+                .HasConstraintName("user_achievements_ibfk_2");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserAchievements)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("user_achievements_ibfk_1");
+        });
+
+        modelBuilder.Entity<UserStat>(entity =>
+        {
+            entity.HasKey(e => e.UserStatId).HasName("PRIMARY");
+
+            entity.ToTable("user_stats");
+
+            entity.HasIndex(e => e.Userid, "userid").IsUnique();
+
+            entity.Property(e => e.UserStatId)
+                .HasColumnType("int(11)")
+                .HasColumnName("user_stat_id");
+            entity.Property(e => e.Deaths)
+                .HasColumnType("int(11)")
+                .HasColumnName("deaths");
+            entity.Property(e => e.HighestKillCount)
+                .HasColumnType("int(11)")
+                .HasColumnName("highestKillCount");
+            entity.Property(e => e.HighestLevel)
+                .HasColumnType("int(11)")
+                .HasColumnName("highestLevel");
+            entity.Property(e => e.Kills)
+                .HasColumnType("int(11)")
+                .HasColumnName("kills");
+            entity.Property(e => e.Timesplayed)
+                .HasColumnType("int(11)")
+                .HasColumnName("timesplayed");
+            entity.Property(e => e.Userid)
+                .HasMaxLength(254)
+                .HasColumnName("userid");
+
+            entity.HasOne(d => d.User).WithOne(p => p.UserStat)
+                .HasForeignKey<UserStat>(d => d.Userid)
+                .HasConstraintName("user_stats_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);
