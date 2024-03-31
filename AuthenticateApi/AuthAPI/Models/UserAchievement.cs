@@ -4,17 +4,17 @@ using System.Text.Json.Serialization;
 
 namespace AuthAPI.Models;
 
-public partial class LoggedInUser
+public partial class UserAchievement
 {
-    public int LoggedIsUsersId { get; set; }
+    public int UserAchievementId { get; set; }
 
     public string Userid { get; set; } = null!;
 
-    public string Username { get; set; } = null!;
+    public int AchievementId { get; set; }
 
-    public string Token { get; set; } = null!;
+    public DateTime AchievementDate { get; set; }
 
-    public DateTime? SessionExpires { get; set; }
+    public virtual Achievement Achievement { get; set; } = null!;
 
     [JsonIgnore]
     public virtual RegisteredUser User { get; set; } = null!;

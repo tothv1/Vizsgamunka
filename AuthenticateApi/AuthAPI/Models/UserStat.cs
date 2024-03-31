@@ -1,32 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace SyntaxBackEnd.Models;
+namespace AuthAPI.Models;
 
-public partial class Userstat
+public partial class UserStat
 {
     public int UserStatId { get; set; }
 
+    public string Userid { get; set; } = null!;
+
     public int Kills { get; set; }
-    
-    public int HighestKillCount { get; set; }
-    
+
     public int Deaths { get; set; }
+
+    public int HighestKillCount { get; set; }
 
     public int HighestLevel { get; set; }
 
     public int Timesplayed { get; set; }
 
     [JsonIgnore]
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual RegisteredUser User { get; set; } = null!;
 
-    public bool isValidName(string type)
+    public bool IsValidName(string type)
     {
-        return getByKey(type) != 0;
+        PropertyInfo[] properties = typeof(UserStat).GetProperties();
+        return properties.First(s => s.Name.ToLower() == type.ToLower()) != null;
     }
 
-    public int getByKey(string type)
+    public int GetByKey(string type)
     {
         switch (type)
         {
@@ -44,5 +48,4 @@ public partial class Userstat
                 return 0;
         }
     }
-
 }
