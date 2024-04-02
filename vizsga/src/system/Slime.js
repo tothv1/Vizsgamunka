@@ -4,7 +4,7 @@ import rightEnemy1 from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 import leftEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-left.png";
 import rightEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-right.png";
 
-import { GetDirection, Normalise, Translate, getRandomRange, Distance } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange, Distance, CheckCollision } from "./Math";
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 import { Potion } from "./Pickups/Potion";
@@ -118,11 +118,16 @@ class Slime {
 
     let translation = Translate([this.x, this.y], [normDir[0] * this.speed * deltaTime, normDir[1] * this.speed * deltaTime]);
 
-    this.x = translation[0];
-    this.y = translation[1];
 
-    this.xcenter = this.x - (this.width / 2);
-    this.ycenter = this.y - (this.height / 2);
+      this.x = translation[0];
+      this.y = translation[1];
+  
+      this.xcenter = this.x - (this.width / 2);
+      this.ycenter = this.y - (this.height / 2);
+    
+    
+
+
 
 
     if (target.x > this.x) {
@@ -188,9 +193,7 @@ class Slime {
         console.log(this.entityRef)
       }
       this.dead = true;
-      console.log(source.source.statCard)
-      source.source.statCard.kills++;
-      console.log(source)
+      source.source.GameStatCard.kills++;
     }
   }
 

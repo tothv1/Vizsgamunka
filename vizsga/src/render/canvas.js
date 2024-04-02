@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { rawMaps } from '../Assets/map/maps';
 
 import { Slime, xd } from '../system/Slime';
@@ -6,12 +6,13 @@ import { Wall } from '../system/StoneWall';
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
-import { Clamp, Normalise, CheckCollision, getRandomRange } from '../system/Math';
+import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside } from '../system/Math';
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
-import { Potion } from '../system/Pickups/Potion';
+import { ItemCard } from './ItemCard';
+import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -22,6 +23,14 @@ let entities = [];
 
 let gameTime = 0;
 let paused = false;
+let pauseBlock = false;
+
+let lvlUpCards = [];
+let selectedCard = null;
+
+function setPause(state) {
+  paused = state;
+}
 
 const Canvas = props => {
 
@@ -154,7 +163,7 @@ const Canvas = props => {
     ctx.save();
 
 
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.7;
 
     ctx.fillStyle = 'black';
     ctx.beginPath();
@@ -164,8 +173,92 @@ const Canvas = props => {
 
     ctx.globalAlpha = 1.0;
 
+    ctx.restore();
+  }
+
+  const drawItemPickUI = (ctx, cards, statcard) => {
+
+    ctx.save();
+
+    let cardLock = false;
+
+    ctx.globalAlpha = 1.0;
+
+    ctx.font = `15px Joystix Monospace`;
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`ATK: ${Math.floor(statcard.DamageMult * 100)}%`, 50, 300);
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`ATK: ${Math.floor(statcard.DamageMult * 100)}%`, 50, 300);
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`HP: ${Math.floor(statcard.MaxHealth)}`, 50, 315);
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`HP: ${Math.floor(statcard.MaxHealth)}`, 50, 315);
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`CC: ${Math.floor(statcard.critChance)}%`, 50, 330);
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`CC: ${Math.floor(statcard.critChance)}%`, 50, 330);
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`CD: ${Math.floor(statcard.critDamageMult * 100)}%`, 50, 345);
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`CD: ${Math.floor(statcard.critDamageMult * 100)}%`, 50, 345);
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`AS: ${Math.floor(statcard.FirerateMult * 100)}%`, 50, 360);
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`AS: ${Math.floor(statcard.FirerateMult * 100)}%`, 50, 360);
+
+    for (let index = 0; index < 3; index++) {
+
+
+      if(CheckInside([aimpoint[0]-windowSize[0],aimpoint[1]-windowSize[1]],cards[index])){
+
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = 'yellow';
+
+        ctx.beginPath();
+        ctx.strokeRect(cards[index].xOffset, cards[index].yOffset, cards[index].width, cards[index].height)
+        ctx.closePath();
+        ctx.fill();
+
+
+
+        if(!cardLock){
+          selectedCard=cards[index];
+          cardLock=true;
+        }
+
+        ctx.lineWidth = 1;
+
+      }else if(!cardLock){
+
+        selectedCard=null;
+      }
+      ctx.lineWidth = 1;
+
+      ctx.fillStyle = 'gray';
+      ctx.beginPath();
+      ctx.rect(cards[index].xOffset, cards[index].yOffset, cards[index].width, cards[index].height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.drawImage(cards[index].icon, cards[index].xOffset + 10, cards[index].yOffset + 10);
+
+      ctx.font = `15px Joystix Monospace`;
+
+      ctx.fillStyle = 'white';
+      ctx.fillText(`${cards[index].card.Description}`, cards[index].xOffset + 80, cards[index].yOffset + 30);
+
+      ctx.strokeStyle = 'black'
+      ctx.strokeText(`${cards[index].card.Description}`, cards[index].xOffset + 80, cards[index].yOffset + 30);
+
+    }
 
     ctx.restore();
+
   }
 
 
@@ -177,6 +270,8 @@ const Canvas = props => {
     windowSize = [rect.left, rect.top]
 
     // init
+
+
 
     entities.projectileList = [];
     entities.tileList = [];
@@ -192,8 +287,10 @@ const Canvas = props => {
     playerRef.mapsize = mapsize;
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
-    playerRef.tokenData=props.tokendata;
-    playerRef.statCard.userStatId=props.tokendata.userStatId;
+    playerRef.tokenData = props.tokendata;
+    playerRef.GameStatCard.userStatId = props.tokendata.userStatId;
+    playerRef.SetPause = setPause;
+
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -201,6 +298,8 @@ const Canvas = props => {
     playerRef.canvasRef = canvasRef.current;
 
     entities.entityList.push(playerRef);
+
+    playerRef.RecalcStats();
 
     console.log(playerRef);
 
@@ -238,16 +337,22 @@ const Canvas = props => {
     //eventek playernek
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && !pauseBlock) {
         paused = !paused;
       }
       playerRef.keyhandler(event)
     });
     document.addEventListener("keyup", (event) => {
       playerRef.keyhandler(event)
+      playerRef.ItemPick(event);
     });
     document.addEventListener("mousedown", (event) => {
       playerRef.keyhandler(event)
+
+      if(selectedCard!=null){
+        playerRef.ItemPick(event,selectedCard);
+        playerRef.RecalcStats();
+      }
     });
     document.addEventListener("mouseup", (event) => {
       playerRef.keyhandler(event)
@@ -255,6 +360,8 @@ const Canvas = props => {
     document.addEventListener("mousemove", (event) => {
       aimpoint = [event.pageX, event.pageY];
       playerRef.aimPoint = aimpoint;
+
+      
     });
 
     //console.log(entities)
@@ -270,17 +377,16 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-      if  (playerRef.dead){
-        paused=true;
+      if (playerRef.dead) {
+        paused = true;
       }
 
-      if (!paused){
+      if (!paused) {
         gameTime += deltaTime;
       }
-      
+
       // setting offsets
       renderOffset = [Clamp(playerRef.x - gameSize[0] / 2, 0, (rawmap[0].length * 64) - gameSize[0]), Clamp(playerRef.y - gameSize[1] / 2, 0, (rawmap.length * 64) - gameSize[1])]
-
       renderOffset = [-renderOffset[0], -renderOffset[1]]
 
       // tile update
@@ -297,15 +403,21 @@ const Canvas = props => {
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset);
         if (item.damagable) {
+
           drawHPBar(context, item.hpbar, item.offset);
-          item.hpbar.setval(item.maxHealth, item.health);
+          if (item.StatCard != undefined) {
+            item.hpbar.setval(item.StatCard.MaxHealth, item.StatCard.Health);
+
+          } else {
+            item.hpbar.setval(item.maxHealth, item.health);
+          }
         }
 
-        if(paused){return;}
+        if (paused) { return; }
 
         item.renderoffset = renderOffset;
         item.Update(deltaTime, frameCount, playerRef);
-        
+
 
         if (item.dead && item.xpValue != undefined) {
 
@@ -321,15 +433,13 @@ const Canvas = props => {
 
       });
 
-
-
       //projectile update
       entities.projectileList.forEach(item => {
 
         item.offset = [item.xcenter + renderOffset[0], item.ycenter + renderOffset[1]];
         draw(context, item, item.offset)
 
-        if(paused){return;}
+        if (paused) { return; }
 
 
         item.Update(deltaTime, frameCount);
@@ -337,10 +447,11 @@ const Canvas = props => {
         entities.entityList.forEach(element => {
           if (!element.damagable) { return; }
 
-          if (CheckCollision(item, element) && item.hitlimit > 0) {
+          if (CheckCollision(item, element) && item.hitlimit > 0 && !item.Hits.includes(element)) {
 
             item.hitlimit--;
             element.takeDamage(item);
+            item.Hits.push(element);
 
             if (item.hitlimit <= 0) {
               item.dead = true;
@@ -361,7 +472,7 @@ const Canvas = props => {
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         drawText(context, item, item.offset);
 
-        if (paused) {return;}
+        if (paused) { return; }
 
 
         item.Update(deltaTime, frameCount);
@@ -370,14 +481,43 @@ const Canvas = props => {
         }
       });
 
-      //UI Update
 
-      drawXPBar(context, playerRef)
+
+
+
 
       //paused UI
 
-      if(paused){
-      drawPausedUI(context,playerRef)}
+      if (paused) {
+        drawPausedUI(context, playerRef)
+      }
+
+      //UI Update
+
+      drawXPBar(context, playerRef)
+      
+      //Item select UI
+      if (playerRef.ItemPicks > 0) {
+
+        if (lvlUpCards.length == 0) {
+          for (let i = 0; i < 3; i++) {
+            let card = new ItemCard();
+            card.card = new BaseDMGItemCard();
+            card.item = new BaseDMGItem();
+            card.yOffset = 200 + (card.height + 30) * i;
+            card.init();
+            lvlUpCards.push(card);
+          }
+          playerRef.LVLUpCards=lvlUpCards;
+        }
+        
+        pauseBlock = true;
+        paused = true;
+        drawItemPickUI(context, lvlUpCards, playerRef.StatCard)
+      } else {
+        lvlUpCards = []
+        pauseBlock = false;
+      }
 
       lastUpdateTime = window.performance.now();
       if (!paused) {
