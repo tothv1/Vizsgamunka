@@ -288,7 +288,8 @@ const Canvas = props => {
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
     playerRef.tokenData = props.tokendata;
-    playerRef.GameStatCard.userStatId = props.tokendata.userStatId;
+    console.log(props.tokendata)
+    playerRef.GameStatCard.userid = props.tokendata.userId;
     playerRef.SetPause = setPause;
 
 
