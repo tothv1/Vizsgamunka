@@ -1,3 +1,4 @@
+using AuthAPI.DTOs;
 using AuthAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,6 @@ namespace GameController.Controllers
                 {
                     return NotFound("A kért statisztika nem található");
                 }
-
                 return Ok(requestedTopScoreboard);
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace GameController.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpPut("updateAccountStats")]
-        public async Task<ActionResult> UpdateUserStat([FromBody] UserStat userstat)
+        public async Task<ActionResult> UpdateUserStat([FromBody] UpdateUserStatsDTO userstat)
         {
             try
             {
@@ -129,12 +129,11 @@ namespace GameController.Controllers
                 {
                     return NotFound("A kért statisztika nem található!");
                 }
-                userstat.UserStatId = requestedStat.UserStatId;
 
+                requestedStat!.Userid = userstat.Userid;
                 requestedStat!.Kills += userstat.Kills;
                 requestedStat.HighestLevel = Math.Max(userstat.HighestLevel, requestedStat.HighestLevel);
                 requestedStat.HighestKillCount = Math.Max(userstat.Kills, requestedStat.HighestKillCount);
-
                 requestedStat!.Deaths += 1;
                 requestedStat!.Timesplayed += 1;
 
@@ -152,14 +151,14 @@ namespace GameController.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("adminUpdateAccountStats")]
-        public async Task<ActionResult> AdminUpdateUserStat([FromBody] UserStat userstat)
+        public async Task<ActionResult> AdminUpdateUserStat([FromBody] UpdateUserStatsDTO userstat)
         {
             try
             {
 
                 var context = new SyntaxquestContext();
 
-                var requestedStat = context.UserStats.FirstOrDefault(u => u.UserStatId == userstat.UserStatId);
+                var requestedStat = context.UserStats.FirstOrDefault(u => u.Userid == userstat.Userid);
 
                 if (requestedStat == null)
                 {

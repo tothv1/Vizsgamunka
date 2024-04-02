@@ -36,7 +36,6 @@ namespace AuthAPI.Services.TokenManager
     
                 //Token tartalma
                 new Claim("userId",registeredUser.Userid),
-                new Claim("userStatId", context.RegisteredUsers.Include(s => s.UserStat).FirstOrDefault(s => s.Userid == registeredUser.Userid)!.UserStat!.UserStatId.ToString()),
                 new Claim("username",registeredUser.Username),
                 new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
                 new Claim("userRegdate",registeredUser.Regdate.ToString())
@@ -70,7 +69,7 @@ namespace AuthAPI.Services.TokenManager
             {
                 //Token tartalma
 
-                new Claim("userid",registeredUser.UserId),
+                new Claim("userId",registeredUser.UserId),
                 new Claim("username",registeredUser.Username),
                 new Claim("fullname", registeredUser.Fullname),
                 new Claim("email", registeredUser.Email),
