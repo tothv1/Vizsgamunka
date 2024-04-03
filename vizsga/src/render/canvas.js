@@ -6,7 +6,7 @@ import { Wall } from '../system/StoneWall';
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
-import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside } from '../system/Math';
+import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside, randomTest } from '../system/Math';
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
@@ -14,6 +14,12 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from './ItemCard';
 import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
+<<<<<<< Updated upstream
+=======
+import Inventory from '../system/Inventory';
+import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
+
+>>>>>>> Stashed changes
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
 let windowSize = [0, 0];
@@ -288,7 +294,11 @@ const Canvas = props => {
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
     playerRef.tokenData = props.tokendata;
+<<<<<<< Updated upstream
     playerRef.GameStatCard.userStatId = props.tokendata.userStatId;
+=======
+    playerRef.GameStatCard.userid = props.tokendata.userId;
+>>>>>>> Stashed changes
     playerRef.SetPause = setPause;
 
 
@@ -502,8 +512,17 @@ const Canvas = props => {
         if (lvlUpCards.length == 0) {
           for (let i = 0; i < 3; i++) {
             let card = new ItemCard();
-            card.card = new BaseDMGItemCard();
-            card.item = new BaseDMGItem();
+
+            if (randomTest()){
+              card.card = new BaseDMGItemCard();
+              card.item = new BaseDMGItem();
+            }else{
+              card.card = new CritItemCard();
+              card.item = new CritItem();
+            }
+
+
+
             card.yOffset = 200 + (card.height + 30) * i;
             card.init();
             lvlUpCards.push(card);
@@ -536,6 +555,10 @@ const Canvas = props => {
   return (
     <div className={"d-flex align-items-center justify-content-center vh-100"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
+<<<<<<< Updated upstream
+=======
+<Inventory />
+>>>>>>> Stashed changes
     </div>
   )
 }

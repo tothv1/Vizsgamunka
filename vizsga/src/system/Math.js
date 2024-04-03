@@ -121,3 +121,11 @@ export function CreateRandomDirection() {
     return [c, s];
 
 }
+
+export function randomTest(){
+    let test = Math.random();
+    if(test<0.5){
+        return true;
+    }
+    return false;
+}
