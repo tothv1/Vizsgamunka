@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import '../public/index.css';
 
 const Login = () => {
     return (
