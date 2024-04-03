@@ -14,6 +14,8 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from './ItemCard';
 import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
+import Inventory from './inventory';
+
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
 let windowSize = [0, 0];
@@ -537,6 +539,7 @@ const Canvas = props => {
   return (
     <div className={"d-flex align-items-center justify-content-center vh-100"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
+      <Inventory />
     </div>
   )
 }
