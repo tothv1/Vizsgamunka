@@ -33,7 +33,11 @@ namespace AuthAPI.Controllers
             {
                 var context = new SyntaxquestContext();
 
-                var users = await context.RegisteredUsers.Include(u => u.Role).ToListAsync();
+                var users = await context.RegisteredUsers
+                    .Include(u => u.Role)
+                    .Include(s => s.UserStat)
+                    .Include(s => s.UserAchievements)
+                    .ThenInclude(s => s.Achievement).ToListAsync();
 
                 return Ok(users);
 
@@ -52,7 +56,11 @@ namespace AuthAPI.Controllers
             {
                 var context = new SyntaxquestContext();
 
-                var selectedUser = await context.RegisteredUsers.Include(u => u.Role).FirstOrDefaultAsync(user => user.Userid == id);
+                var selectedUser = await context.RegisteredUsers
+                    .Include(u => u.Role)
+                    .Include(s => s.UserStat)
+                    .Include(s => s.UserAchievements)
+                    .ThenInclude(s => s.Achievement).FirstOrDefaultAsync(user => user.Userid == id);
 
                 if (selectedUser == null)
                 {
@@ -76,7 +84,11 @@ namespace AuthAPI.Controllers
             {
                 var context = new SyntaxquestContext();
 
-                var users = await context.RegisteredUsers.Include(u => u.Role).Where(u => u.IsLoggedIn == isActive).ToListAsync();
+                var users = await context.RegisteredUsers
+                    .Include(u => u.Role)
+                    .Include(s => s.UserStat)
+                    .Include(s => s.UserAchievements)
+                    .ThenInclude(s => s.Achievement).Where(u => u.IsLoggedIn == isActive).ToListAsync();
 
                 return Ok(users);
 
