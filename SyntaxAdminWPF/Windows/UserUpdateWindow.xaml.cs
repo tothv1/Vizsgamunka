@@ -61,6 +61,7 @@ namespace SyntaxAdminWPF.Windows
                     updateUserDTO.userid = selectedUser.Id;
 
                     UserStats userStats = new UserStats();
+                    userStats.userid = selectedUser.Id;
                     userStats.userStatId = selectedUser.UserStatsId;
                     userStats.Kills = int.Parse(TB_Kills.Text);
                     userStats.highestKillCount = int.Parse(TB_HighestKills.Text);
