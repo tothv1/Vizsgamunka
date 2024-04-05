@@ -129,17 +129,22 @@ namespace AuthAPI.Services.AuthServices
                     var selectedLoggedInUser = context.LoggedInUsers.FirstOrDefault(u => u.Userid == user.Userid);
                     var tokenData = _tokenManager.JwtDecode(token);
 
+                    user.IsLoggedIn = true;
+                    user.Lastlogin = DateTime.Now;
+
+                    context.Update(user);
+
                     if (selectedLoggedInUser != null)
                     {
-                        var oldToken = selectedLoggedInUser.Token;
-                        _tokenManager.blackListToken(oldToken);
+                        _tokenManager.blackListToken(selectedLoggedInUser.Token);
                         selectedLoggedInUser.Token = token;
                         selectedLoggedInUser.SessionExpires = tokenData.ValidTo;
                         context.Update(selectedLoggedInUser);
                     } 
                     else
                     {
-                        user.IsLoggedIn = true;
+                        
+
                         await context.AddAsync(new LoggedInUser()
                         {
                             LoggedIsUsersId = 0,
@@ -149,6 +154,8 @@ namespace AuthAPI.Services.AuthServices
                             Token = token
                         });
                     }
+
+                    
 
                     await context.SaveChangesAsync();
 
