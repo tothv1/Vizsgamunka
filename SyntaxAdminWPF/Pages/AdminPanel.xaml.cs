@@ -27,7 +27,6 @@ namespace SyntaxAdminWPF.Pages
     public partial class AdminPanel : Page
     {
         private string AUTH_API_PATH = "https://localhost:7096";
-        private string GAME_API_PATH = "https://localhost:7096";
 
         public static AdminPanel instance { get; private set; } = new AdminPanel();
 
@@ -83,14 +82,10 @@ namespace SyntaxAdminWPF.Pages
                 HttpResponseMessage resultAuth = GetFromAuth("/User/users");
                 string responseAuthBody = resultAuth.Content.ReadAsStringAsync().Result;
 
-                HttpResponseMessage resultGame = GetFromGame("/Game/getUsers");
-                string responseGameBody = resultGame.Content.ReadAsStringAsync().Result;
-
                 HttpResponseMessage resultRoles = GetFromAuth("/Role/Roles");
                 string responseRoleBody = resultRoles.Content.ReadAsStringAsync().Result;
 
                 dynamic auth_users = JsonConvert.DeserializeObject(responseAuthBody)!;
-                dynamic game_users = JsonConvert.DeserializeObject(responseGameBody)!;
                 dynamic authroles = JsonConvert.DeserializeObject(responseRoleBody)!;
 
                 MainPage.FelhasznaloLista.Clear();
@@ -112,37 +107,17 @@ namespace SyntaxAdminWPF.Pages
                     temp.FullName = authUser.fullname;
                     temp.Email = authUser.email;
                     temp.RegDate = authUser.regdate;
-                    temp.LastLogin = DateTime.Now;
+                    temp.LastLogin = authUser.lastlogin;
                     int roleId = authUser["roleid"];
                     temp.UserRole = MainPage.FelhasznaloRoleok.FirstOrDefault(r => r.roleid == roleId)!.roleName;
                     temp.IsLoggedIn = authUser.isLoggedIn;
-                    temp.UserStatsId = 0;
-                    temp.Kills = 0;
-                    temp.HighestKills = 0;
-                    temp.HighestLevel = 0;
-                    temp.Deaths = 0;
-                    temp.TimesPlayed = 0;
+                    temp.Kills = authUser.userStat.kills;
+                    temp.HighestKills = authUser.userStat.highestKillCount;
+                    temp.HighestLevel = authUser.userStat.highestLevel;
+                    temp.Deaths = authUser.userStat.deaths;
+                    temp.TimesPlayed = authUser.userStat.timesplayed;
                     MainPage.FelhasznaloLista.Add(temp);
                     //MessageBox.Show(temp.ToString() + "");
-                }
-
-                foreach (var gameUser in game_users)
-                {
-                    foreach (var authUser in MainPage.FelhasznaloLista)
-                    {
-                        var userStats = gameUser.userStats;
-                        if (gameUser.id == authUser.Id)
-                        {
-                            authUser.Kills = userStats.kills;
-                            authUser.HighestKills = userStats.highestKillCount;
-                            authUser.HighestLevel = userStats.highestLevel;
-                            authUser.Deaths = userStats.deaths;
-                            authUser.TimesPlayed = userStats.timesplayed;
-                            authUser.LastLogin = gameUser.lastlogin;
-                            authUser.UserStatsId = gameUser.userStatsId;
-                            //MessageBox.Show(gameUser + "");
-                        }
-                    }
                 }
                 Felhasznalok.instance.DG_Felhasznalok.ItemsSource = MainPage.FelhasznaloLista;
                 CollectionViewSource.GetDefaultView(Felhasznalok.instance.DG_Felhasznalok.ItemsSource).Refresh();
@@ -202,7 +177,7 @@ namespace SyntaxAdminWPF.Pages
         {
             MainPage.Teljesitmenyek.Clear();
 
-            HttpResponseMessage resultGame = GetFromGame("/Game/achievements");
+            HttpResponseMessage resultGame = GetFromAuth("/Game/achievements");
             string responseGameAchievement = resultGame.Content.ReadAsStringAsync().Result;
 
             dynamic achievements = JsonConvert.DeserializeObject(responseGameAchievement)!;
@@ -211,7 +186,7 @@ namespace SyntaxAdminWPF.Pages
             {
                 MainPage.Teljesitmenyek.Add(new Achievement
                 {
-                    Id = achi.id,
+                    achievementId = achi.achievementId,
                     achievementName = achi.achievementName,
                 });
             }
@@ -246,16 +221,6 @@ namespace SyntaxAdminWPF.Pages
             HttpClient client = new();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {MainPage.ResponseToken}");
             var request = client.GetAsync(auth_url);
-
-            return request.Result;
-        }
-
-        private HttpResponseMessage GetFromGame(string endpoint)
-        {
-            string game_url = GAME_API_PATH + endpoint;
-            HttpClient client = new();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {MainPage.ResponseToken}");
-            var request = client.GetAsync(game_url);
 
             return request.Result;
         }
