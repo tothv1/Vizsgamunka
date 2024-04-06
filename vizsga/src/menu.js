@@ -4,7 +4,7 @@ import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import AuthPage from "./pages/AuthPage";
-import '../public/index.css';
+import '../src/style.css';
 
 const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 

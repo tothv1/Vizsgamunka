@@ -14,7 +14,7 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from './ItemCard';
 import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
-import Inventory from './inventory';
+import Inventory from '../system/Inventory';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
