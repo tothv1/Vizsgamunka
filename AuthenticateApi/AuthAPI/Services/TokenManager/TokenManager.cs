@@ -55,6 +55,37 @@ namespace AuthAPI.Services.TokenManager
             return tokenHandler.WriteToken(token);
         }
 
+        public string GenerateDevelopmentTokenForTesting(DevUser devUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
+
+            var context = new SyntaxquestContext();
+
+            var roles = context.Roles;
+
+            var claimList = new List<Claim>
+            {
+                //Token tartalma
+                new Claim("devname", devUser.Username!),
+                new Claim("role", "Admin"),
+            };
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Audience = jwtOptions.Audience,
+                Issuer = jwtOptions.Issuer,
+                Subject = new ClaimsIdentity(claimList),
+                Expires = DateTime.Now.AddYears(10),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescription);
+
+            return tokenHandler.WriteToken(token);
+        }
+
         public string GenerateConfirmationToken(ConfirmationUserDTO registeredUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

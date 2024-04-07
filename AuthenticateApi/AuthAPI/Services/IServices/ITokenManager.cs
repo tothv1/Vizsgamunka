@@ -6,9 +6,11 @@ namespace AuthAPI.Services.IServices
 {
     public interface ITokenManager
     {
+
         public void blackListToken(string token);
         public string GenerateToken(RegisteredUser user);
         public string GenerateConfirmationToken(ConfirmationUserDTO registeredUser);
+        public string GenerateDevelopmentTokenForTesting(DevUser devUser);
         //public void RefreshToken(string token);
         public JwtSecurityToken JwtDecode(string token);
     }
