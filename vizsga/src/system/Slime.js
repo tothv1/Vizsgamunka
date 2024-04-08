@@ -116,11 +116,29 @@ class Slime {
     let normDir = Normalise(dir);
 
 
-    let translation = Translate([this.x, this.y], [normDir[0] * this.speed * deltaTime, normDir[1] * this.speed * deltaTime]);
+    let translationOffset = [normDir[0] * this.speed * deltaTime, normDir[1] * this.speed * deltaTime]
+    let translation = Translate([this.x, this.y], translationOffset);
 
 
-      this.x = translation[0];
-      this.y = translation[1];
+
+
+
+      
+
+    this.entityRef.entityList.forEach(enemy => {
+        if(!Distance([this.x+translation[0],this.y],[enemy.x,enemy.y])<5){
+          this.x = translation[0];
+        }
+        if(!Distance([this.x,this.y+translation[1]],[enemy.x,enemy.y])<5){
+          this.y = translation[1];
+        }
+      });
+
+      
+
+      
+
+
   
       this.xcenter = this.x - (this.width / 2);
       this.ycenter = this.y - (this.height / 2);
