@@ -4,7 +4,8 @@ import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import AuthPage from "./pages/AuthPage";
-import '../public/index.css';
+//import '../public/index.css';
+import logo1 from './Assets/logo/logo1.png';
 
 const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
@@ -41,7 +42,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
         <div className="row">
           <div className="col border border-primary">
             <h1>Játék Menü</h1>
-            <img src="https://via.placeholder.com/300x300" alt="LOGÓ" title="LOGÓ" />
+            <img src={logo1} style={{ width: 'auto', height: 'auto' }} />
             <div className="mb-3 p-2">
               {/* Gombok */}
               <button className="btn btn-primary mb-2" onClick={async () => {
@@ -70,8 +71,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
             </div>
           </div>
           <div className="col border border-primary">
-            {/* Majd ide jönne a logó/játék neve*/}
-            {/* <img scr=""><img> */}
+            
             <div className="mb-6">
               {/* karakterek/artok */}
 

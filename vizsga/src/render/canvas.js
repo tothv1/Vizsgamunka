@@ -14,7 +14,11 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from './ItemCard';
 import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
-import Inventory from './inventory';
+import Bow1 from '../Assets/weapon/BOW1.png';
+import Crossbow from '../Assets/weapon/CROSSBOW.png';
+import Icerod from '../Assets/weapon/ICEROD.png';
+
+//import Inventory from './inventory';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -263,6 +267,24 @@ const Canvas = props => {
 
   }
 
+  //inventory elhelyezése
+  const drawItemInInventory = (ctx, itemImage, slotIndex) => {
+    const { innerWidth: width, innerHeight: height } = window;
+    const inventoryWidth = 300;
+    const inventoryHeight = 100;
+    const inventoryX = (width - inventoryWidth) / 2;
+    const inventoryY = height - inventoryHeight;
+
+    const slotWidth = inventoryWidth / 3;
+    const slotX = inventoryX + slotIndex * slotWidth;
+    const slotY = inventoryY;
+
+    const imageX = slotX + (slotWidth - itemImage.width) / 2;
+    const imageY = slotY + (inventoryHeight - itemImage.height) / 2;
+
+    ctx.drawImage(itemImage, imageX, imageY);
+  };
+
 
   useEffect(() => {
 
@@ -271,9 +293,14 @@ const Canvas = props => {
     var rect = canvas.getBoundingClientRect();
     windowSize = [rect.left, rect.top]
 
+    //item rajzolása az első slotba
+    const itemImage = new Image();
+    itemImage.src = Bow1;
+    itemImage.onload = () => {
+      drawItemInInventory(context, itemImage, 0);
+    };
+
     // init
-
-
 
     entities.projectileList = [];
     entities.tileList = [];
@@ -539,7 +566,6 @@ const Canvas = props => {
   return (
     <div className={"d-flex align-items-center justify-content-center vh-100"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
-      <Inventory />
     </div>
   )
 }
