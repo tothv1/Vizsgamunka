@@ -8,6 +8,7 @@ import { GetDirection, Normalise, Translate, getRandomRange, Distance, CheckColl
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 import { Potion } from "./Pickups/Potion";
+import { valid } from "semver";
 
 
 
@@ -123,27 +124,37 @@ class Slime {
 
 
 
-      
+    let xvalid = true;
+    let yvalid = true;
 
     this.entityRef.entityList.forEach(enemy => {
-        if(!Distance([this.x+translation[0],this.y],[enemy.x,enemy.y])<5){
-          this.x = translation[0];
-        }
-        if(!Distance([this.x,this.y+translation[1]],[enemy.x,enemy.y])<5){
-          this.y = translation[1];
-        }
-      });
+      if (Distance([translation[0], this.y], [enemy.x, enemy.y]) < 5) {
+        xvalid = false;
+      }
+    });
+    if (xvalid) {
+      this.x = translation[0];
+    }
 
-      
+    this.entityRef.entityList.forEach(enemy => {
+      if (Distance([this.x, translation[1]], [enemy.x, enemy.y]) < 5) {
+        yvalid = false;
+      }
+    });
+    if (yvalid) {
+      this.y = translation[1];
+    }
 
-      
 
 
-  
-      this.xcenter = this.x - (this.width / 2);
-      this.ycenter = this.y - (this.height / 2);
-    
-    
+
+
+
+
+    this.xcenter = this.x - (this.width / 2);
+    this.ycenter = this.y - (this.height / 2);
+
+
 
 
 
@@ -193,15 +204,15 @@ class Slime {
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
-    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
+    temp.size = Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
     this.health -= source.Damage;
     if (this.health <= 0) {
-      let roll = Math.random()*100;
-      if(roll<20){
+      let roll = Math.random() * 100;
+      if (roll < 20) {
         let h = new Potion();
 
         h.x = this.x;
