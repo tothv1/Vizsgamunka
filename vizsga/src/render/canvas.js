@@ -14,12 +14,9 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from './ItemCard';
 import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
 
-<<<<<<< Updated upstream
-=======
 import Inventory from '../system/Inventory';
 import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
 
->>>>>>> Stashed changes
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
 let windowSize = [0, 0];
@@ -294,11 +291,7 @@ const Canvas = props => {
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
     playerRef.tokenData = props.tokendata;
-<<<<<<< Updated upstream
-    playerRef.GameStatCard.userStatId = props.tokendata.userStatId;
-=======
     playerRef.GameStatCard.userid = props.tokendata.userId;
->>>>>>> Stashed changes
     playerRef.SetPause = setPause;
 
 
