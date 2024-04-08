@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import '../public/index.css';
 
 const Login = () => {
     return (
-        <div className='container w-50 border border-dark mt-5'>
+        <div className='container w-50 border border-dark mt-5 loginhatter'>
             <form onSubmit={ () => { 
                 
 

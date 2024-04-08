@@ -11,3 +11,23 @@ div {
     font-family: "Joystix Monospace";
 }
 
+.menuhatter{
+    background-image: url('./Assets/background/Hatter01kerettel.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.loginhatter{
+    background-image: url('./Assets/background/menuhatterblurKeret.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.authhatter{
+    background-image: url('./Assets/background/menuhatterblurKeret.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SyntaxBackEnd.Models;
+namespace AuthAPI.Models;
 
 public partial class Achievement
 {
-    public int Id { get; set; }
+    public int AchievementId { get; set; }
 
     public string AchievementName { get; set; } = null!;
 
     [JsonIgnore]
-    public virtual ICollection<UserAchievementDetail> UserAchievementDetails { get; set; } = new List<UserAchievementDetail>();
+    public virtual ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
 }

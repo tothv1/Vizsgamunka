@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SyntaxBackEnd.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -28,18 +27,15 @@ namespace AuthAPI.Services.TokenManager
 
             var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
-            var context = new AuthContext();
+            var context = new SyntaxquestContext();
 
             var roles = context.Roles;
-
-            var gameContext = new GameContext();
 
             var claimList = new List<Claim>
             {
     
                 //Token tartalma
                 new Claim("userId",registeredUser.Userid),
-                new Claim("userStatId",gameContext.Users.Include(s => s.UserStats).FirstOrDefault(s => s.Id == registeredUser.Userid)!.UserStatsId.ToString()),
                 new Claim("username",registeredUser.Username),
                 new Claim("role",roles.FirstOrDefault(r_id => r_id.Roleid == registeredUser.Roleid)!.RoleName),
                 new Claim("userRegdate",registeredUser.Regdate.ToString())
@@ -59,13 +55,44 @@ namespace AuthAPI.Services.TokenManager
             return tokenHandler.WriteToken(token);
         }
 
+        public string GenerateDevelopmentTokenForTesting(DevUser devUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
+
+            var context = new SyntaxquestContext();
+
+            var roles = context.Roles;
+
+            var claimList = new List<Claim>
+            {
+                //Token tartalma
+                new Claim("devname", devUser.Username!),
+                new Claim("role", "Admin"),
+            };
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Audience = jwtOptions.Audience,
+                Issuer = jwtOptions.Issuer,
+                Subject = new ClaimsIdentity(claimList),
+                Expires = DateTime.Now.AddYears(10),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescription);
+
+            return tokenHandler.WriteToken(token);
+        }
+
         public string GenerateConfirmationToken(ConfirmationUserDTO registeredUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
-            var context = new AuthContext();
+            var context = new SyntaxquestContext();
 
             var roles = context.Roles;
 
@@ -73,7 +100,7 @@ namespace AuthAPI.Services.TokenManager
             {
                 //Token tartalma
 
-                new Claim("userid",registeredUser.UserId),
+                new Claim("userId",registeredUser.UserId),
                 new Claim("username",registeredUser.Username),
                 new Claim("fullname", registeredUser.Fullname),
                 new Claim("email", registeredUser.Email),
@@ -101,7 +128,7 @@ namespace AuthAPI.Services.TokenManager
 
         public void blackListToken(string token)
         {
-            var context = new AuthContext();
+            var context = new SyntaxquestContext();
 
             var tokenData = JwtDecode(token);
 

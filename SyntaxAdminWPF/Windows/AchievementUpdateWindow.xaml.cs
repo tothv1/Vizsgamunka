@@ -45,7 +45,7 @@ namespace SyntaxAdminWPF.Windows
                     Achievement selectedAchi = (Achievement)selectedItem;
 
                     Achievement achi = new Achievement();
-                    achi.Id = selectedAchi.Id;
+                    achi.achievementId = selectedAchi.achievementId;
                     achi.achievementName = TB_AchievementName.Text;
 
                     StringContent stringContentAchi = new(JsonConvert.SerializeObject(achi), Encoding.UTF8, "application/json");
@@ -76,7 +76,7 @@ namespace SyntaxAdminWPF.Windows
 
                     Achievement selectedAchi = (Achievement)selectedItem;
 
-                    HttpResponseMessage responseAchi = client.DeleteAsync(API_PATH + $"/Game/deleteAchievement?id={selectedAchi.Id}").Result;
+                    HttpResponseMessage responseAchi = client.DeleteAsync(API_PATH + $"/Game/deleteAchievement?id={selectedAchi.achievementId}").Result;
                     string responseAchiBody = responseAchi.Content.ReadAsStringAsync().Result;
 
                     MessageBox.Show(responseAchiBody);

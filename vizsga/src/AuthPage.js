@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import '../public/index.css';
 
 const AuthPage = () => {
     return (
-        <div className='container'>
+        <div className='container authhatter'>
             <div>
                 <button className='btn btn-primary'>Regisztráció</button><br />
                 <Link to='/login'>Már van felhasználója? Bejelentkezés</Link>
