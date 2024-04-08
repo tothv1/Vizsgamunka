@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AuthAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SyntaxBackEnd.DTOs;
-using SyntaxBackEnd.Models;
 
 namespace SyntaxBackEnd.Controllers
 {
@@ -20,7 +20,7 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                var context = new GameContext();
+                var context = new SyntaxquestContext();
 
                 var achievements = context.Achievements;
 
@@ -44,7 +44,7 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                var context = new GameContext();
+                var context = new SyntaxquestContext();
 
                 var achievements = context.Achievements;
 
@@ -54,10 +54,9 @@ namespace SyntaxBackEnd.Controllers
                 }
 
 
-                var userAchievements = context.UserAchievementDetails
-                    .Include(s => s.UserAchievement)
+                var userAchievements = context.UserAchievements
                     .Include(u => u.Achievement)
-                    .Where(s => s.UserAchievement.Userid == userId)
+                    .Where(s => s.Userid == userId)
                     .ToList();
 
                 if (userAchievements == null)
@@ -85,11 +84,11 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                using var context = new GameContext();
+                using var context = new SyntaxquestContext();
 
-                var user = context.Users.FirstOrDefault(u => u.Id == userId);
+                var user = context.RegisteredUsers.FirstOrDefault(u => u.Userid == userId);
 
-                var achievement = context.Achievements.FirstOrDefault(a => a.Id == achiId);
+                var achievement = context.Achievements.FirstOrDefault(a => a.AchievementId == achiId);
 
                 if (user == null)
                 {
@@ -101,22 +100,16 @@ namespace SyntaxBackEnd.Controllers
                     return NotFound("Az kért teljesítmény nem található.");
                 }
 
-                if (context.UserAchievementDetails.FirstOrDefault(achi => achi.Achievement == achievement) != null)
+                if (context.UserAchievements.FirstOrDefault(achi => achi.Achievement == achievement) != null)
                 {
                     return BadRequest("Már megszerezted ezt a teljesítményt.");
                 }
 
-                var userAchievement = new UserAchievement
+                context.Add(new UserAchievement
                 {
-                    AchievementId = 0,
-                    Userid = userId,
-                };
-
-                context.Add(new UserAchievementDetail
-                {
-                    AchievementDetailId = 0,
+                    UserAchievementId = 0,
                     AchievementId = achiId,
-                    UserAchievement = userAchievement,
+                    Userid = user.Userid,
                     AchievementDate = DateTime.Now,
                 });
                 context.SaveChanges();
@@ -137,7 +130,7 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                using var context = new GameContext();
+                using var context = new SyntaxquestContext();
 
 
                 if (context.Achievements.Contains(context.Achievements.FirstOrDefault(a => a.AchievementName == achievement.AchievementName)))
@@ -167,9 +160,9 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                using var context = new GameContext();
+                using var context = new SyntaxquestContext();
 
-                var requestAchi = context.Achievements.FirstOrDefault(a => a.Id == achievement.Id);
+                var requestAchi = context.Achievements.FirstOrDefault(a => a.AchievementId == achievement.AchievementId);
 
                 if (context.Achievements.FirstOrDefault(a => a.AchievementName == achievement.AchievementName) != null && !requestAchi.AchievementName.Equals(achievement.AchievementName))
                 {
@@ -177,8 +170,8 @@ namespace SyntaxBackEnd.Controllers
                 }
 
                 requestAchi!.AchievementName = achievement.AchievementName;
-                requestAchi.UserAchievementDetails = achievement.UserAchievementDetails;
-                requestAchi.Id = achievement.Id;
+                requestAchi.UserAchievements = achievement.UserAchievements;
+                requestAchi.AchievementId = achievement.AchievementId;
 
                 context.Update(requestAchi);
                 context.SaveChanges();
@@ -198,9 +191,9 @@ namespace SyntaxBackEnd.Controllers
         {
             try
             {
-                using var context = new GameContext();
+                using var context = new SyntaxquestContext();
 
-                var requestAchi = context.Achievements.FirstOrDefault(a => a.Id == id);
+                var requestAchi = context.Achievements.FirstOrDefault(a => a.AchievementId == id);
 
                 if (requestAchi == null)
                 {

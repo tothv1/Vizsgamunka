@@ -93,7 +93,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                await using var context = new AuthContext();
+                await using var context = new SyntaxquestContext();
                 return Ok(context.Registries.ToList());
             }
             catch (Exception ex)

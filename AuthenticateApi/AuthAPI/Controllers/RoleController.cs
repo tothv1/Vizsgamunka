@@ -1,12 +1,8 @@
-﻿using AuthAPI.Migrations;
-using AuthAPI.Models;
+﻿using AuthAPI.Models;
 using AuthAPI.Services;
-using GameController.Controllers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SyntaxBackEnd.Models;
 
 namespace AuthAPI.Controllers
 {
@@ -21,7 +17,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
 
                 var roles = await context.Roles.ToListAsync();
 
@@ -41,8 +37,8 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var gameContext = new GameContext();
-                await using var context = new AuthContext();
+                
+                await using var context = new SyntaxquestContext();
 
                 var requestedRole = await context.Roles.FirstOrDefaultAsync(r => r.RoleName == role.RoleName);
 
@@ -51,9 +47,8 @@ namespace AuthAPI.Controllers
                     return NotFound(ResponseObject.create("Már létezik ilyen szerepkör!", 400));
                 }
 
-                gameContext.Add(new SyntaxBackEnd.Models.Role { Id = 0, RoleName = role.RoleName});
+                
                 context.Add(new Models.Role { Roleid = 0, RoleName = role.RoleName });
-                await gameContext.SaveChangesAsync();
                 await context.SaveChangesAsync();
 
                 return Ok(ResponseObject.create("Sikeresen létrehoztad a szerepkört!", 200));
@@ -70,8 +65,7 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var gameContext = new GameContext();
-                await using var context = new AuthContext();
+                await using var context = new SyntaxquestContext();
 
                 var user = await context.RegisteredUsers.FirstOrDefaultAsync(user => user.Userid == userid);
 
@@ -92,12 +86,12 @@ namespace AuthAPI.Controllers
                     return Ok(ResponseObject.create("Már rendelkezik a kért szerepkörrel!", 400));
                 }
 
-                var finalGameUser = gameContext.Users.FirstOrDefault(u => u.Email == user.Email)!;
+                var finalGameUser = context.RegisteredUsers.FirstOrDefault(u => u.Email == user.Email)!;
 
-                finalGameUser.Role = gameContext.Roles.FirstOrDefault(r => r.RoleName == requestedRole.RoleName)!;
+                finalGameUser.Role = context.Roles.FirstOrDefault(r => r.RoleName == requestedRole.RoleName)!;
 
-                gameContext.Update(finalGameUser);
-                await gameContext.SaveChangesAsync();
+                context.Update(finalGameUser);
+                await context.SaveChangesAsync();
 
                 user.Role = requestedRole;
                 context.Update(user);
@@ -118,12 +112,10 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
+                var context = new SyntaxquestContext();
                 var requestRole = context.Roles.FirstOrDefault(r => r.Roleid == role.Roleid);
-                var gameContext = new GameContext();
-                var requestGameRole = gameContext.Roles.FirstOrDefault(r => r.Id == role.Roleid);
 
-                if (requestRole == null || requestGameRole == null)
+                if (requestRole == null)
                 {
                     return NotFound("A kért szerepkör nem létezik!");
                 }
@@ -131,13 +123,6 @@ namespace AuthAPI.Controllers
                 requestRole.RoleName = role.RoleName;
                 requestRole.RegisteredUsers = role.RegisteredUsers.ToList();
                 requestRole.Roleid = role.Roleid;
-
-                requestGameRole.RoleName = role.RoleName;
-                requestGameRole.Users = requestGameRole.Users.ToList();
-                requestGameRole.Id = role.Roleid;
-
-                gameContext.Update(requestGameRole);
-                await gameContext.SaveChangesAsync();
 
                 context.Update(requestRole);
                 await context.SaveChangesAsync();
@@ -156,20 +141,14 @@ namespace AuthAPI.Controllers
         {
             try
             {
-                var context = new AuthContext();
-                var gameContext = new GameContext();
+                var context = new SyntaxquestContext();
                 var requestRole = context.Roles.FirstOrDefault(r => r.Roleid == roleId);
-                var requestGameRole = gameContext.Roles.FirstOrDefault(r => r.Id == roleId);
 
-                if (requestRole == null || requestGameRole == null)
-                {
+                if (requestRole == null)    {
                     return NotFound("A kért szerepkör nem létezik!");
                 }
-
-                gameContext!.Remove(requestGameRole);
                 context.Remove(requestRole);
                 await context.SaveChangesAsync();
-                await gameContext.SaveChangesAsync();
                 return Ok("Sikeresen törölted a kívánt a szerepkört!");
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-import { Arrow } from "./Arrow";
+import { Arrow } from "./Projectiles/Arrow";
 
 export function Clamp(num, min, max) {
     if (num < min) return min;
@@ -22,7 +22,7 @@ export function LerpNum(num, target, rate) {
     return num + lerp;
 }
 
-export function Distance(point1,point2){
+export function Distance(point1, point2) {
     let dist = Math.hypot(point1[0] - point2[0], point1[1] - point2[1]);
     return dist;
 }
@@ -76,6 +76,20 @@ export function CheckCollision(object1, object2) {
     return hit
 }
 
+export function CheckInside(point, obj) {
+
+    let hit = true;
+
+    if (point[0] < obj.xOffset ||
+        point[0] > obj.xOffset + obj.width ||
+        point[1] < obj.yOffset ||
+        point[1] > obj.yOffset + obj.height) {
+        hit = false;
+    }
+
+    return hit
+}
+
 export function getRandomRange(min, max) {
     var num = Math.random() * (max - min) + min;
 
@@ -85,25 +99,25 @@ export function getRandomRange(min, max) {
 export function CreateProjectile(position, direction, object, source) {
 
     const temp = object;
-    
-    temp.x=position[0];
-    temp.y=position[1];
-    temp.direction=direction;
-    temp.rotation=GetDirectionRadian(direction);
-    temp.source=source;
+
+    temp.x = position[0];
+    temp.y = position[1];
+    temp.direction = direction;
+    temp.rotation = GetDirectionRadian(direction);
+    temp.source = source;
     temp.team = source.team;
 
-    temp.Damage = Math.round(getRandomRange(object.Damage*0.8,object.Damage*1.2));
+    temp.Damage = Math.round(getRandomRange(object.Damage * 0.8, object.Damage * 1.2));
 
     return temp;
 }
 
-export function CreateRandomDirection(){
-    let the = 2*Math.PI*Math.random()
+export function CreateRandomDirection() {
+    let the = 2 * Math.PI * Math.random()
 
     let c = Math.cos(the);
     let s = Math.sin(the);
 
-    return [c,s];
+    return [c, s];
 
 }

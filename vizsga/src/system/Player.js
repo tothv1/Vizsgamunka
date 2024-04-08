@@ -6,18 +6,23 @@ import down from "../Assets/characters/1.karakter/KNIGHT-SPRITESHEET-down.png"
 import "../system/Math";
 import { Clamp, getRandomRange } from "../system/Math";
 import { HPbar } from "../render/HPBar";
-import { StatCard } from "./StatCard";
+import { GameStatCard } from "./GameStatCard";
 import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
 import { putStats } from "./Hooks/PutStats";
+import { StatCard } from "./StatCard";
+import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
 
 class Player {
   ID = 0;
 
   level = 1;
+  ItemPicks = 0;
   currrentXP = 0;
   requiredXP = 10;
   XPRatio = 0;
+
+
 
   frameCount = 0;
   frameDelay = 20; //every x updates; the sprite turns over to the next frame
@@ -41,18 +46,18 @@ class Player {
   offset = [0, 0];
   renderoffset = [0, 0];
 
-  statCard = new StatCard();
-
-  speed = 300;
-
-  maxHealth = 100;
-  health = 100;
+  GameStatCard = new GameStatCard();
+  BaseStatCard = new StatCard();
+  StatCard = new StatCard();
+  SetPause = [];
 
   team = 1;
   shooting = false;
   aimPoint = [0, 0];
   windowSize = [0, 0];
+
   weapons = [];
+  items = [];
 
   damagable = true;
 
@@ -63,10 +68,6 @@ class Player {
 
   frame = 0;
 
-  Damage = 10;
-  critChance = 20;
-  critDamageMult=2;
-
   canvasRef = 0;
 
   drawing = new Image();
@@ -76,6 +77,24 @@ class Player {
 
   hpbar = Object.create(HPbar)
 
+  LVLUpCards = [];
+
+  RecalcStats(){
+
+    this.StatCard=structuredClone(this.BaseStatCard);
+
+    console.log(this.BaseStatCard);
+
+    this.items.forEach(item => {
+      item.RecalcStats(this);
+    });
+
+    this.weapons.forEach(weapon=>{
+      weapon.RecalculateStats(this);
+    })
+
+  }
+
   Update(deltaTime, frameCount) {
 
     if (this.currrentXP >= this.requiredXP) {
@@ -83,14 +102,10 @@ class Player {
 
       this.currrentXP -= this.requiredXP;
       this.level += 1;
-      this.Damage+=1;
-      this.critChance+=3;
-      this.critDamageMult+=0.05;
-      this.statCard.highestLevel=this.level;
-
-      //let obj = new Bow();
-      //obj.owner = this;
-      //this.weapons.push(obj)
+      //this.BaseStatCard.critChance += 3;
+      //this.BaseStatCard.critDamageMult += 0.05;
+      this.GameStatCard.highestLevel = this.level;
+      this.ItemPicks++;
 
       //let linearNext = this.level*5; 
       //let exponentialNext = Math.floor(this.requiredXP*1.1);
@@ -144,28 +159,28 @@ class Player {
     //irány state, lezárja az irányt
 
     if (this.UpState) {
-      this.y -= this.speed * deltaTime;
+      this.y -= this.StatCard.Speed * deltaTime;
       if (this.direction === "none") {
         this.direction = "up";
       }
     }
 
     if (this.DownState) {
-      this.y += this.speed * deltaTime;
+      this.y += this.StatCard.Speed * deltaTime;
       if (this.direction === "none") {
         this.direction = "down";
       }
     }
 
     if (this.RightState) {
-      this.x += this.speed * deltaTime;
+      this.x += this.StatCard.Speed * deltaTime;
       if (this.direction === "none") {
         this.direction = "right";
       }
     }
 
     if (this.LeftState) {
-      this.x -= this.speed * deltaTime;
+      this.x -= this.StatCard.Speed * deltaTime;
       if (this.direction === "none") {
         this.direction = "left";
       }
@@ -185,19 +200,28 @@ class Player {
   };
   takeDamage(source) {
 
+    let sourceDMG = source.Damage;
+
     let temp = new DMGpopup();
     temp.x = this.x;
     temp.y = this.y;
-    temp.Damage = source.Damage;
-    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
+    temp.Damage = sourceDMG;
+    temp.size = Math.sqrt(Math.abs(sourceDMG)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
-    this.health -= source.Damage;
-    if (this.health <= 0) {
+    
 
-      putStats(this.statCard);
+    if (sourceDMG<=0) {
+      sourceDMG*=this.StatCard.HealMult;
+    } 
+
+    this.StatCard.Health=Clamp(this.StatCard.Health-sourceDMG,0,this.StatCard.MaxHealth)
+
+    if (this.StatCard.Health <= 0) {
+
+      putStats(this.GameStatCard);
       this.dead = true;
     }
   }
@@ -253,6 +277,26 @@ class Player {
         if (this.direction === "right") this.direction = "none";
       }
     }
+  }
+
+  ItemPick(e,obj){
+    if (this.ItemPicks<=0) {return;}
+
+    let pick;
+    if (obj==undefined) {
+      pick = this.LVLUpCards[e.key-1];
+    }else{
+      pick = obj;
+    }
+
+    if(pick!=undefined){
+    this.items.push(pick.item);
+
+    this.ItemPicks--;
+    this.RecalcStats();
+    this.SetPause(false);
+    this.LVLUpCards=[];}
+
   }
 }
 

@@ -1,4 +1,4 @@
-﻿using SyntaxBackEnd.Models;
+﻿using AuthAPI.Models;
 using System.Text.Json.Serialization;
 
 namespace SyntaxBackEnd.DTOs
@@ -9,7 +9,7 @@ namespace SyntaxBackEnd.DTOs
         public string Username { get; set; } = null!;
         public string Email { get; set; } = null!;
         public DateTime Regdate { get; set; }
-        public virtual Userstat UserStats { get; set; } = null!;
+        public virtual UserStat UserStats { get; set; } = null!;
 
     }
 }
