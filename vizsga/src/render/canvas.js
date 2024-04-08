@@ -11,8 +11,8 @@ import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
-import { ItemCard } from './ItemCard';
-import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
+import { ItemCard } from '../system/PassiveItems/ItemCard';
+import { CardPool } from '../system/PassiveItems/CardPool';
 
 import Inventory from '../system/Inventory';
 import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
@@ -504,21 +504,24 @@ const Canvas = props => {
 
         if (lvlUpCards.length == 0) {
           for (let i = 0; i < 3; i++) {
-            let card = new ItemCard();
+            let pool = new CardPool().card;
 
-            if (randomTest()){
-              card.card = new BaseDMGItemCard();
-              card.item = new BaseDMGItem();
-            }else{
-              card.card = new CritItemCard();
-              card.item = new CritItem();
-            }
+            let roll = Math.floor(Math.random()*3);
+
+            
+            let xd = new ItemCard();
+            xd = pool[roll];
+            
+            console.log(pool)
 
 
+            xd.yOffset = 200 + (xd.height + 30) * i;
+            xd.init();    
 
-            card.yOffset = 200 + (card.height + 30) * i;
-            card.init();
-            lvlUpCards.push(card);
+            console.log(roll);
+            console.log(pool[roll]);
+
+            lvlUpCards.push(xd);
           }
           playerRef.LVLUpCards=lvlUpCards;
         }
@@ -548,10 +551,7 @@ const Canvas = props => {
   return (
     <div className={"d-flex align-items-center justify-content-center vh-100"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
-<<<<<<< Updated upstream
-=======
 <Inventory />
->>>>>>> Stashed changes
     </div>
   )
 }

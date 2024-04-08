@@ -2,6 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import menuhatter from '../Assets/background/menuhatter.jpg'
 import axios from 'axios'
+import "./index.css";
+
 import {jwtDecode} from 'jwt-decode'
 
 const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData, setTokenData}) => {
@@ -9,6 +11,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData,
   const navigate = useNavigate();
 
   return (
+    <div className='homalyoshatter'>
     <div className='container w-25'>
       <form onSubmit={async (e) => {
         e.preventDefault();
@@ -45,6 +48,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData,
         </div>
         <button type='submit' className='btn btn-primary mt-2'>Bejelentkezés</button>
       </form>
+    </div>
     </div>
   )
 }

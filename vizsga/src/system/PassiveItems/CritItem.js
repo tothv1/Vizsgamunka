@@ -1,4 +1,5 @@
 import render from "../../Assets/passive-items/Passive_item2.png";
+import { ItemCard } from "./ItemCard";
 
 
 
@@ -18,4 +19,10 @@ class CritItem {
         owner.StatCard.critChance+=this.critBonus;
     }
 }
-export {CritItem,CritItemCard}
+
+class BaseCritCardSelectable extends ItemCard{
+    card=new CritItemCard();
+    item=new CritItem();
+};
+
+export {BaseCritCardSelectable}
