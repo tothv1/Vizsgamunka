@@ -223,6 +223,17 @@ class Player {
 
       putStats(this.GameStatCard);
       this.dead = true;
+
+      let gameOverText = document.createElement('div');
+      gameOverText.textContent = 'Game Over! \n You killed ' + this.GameStatCard.kills + ' enemies';
+      gameOverText.style.position = 'absolute';
+      gameOverText.style.top = '50%';
+      gameOverText.style.left = '50%';
+      gameOverText.style.transform = 'translate(-50%, -50%)';
+      gameOverText.style.fontSize = '40px';
+      gameOverText.style.color = 'red';
+      document.body.appendChild(gameOverText);
+
     }
   }
   keyhandler(e) {
@@ -298,6 +309,7 @@ class Player {
     this.LVLUpCards=[];}
 
   }
+  
 }
 
 export { Player };

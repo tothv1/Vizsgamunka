@@ -73,7 +73,6 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
           <div className="col border border-primary">
             
             <div className="mb-6">
-              {/* karakterek/artok */}
 
               {/* Stat megjelenítése */}
               {showStats && (
@@ -93,7 +92,6 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
               {showSettings && (
                 <div>
                   <h2>Beállítások:</h2>
-                  {/* Beállítások megjelenítése */}
                   <div className="container mt-5">
                     <div className="row">
                       <div className="col-md-6 offset-md-3">
