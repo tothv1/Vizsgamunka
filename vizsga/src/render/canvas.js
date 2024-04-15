@@ -269,20 +269,13 @@ const Canvas = props => {
 
   //inventory elhelyezése
   const drawItemInInventory = (ctx, itemImage, slotIndex) => {
-    const { innerWidth: width, innerHeight: height } = window;
-    const inventoryWidth = 300;
+    const inventoryWidth = 100;
     const inventoryHeight = 100;
-    const inventoryX = (width - inventoryWidth) / 2;
-    const inventoryY = height - inventoryHeight;
 
-    const slotWidth = inventoryWidth / 3;
-    const slotX = inventoryX + slotIndex * slotWidth;
-    const slotY = inventoryY;
+    itemImage.width = 64;
+    itemImage.height = 64;
 
-    const imageX = slotX + (slotWidth - itemImage.width) / 2;
-    const imageY = slotY + (inventoryHeight - itemImage.height) / 2;
-
-    ctx.drawImage(itemImage, imageX, imageY);
+    ctx.drawImage(itemImage, inventoryWidth, inventoryHeight+slotIndex*64);
   };
 
 
@@ -296,9 +289,8 @@ const Canvas = props => {
     //item rajzolása az első slotba
     const itemImage = new Image();
     itemImage.src = Bow1;
-    itemImage.onload = () => {
-      drawItemInInventory(context, itemImage, 0);
-    };
+
+    
 
     // init
 
@@ -515,7 +507,7 @@ const Canvas = props => {
 
 
 
-
+      drawItemInInventory(context, itemImage, 0);
       //paused UI
 
       if (paused) {

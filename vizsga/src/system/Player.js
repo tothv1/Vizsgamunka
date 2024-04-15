@@ -224,6 +224,7 @@ class Player {
       putStats(this.GameStatCard);
       this.dead = true;
 
+      //gamover text
       let gameOverText = document.createElement('div');
       gameOverText.textContent = 'Game Over! \n You killed ' + this.GameStatCard.kills + ' enemies';
       gameOverText.style.position = 'absolute';
