@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import Canvas from "./render/canvas";
 import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,23 +15,36 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [statsData, setStatsData] = useState(null);
 
   console.log(tokenData);
 
-  //a stats jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
-  const handleStats = () => {
-    var res = axios.put(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {}, {
-                      headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                      }
-                    });
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.put(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {}, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        setStatsData(response.data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
 
+    if (showStats && isLoggedIn) {
+      fetchStats();
+    }
+  }, [showStats, isLoggedIn, token, tokenData.userId]);
+
+  const handleStats = () => {
     setShowStats(!showStats);
     setShowSettings(false);
   }
 
-  //a settings jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
+  //a settings jobb oldalon megjelenik
   const handleSettings = () => {
 
     setShowSettings(!showSettings);
@@ -54,7 +67,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
           <div className="container">
             <div className="row">
               <div className="col ">
-                <h1>Játék Menü</h1>
+                <h1 className="felirat">Játék Menü</h1>
                 <img src={logo1} />
                 <div className="mb-3 p-2">
                   {/* Gombok */}
@@ -88,21 +101,18 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                 <div className="mb-6">
                   {/* Stat megjelenítése */}
                   {showStats && (
-                    <div>
-                      <h2>Stats</h2>
-                      <p>Highest level reached: </p>
-                      <p>Times played: {tokenData.timesplayed}</p>
-                      <p>Kills: {tokenData.kills}</p>
-                      <p>Deaths: {tokenData.deaths}</p>
-                      <br />
-                      <h2>Achievements</h2>
-                      <></>
-                    </div>
+                    <div className="felirat">
+                    <h2>Statisztikák</h2>
+                        <p>Highest level reached: {statsData.highestLevel}</p>
+                        <p>Times played: {statsData.timesPlayed}</p>
+                        <p>Kills: {statsData.kills}</p>
+                        <p>Deaths: {statsData.deaths}</p>
+                  </div>
                   )}
 
                   {/* Beállítások megjelenítése */}
                   {showSettings && (
-                    <div>
+                    <div className="felirat">
                       <h2>Beállítások:</h2>
                       {/* Beállítások megjelenítése */}
                       <div className="container mt-5">
