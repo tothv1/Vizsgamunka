@@ -8,7 +8,7 @@ namespace SyntaxAdminWPF.Models
 {
     public class Achievement
     {
-        public int Id { get; set; }
+        public int achievementId { get; set; }
         public string achievementName { get; set; }
     }
 }

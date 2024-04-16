@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace AuthAPI.Models;
 
@@ -25,6 +26,7 @@ public partial class RegisteredUser
 
     public string? ChangePasswordConfirmationKey { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<LoggedInUser> LoggedInUsers { get; set; } = new List<LoggedInUser>();
 
     public virtual Role Role { get; set; } = null!;

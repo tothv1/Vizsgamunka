@@ -3,22 +3,23 @@ import { rawMaps } from '../Assets/map/maps';
 
 import { Slime, xd } from '../system/Slime';
 import { Wall } from '../system/StoneWall';
+import { Tile } from '../Assets/background/tiletile.jpg'
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
-import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside } from '../system/Math';
+import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside, randomTest } from '../system/Math';
 import { Bow } from '../system/Weapons/Bow';
 
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
-import { ItemCard } from './ItemCard';
-import { BaseDMGItem, BaseDMGItemCard } from '../system/PassiveItems/BaseDMGStat';
+import { ItemCard } from '../system/PassiveItems/ItemCard';
+import { CardPool } from '../system/PassiveItems/CardPool';
 
 import Bow1 from '../Assets/weapon/BOW1.png';
 import Crossbow from '../Assets/weapon/CROSSBOW.png';
 import Icerod from '../Assets/weapon/ICEROD.png';
 
-//import Inventory from './inventory';
+import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -309,7 +310,6 @@ const Canvas = props => {
     playerRef.entityRef = entities;
     playerRef.windowSize = windowSize;
     playerRef.tokenData = props.tokendata;
-    console.log(props.tokendata)
     playerRef.GameStatCard.userid = props.tokendata.userId;
     playerRef.SetPause = setPause;
 
@@ -523,12 +523,24 @@ const Canvas = props => {
 
         if (lvlUpCards.length == 0) {
           for (let i = 0; i < 3; i++) {
-            let card = new ItemCard();
-            card.card = new BaseDMGItemCard();
-            card.item = new BaseDMGItem();
-            card.yOffset = 200 + (card.height + 30) * i;
-            card.init();
-            lvlUpCards.push(card);
+            let pool = new CardPool().card;
+
+            let roll = Math.floor(Math.random()*3);
+
+            
+            let xd = new ItemCard();
+            xd = pool[roll];
+            
+            console.log(pool)
+
+
+            xd.yOffset = 200 + (xd.height + 30) * i;
+            xd.init();    
+
+            console.log(roll);
+            console.log(pool[roll]);
+
+            lvlUpCards.push(xd);
           }
           playerRef.LVLUpCards=lvlUpCards;
         }
@@ -556,7 +568,7 @@ const Canvas = props => {
   }, [draw])
 
   return (
-    <div className={"d-flex align-items-center justify-content-center vh-100"}>
+    <div className={"d-flex align-items-center justify-content-center vh-100 tileHatter"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
     </div>
   )

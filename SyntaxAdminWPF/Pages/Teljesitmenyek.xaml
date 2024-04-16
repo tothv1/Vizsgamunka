@@ -12,7 +12,7 @@
         <Button Content="↩ Vissza" HorizontalAlignment="Left" VerticalAlignment="Top" Width="102" Height="29" Click="Button_Click"/>
         <DataGrid x:Name="DG_Teljesitmenyek" Margin="102,0,0,0" AutoGenerateColumns="False" SelectionChanged="DG_Teljesitmenyek_SelectionChanged" FontSize="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Id" Binding="{Binding achievementId}" />
                 <DataGridTextColumn Header="AchievementName" Binding="{Binding achievementName}" />
             </DataGrid.Columns>
         </DataGrid>

@@ -8,7 +8,9 @@ namespace SyntaxAdminWPF.Models
 {
     public class UserStats
     {
+
         public int userStatId {  get; set; }
+        public string userid { get; set; } = null!;
         public int Kills { get; set; }
         public int highestKillCount { get; set; }
         public int highestLevel { get; set; }

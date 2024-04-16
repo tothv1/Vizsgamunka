@@ -1,5 +1,5 @@
 import render from "../../Assets/passive-items/Passive_item1.png";
-
+import { ItemCard } from "./ItemCard";
 
 
 class BaseDMGItemCard {
@@ -18,4 +18,12 @@ class BaseDMGItem {
         owner.StatCard.DamageMult+=this.DamageMultBonus;
     }
 }
-export {BaseDMGItem,BaseDMGItemCard}
+
+class BaseDMGCardSelectable extends ItemCard{
+    card=new BaseDMGItemCard();
+    item=new BaseDMGItem();
+};
+
+
+
+export {BaseDMGCardSelectable}

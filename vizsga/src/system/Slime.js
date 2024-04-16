@@ -8,6 +8,7 @@ import { GetDirection, Normalise, Translate, getRandomRange, Distance, CheckColl
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 import { Potion } from "./Pickups/Potion";
+import { valid } from "semver";
 
 
 
@@ -116,16 +117,29 @@ class Slime {
     let normDir = Normalise(dir);
 
 
-    let translation = Translate([this.x, this.y], [normDir[0] * this.speed * deltaTime, normDir[1] * this.speed * deltaTime]);
+    let translationOffset = [normDir[0] * this.speed * deltaTime, normDir[1] * this.speed * deltaTime]
+    let translation = Translate([this.x, this.y], translationOffset);
 
 
-      this.x = translation[0];
-      this.y = translation[1];
-  
-      this.xcenter = this.x - (this.width / 2);
-      this.ycenter = this.y - (this.height / 2);
+    this.entityRef.entityList.forEach(enemy => {
+      
+      if (Distance([translation[0], translation[1]], [enemy.x, enemy.y]) < 20 && enemy!==this && enemy.ID!=0) {
+        let bonktempdir = GetDirection([this.x,this.y],[enemy.x,enemy.y]);
+        let bonknormdir = Normalise(bonktempdir);
+
+        let translationOffset = [bonknormdir[0] * -this.speed * deltaTime, bonknormdir[1] * -this.speed * deltaTime]
+        translation = Translate([this.x, this.y], translationOffset);
+      }
+
+    });
     
-    
+    this.x = translation[0];
+    this.y = translation[1];
+
+    this.xcenter = this.x - (this.width / 2);
+    this.ycenter = this.y - (this.height / 2);
+
+
 
 
 
@@ -175,15 +189,15 @@ class Slime {
     temp.x = this.x;
     temp.y = this.y;
     temp.Damage = source.Damage;
-    temp.size =Math.sqrt(Math.abs(source.Damage)) + 20;
+    temp.size = Math.sqrt(Math.abs(source.Damage)) + 20;
     temp.drift = [getRandomRange(-100, 100), -500];
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
     this.health -= source.Damage;
     if (this.health <= 0) {
-      let roll = Math.random()*100;
-      if(roll<20){
+      let roll = Math.random() * 100;
+      if (roll < 20) {
         let h = new Potion();
 
         h.x = this.x;

@@ -8,6 +8,7 @@ import Register from "./pages/register";
 import { jwtDecode } from "jwt-decode";
 import AdminPage from "./pages/AdminPage";
 import ConfirmPage from "./pages/ConfirmPage";
+import "./pages/index.css";
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
 
   return (
       <Router>
+
         <Routes>
           <Route path="/" element={isLoggedIn ? <Menu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} role={role} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} /> : <AuthPage />} />
           <Route path="/menu" element={<Menu isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} role={role} setRole={setRole} tokenData={tokenData} setTokenData={setTokenData} />} />
