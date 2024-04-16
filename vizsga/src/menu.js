@@ -66,7 +66,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                 <img src={logo1} />
                 <div className="mb-3 p-2">
                   {/* Gombok */}
-                  <button className="btn btn-primary mb-2" onClick={async () => {
+                  <button className="btn mb-2 felirat gombok" onClick={async () => {
                     var response = await axios.put(`https://localhost:7096/Auth/logout?token=${token}`, {}, {
                       headers: {
                         "Content-Type": "application/json",
@@ -84,11 +84,11 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                     {isLoggedIn ? `Kijelentkezés (${tokenData.username})` : "Bejelentkezés"}
                   </button>
                   <br />
-                  <Link to="/game" className="btn btn-primary mb-2">Play</Link>
+                  <Link to="/game" className="btn mb-2 gombok felirat">Play</Link>
                   <br />
-                  <button className="btn btn-primary mb-2" onClick={handleStats}>Stats</button>
+                  <button className="btn mb-2 gombok felirat" onClick={handleStats}>Stats</button>
                   <br />
-                  <button className="btn btn-primary mb-2" onClick={handleSettings}>Settings</button>
+                  <button className="btn mb-2 gombok felirat" onClick={handleSettings}>Settings</button>
                 </div>
               </div>
               <div className="col">

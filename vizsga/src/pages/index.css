@@ -40,3 +40,10 @@ div {
 .felirat{
     color: white;
 }
+
+.gombok{
+    background-image: url('../Assets/buttons/button.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
