@@ -19,33 +19,28 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   console.log(tokenData);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await axios.put(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {}, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        });
-        setStatsData(response.data);
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      }
-    };
 
-    if (showStats && isLoggedIn) {
-      fetchStats();
+  const handleStats = async() => {
+
+    try {
+      const response = await axios.get(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setStatsData(response.data);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
     }
-  }, [showStats, isLoggedIn, token, tokenData.userId]);
 
-  const handleStats = () => {
     setShowStats(!showStats);
     setShowSettings(false);
   }
 
   //a settings jobb oldalon megjelenik
-  const handleSettings = () => {
+  const handleSettings = ()  => {
 
     setShowSettings(!showSettings);
     setShowStats(false);
@@ -104,7 +99,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                     <div className="felirat">
                     <h2>Statisztikák</h2>
                         <p>Highest level reached: {statsData.highestLevel}</p>
-                        <p>Times played: {statsData.timesPlayed}</p>
+                        <p>Times played: {statsData.timesplayed}</p>
                         <p>Kills: {statsData.kills}</p>
                         <p>Deaths: {statsData.deaths}</p>
                   </div>
