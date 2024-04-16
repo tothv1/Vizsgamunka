@@ -3,6 +3,7 @@ import { rawMaps } from '../Assets/map/maps';
 
 import { Slime, xd } from '../system/Slime';
 import { Wall } from '../system/StoneWall';
+import { Tile } from '../Assets/background/tiletile.jpg'
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
@@ -15,7 +16,10 @@ import { Spawner } from '../system/Spawner';
 import { ItemCard } from '../system/PassiveItems/ItemCard';
 import { CardPool } from '../system/PassiveItems/CardPool';
 
-import Inventory from '../system/Inventory';
+import Bow1 from '../Assets/weapon/BOW1.png';
+import Crossbow from '../Assets/weapon/CROSSBOW.png';
+import Icerod from '../Assets/weapon/ICEROD.png';
+
 import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
 import { CButton, QuitButton } from '../system/CButton';
 import { Button } from 'bootstrap';
@@ -345,11 +349,9 @@ const Canvas = props => {
     const itemImage = new Image();
     itemImage.src = Bow1;
 
-
+    
 
     // init
-
-
 
     entities.projectileList = [];
     entities.tileList = [];
@@ -569,7 +571,7 @@ const Canvas = props => {
 
 
 
-
+      drawItemInInventory(context, itemImage, 0);
       //paused UI
 
       if (paused) {
@@ -630,9 +632,8 @@ const Canvas = props => {
   }, [draw])
 
   return (
-    <div className={"d-flex align-items-center justify-content-center vh-100"}>
+    <div className={"d-flex align-items-center justify-content-center vh-100 tileHatter"}>
       <canvas width={gameSize[0]} height={gameSize[1]} className='mg-0 b-0' ref={canvasRef} {...props} />
-<Inventory />
     </div>
   )
 }

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import Canvas from "./render/canvas";
 import { useHistory, useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import AuthPage from "./pages/AuthPage";
+//import '../public/index.css';
+import logo1 from './Assets/logo/logo1.png';
 import "./pages/index.css";
 
 const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
@@ -13,15 +15,33 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [statsData, setStatsData] = useState(null);
 
-  //a stats jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
-  const handleStats = () => {
+  console.log(tokenData);
+
+
+  const handleStats = async() => {
+
+    try {
+      const response = await axios.get(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setStatsData(response.data);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+
     setShowStats(!showStats);
     setShowSettings(false);
   }
 
-  //a settings jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
-  const handleSettings = () => {
+  //a settings jobb oldalon megjelenik
+  const handleSettings = ()  => {
+
     setShowSettings(!showSettings);
     setShowStats(false);
   }
@@ -41,9 +61,9 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
         <div className='hatter'>
           <div className="container">
             <div className="row">
-              <div className="col border border-primary">
-                <h1>Játék Menü</h1>
-                <img src="https://via.placeholder.com/300x300" alt="LOGÓ" title="LOGÓ" />
+              <div className="col ">
+                <h1 className="felirat">Játék Menü</h1>
+                <img src={logo1} />
                 <div className="mb-3 p-2">
                   {/* Gombok */}
                   <button className="btn btn-primary mb-2" onClick={async () => {
@@ -71,29 +91,23 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                   <button className="btn btn-primary mb-2" onClick={handleSettings}>Settings</button>
                 </div>
               </div>
-              <div className="col border border-primary">
-                {/* Majd ide jönne a logó/játék neve*/}
-                {/* <img scr=""><img> */}
-                <div className="mb-6">
-                  {/* karakterek/artok */}
+              <div className="col">
 
+                <div className="mb-6">
                   {/* Stat megjelenítése */}
                   {showStats && (
-                    <div>
-                      <h2>Stats</h2>
-                      <p>Highest level reached: </p>
-                      <p>Times played: {tokenData.timesplayed}</p>
-                      <p>Kills: {tokenData.kills}</p>
-                      <p>Deaths: {tokenData.deaths}</p>
-                      <br />
-                      <h2>Achievements</h2>
-                      <></>
-                    </div>
+                    <div className="felirat">
+                    <h2>Statisztikák</h2>
+                        <p>Highest level reached: {statsData.highestLevel}</p>
+                        <p>Times played: {statsData.timesplayed}</p>
+                        <p>Kills: {statsData.kills}</p>
+                        <p>Deaths: {statsData.deaths}</p>
+                  </div>
                   )}
 
                   {/* Beállítások megjelenítése */}
                   {showSettings && (
-                    <div>
+                    <div className="felirat">
                       <h2>Beállítások:</h2>
                       {/* Beállítások megjelenítése */}
                       <div className="container mt-5">
