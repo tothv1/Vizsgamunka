@@ -22,6 +22,7 @@ class XP {
 
   width = 64;
   height = 64;
+  collision=false;
 
   damagable = false;
   speed = 100 * getRandomRange(0.9, 1.1);

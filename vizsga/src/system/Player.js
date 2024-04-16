@@ -55,6 +55,7 @@ class Player {
   shooting = false;
   aimPoint = [0, 0];
   windowSize = [0, 0];
+  collision=true;
 
   weapons = [];
   items = [];

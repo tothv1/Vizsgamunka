@@ -8,6 +8,7 @@ import { DMGpopup } from './DmgPopup';
 import '../system/Math';
 import { Clamp, Normalise, CheckCollision, getRandomRange, CheckInside, randomTest } from '../system/Math';
 import { Bow } from '../system/Weapons/Bow';
+import { useNavigate } from 'react-router-dom';
 
 import { XP } from '../system/Pickups/Experience';
 import { Spawner } from '../system/Spawner';
@@ -16,6 +17,8 @@ import { CardPool } from '../system/PassiveItems/CardPool';
 
 import Inventory from '../system/Inventory';
 import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
+import { CButton, QuitButton } from '../system/CButton';
+import { Button } from 'bootstrap';
 
 let renderOffset = [0, 0]
 let gameSize = [0, 0]
@@ -24,22 +27,28 @@ let windowSize = [0, 0];
 let aimpoint = [0, 0];
 let entities = [];
 
-let gameTime = 0;
-let paused = false;
-let pauseBlock = false;
-
-let lvlUpCards = [];
-let selectedCard = null;
-
-function setPause(state) {
-  paused = state;
-}
 
 const Canvas = props => {
 
   const canvasRef = useRef(null)
   gameSize = [props.style.width, props.style.height]
-  let frameCount = 0
+  let frameCount = 0;
+
+  const navigate = useNavigate();
+
+  let gameTime = 0;
+  let paused = false;
+  let pauseBlock = false;
+
+  let lvlUpCards = [];
+  let selectedCard = null;
+
+  let buttons = [];
+  let selectedButton = null;
+
+  function setPause(state) {
+    paused = state;
+  }
 
   const clrCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -165,6 +174,7 @@ const Canvas = props => {
   const drawPausedUI = (ctx, object, offset) => {
     ctx.save();
 
+    let lock = false;
 
     ctx.globalAlpha = 0.7;
 
@@ -175,6 +185,57 @@ const Canvas = props => {
     ctx.fill();
 
     ctx.globalAlpha = 1.0;
+
+    ctx.font = `50px Joystix Monospace`;
+
+    ctx.fillStyle = 'white';
+    ctx.fillText(`PAUSED`, 475, 150);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeText(`PAUSED`, 475, 150);
+
+
+
+    for (let index = 0; index < buttons.length; index++) {
+      ctx.lineWidth = 1;
+
+      if (CheckInside([aimpoint[0] - windowSize[0], aimpoint[1] - windowSize[1]], buttons[index])) {
+
+
+
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = 'yellow';
+
+        ctx.beginPath();
+        ctx.strokeRect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height)
+        ctx.closePath();
+        ctx.fill();
+
+        if (!lock) {
+          selectedButton = buttons[index];
+          lock = true;
+        }
+        ctx.lineWidth = 1;
+      } else {
+        selectedButton = null;
+      }
+
+
+      ctx.fillStyle = 'gray';
+      ctx.beginPath();
+      ctx.rect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.font = `${buttons[index].height / 2}px Joystix Monospace`;
+
+
+      ctx.fillStyle = 'white';
+      ctx.fillText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
+      ctx.strokeStyle = 'black';
+      ctx.strokeText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
+    }
+
 
     ctx.restore();
   }
@@ -217,7 +278,7 @@ const Canvas = props => {
     for (let index = 0; index < 3; index++) {
 
 
-      if(CheckInside([aimpoint[0]-windowSize[0],aimpoint[1]-windowSize[1]],cards[index])){
+      if (CheckInside([aimpoint[0] - windowSize[0], aimpoint[1] - windowSize[1]], cards[index])) {
 
         ctx.lineWidth = 10;
         ctx.strokeStyle = 'yellow';
@@ -227,18 +288,15 @@ const Canvas = props => {
         ctx.closePath();
         ctx.fill();
 
-
-
-        if(!cardLock){
-          selectedCard=cards[index];
-          cardLock=true;
+        if (!cardLock) {
+          selectedCard = cards[index];
+          cardLock = true;
         }
 
         ctx.lineWidth = 1;
 
-      }else if(!cardLock){
-
-        selectedCard=null;
+      } else if (!cardLock) {
+        selectedCard = null;
       }
       ctx.lineWidth = 1;
 
@@ -264,6 +322,17 @@ const Canvas = props => {
 
   }
 
+  //inventory elhelyezése
+  const drawItemInInventory = (ctx, itemImage, slotIndex) => {
+    const inventoryWidth = 100;
+    const inventoryHeight = 100;
+
+    itemImage.width = 64;
+    itemImage.height = 64;
+
+    ctx.drawImage(itemImage, inventoryWidth, inventoryHeight + slotIndex * 64);
+  };
+
 
   useEffect(() => {
 
@@ -271,6 +340,12 @@ const Canvas = props => {
     const context = canvas.getContext('2d')
     var rect = canvas.getBoundingClientRect();
     windowSize = [rect.left, rect.top]
+
+    //item rajzolása az első slotba
+    const itemImage = new Image();
+    itemImage.src = Bow1;
+
+
 
     // init
 
@@ -306,8 +381,12 @@ const Canvas = props => {
 
     console.log(playerRef);
 
-
-
+    let quit = new QuitButton();
+    quit.xOffset = 500;
+    quit.yOffset = 300;
+    quit.height = 50;
+    quit.width = 200;
+    buttons.push(quit);
 
     const rawmap = rawMaps[0];
 
@@ -333,14 +412,13 @@ const Canvas = props => {
 
           entities.entityList.push(temp);
         }
-
       }
     }
 
     //eventek playernek
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !pauseBlock) {
+      if ((event.key === "Escape" || event.key === "p") && !pauseBlock) {
         paused = !paused;
       }
       playerRef.keyhandler(event)
@@ -352,9 +430,16 @@ const Canvas = props => {
     document.addEventListener("mousedown", (event) => {
       playerRef.keyhandler(event)
 
-      if(selectedCard!=null){
-        playerRef.ItemPick(event,selectedCard);
+      if (selectedCard != null) {
+        playerRef.ItemPick(event, selectedCard);
         playerRef.RecalcStats();
+      }
+
+      if (selectedButton != null) {
+        if (selectedButton.role === "quit") {
+          selectedButton=null;
+          navigate("/");
+        }
       }
     });
     document.addEventListener("mouseup", (event) => {
@@ -363,8 +448,6 @@ const Canvas = props => {
     document.addEventListener("mousemove", (event) => {
       aimpoint = [event.pageX, event.pageY];
       playerRef.aimPoint = aimpoint;
-
-      
     });
 
     //console.log(entities)
@@ -394,8 +477,6 @@ const Canvas = props => {
 
       // tile update
       entities.tileList.forEach(item => {
-
-
         item.update(deltaTime, frameCount);
         item.offset = [item.x + renderOffset[0], item.y + renderOffset[1]];
         draw(context, item, item.offset)
@@ -498,7 +579,7 @@ const Canvas = props => {
       //UI Update
 
       drawXPBar(context, playerRef)
-      
+
       //Item select UI
       if (playerRef.ItemPicks > 0) {
 
@@ -506,26 +587,26 @@ const Canvas = props => {
           for (let i = 0; i < 3; i++) {
             let pool = new CardPool().card;
 
-            let roll = Math.floor(Math.random()*3);
+            let roll = Math.floor(Math.random() * 3);
 
-            
+
             let xd = new ItemCard();
             xd = pool[roll];
-            
+
             console.log(pool)
 
 
             xd.yOffset = 200 + (xd.height + 30) * i;
-            xd.init();    
+            xd.init();
 
             console.log(roll);
             console.log(pool[roll]);
 
             lvlUpCards.push(xd);
           }
-          playerRef.LVLUpCards=lvlUpCards;
+          playerRef.LVLUpCards = lvlUpCards;
         }
-        
+
         pauseBlock = true;
         paused = true;
         drawItemPickUI(context, lvlUpCards, playerRef.StatCard)
