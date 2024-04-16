@@ -29,3 +29,10 @@ div {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.tileHatter{
+    background-image: url('../Assets/background/tiletile.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

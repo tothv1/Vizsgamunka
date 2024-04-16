@@ -16,14 +16,24 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
+  console.log(tokenData);
+
   //a stats jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
   const handleStats = () => {
+    var res = axios.put(`https://localhost:7096/Game/getStats/user?id=${tokenData.userId}`, {}, {
+                      headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                      }
+                    });
+
     setShowStats(!showStats);
     setShowSettings(false);
   }
 
   //a settings jobb oldalon megjelenik, ha rákattintasz mégegyszer a gombra akkor eltűnik, vagy kéne egy kilépés gomb
   const handleSettings = () => {
+
     setShowSettings(!showSettings);
     setShowStats(false);
   }

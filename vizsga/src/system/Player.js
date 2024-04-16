@@ -269,6 +269,9 @@ class Player {
       }
 
     }
+    if (e.type === "") {
+      
+    }
 
     // felengedésen kinyitja az irány lock-ot, rendereléshez kell
     if (e.type === "keyup") {
