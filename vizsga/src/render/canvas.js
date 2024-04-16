@@ -24,15 +24,17 @@ import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
 import { CButton, QuitButton } from '../system/CButton';
 import { Button } from 'bootstrap';
 
-let renderOffset = [0, 0]
-let gameSize = [0, 0]
-let windowSize = [0, 0];
 
-let aimpoint = [0, 0];
-let entities = [];
 
 
 const Canvas = props => {
+  
+  let renderOffset = [0, 0]
+  let gameSize = [0, 0]
+  let windowSize = [0, 0];
+  
+  let aimpoint = [0, 0];
+  let entities = [];
 
   const canvasRef = useRef(null)
   gameSize = [props.style.width, props.style.height]
@@ -43,6 +45,7 @@ const Canvas = props => {
   let gameTime = 0;
   let paused = false;
   let pauseBlock = false;
+  let pausedManual = false;
 
   let lvlUpCards = [];
   let selectedCard = null;
@@ -198,49 +201,50 @@ const Canvas = props => {
     ctx.strokeStyle = 'black';
     ctx.strokeText(`PAUSED`, 475, 150);
 
+    if (pausedManual) {
 
 
-    for (let index = 0; index < buttons.length; index++) {
-      ctx.lineWidth = 1;
+      for (let index = 0; index < buttons.length; index++) {
+        ctx.lineWidth = 1;
 
-      if (CheckInside([aimpoint[0] - windowSize[0], aimpoint[1] - windowSize[1]], buttons[index])) {
+        if (CheckInside([aimpoint[0] - windowSize[0], aimpoint[1] - windowSize[1]], buttons[index])) {
 
 
 
-        ctx.lineWidth = 10;
-        ctx.strokeStyle = 'yellow';
+          ctx.lineWidth = 10;
+          ctx.strokeStyle = 'yellow';
 
+          ctx.beginPath();
+          ctx.strokeRect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height)
+          ctx.closePath();
+          ctx.fill();
+
+          if (!lock) {
+            selectedButton = buttons[index];
+            lock = true;
+          }
+          ctx.lineWidth = 1;
+        } else {
+          selectedButton = null;
+        }
+
+
+        ctx.fillStyle = 'gray';
         ctx.beginPath();
-        ctx.strokeRect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height)
+        ctx.rect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height);
         ctx.closePath();
         ctx.fill();
 
-        if (!lock) {
-          selectedButton = buttons[index];
-          lock = true;
-        }
-        ctx.lineWidth = 1;
-      } else {
-        selectedButton = null;
+        ctx.font = `${buttons[index].height / 2}px Joystix Monospace`;
+
+
+        ctx.fillStyle = 'white';
+        ctx.fillText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
+        ctx.strokeStyle = 'black';
+        ctx.strokeText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
       }
 
-
-      ctx.fillStyle = 'gray';
-      ctx.beginPath();
-      ctx.rect(buttons[index].xOffset, buttons[index].yOffset, buttons[index].width, buttons[index].height);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.font = `${buttons[index].height / 2}px Joystix Monospace`;
-
-
-      ctx.fillStyle = 'white';
-      ctx.fillText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
-      ctx.strokeStyle = 'black';
-      ctx.strokeText(`MAIN MENU`, buttons[index].xOffset + 6, buttons[index].yOffset + buttons[index].height - 15);
     }
-
-
     ctx.restore();
   }
 
@@ -349,7 +353,7 @@ const Canvas = props => {
     const itemImage = new Image();
     itemImage.src = Bow1;
 
-    
+
 
     // init
 
@@ -421,6 +425,7 @@ const Canvas = props => {
 
     document.addEventListener("keydown", (event) => {
       if ((event.key === "Escape" || event.key === "p") && !pauseBlock) {
+        pausedManual = !pausedManual;
         paused = !paused;
       }
       playerRef.keyhandler(event)
@@ -439,7 +444,7 @@ const Canvas = props => {
 
       if (selectedButton != null) {
         if (selectedButton.role === "quit") {
-          selectedButton=null;
+          selectedButton = null;
           navigate("/");
         }
       }
