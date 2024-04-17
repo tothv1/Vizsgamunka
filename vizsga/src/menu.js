@@ -96,18 +96,20 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                 <div className="mb-6">
                   {/* Stat megjelenítése */}
                   {showStats && (
-                    <div className="felirat">
-                    <h2>Statisztikák</h2>
-                        <p>Highest level reached: {statsData.highestLevel}</p>
-                        <p>Times played: {statsData.timesplayed}</p>
-                        <p>Kills: {statsData.kills}</p>
-                        <p>Deaths: {statsData.deaths}</p>
+                    <div className="felirat keret transparent-background">
+                      <div className="">
+                        <h2>Statisztikák</h2>
+                          <p>Highest level reached: {statsData.highestLevel}</p>
+                          <p>Times played: {statsData.timesplayed}</p>
+                          <p>Kills: {statsData.kills}</p>
+                          <p>Deaths: {statsData.deaths}</p>
+                      </div>
                   </div>
                   )}
 
                   {/* Beállítások megjelenítése */}
                   {showSettings && (
-                    <div className="felirat">
+                    <div className="felirat keret transparent-background">
                       <h2>Beállítások:</h2>
                       {/* Beállítások megjelenítése */}
                       <div className="container mt-5">
