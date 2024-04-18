@@ -23,6 +23,7 @@ class Potion {
 
   damagable = false;
   Damage =Math.round(getRandomRange(-20*0.8,-20*1.2))
+  collision = false;
 
   xcenter = 0;
   ycenter = 0;
