@@ -270,8 +270,8 @@ const Canvas = props => {
 
   //inventory elhelyezése
   const drawItemInInventory = (ctx, itemImage, slotIndex) => {
-    const inventoryWidth = 100;
-    const inventoryHeight = 100;
+    const inventoryWidth = 500;
+    const inventoryHeight = 700;
 
     itemImage.width = 64;
     itemImage.height = 64;

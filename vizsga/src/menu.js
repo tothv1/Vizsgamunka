@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 //import Canvas from "./render/canvas";
-import { useHistory, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import AuthPage from "./pages/AuthPage";
@@ -33,6 +33,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
       setStatsData(response.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+
     }
 
     setShowStats(!showStats);
@@ -62,8 +63,8 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
           <div className="container">
             <div className="row">
               <div className="col ">
-                <h1 className="felirat">Játék Menü</h1>
-                <img src={logo1} />
+                <h1 className="felirat">Main Menu</h1>
+                <img src={logo1} alt="Syntax Quest"/>
                 <div className="mb-3 p-2">
                   {/* Gombok */}
                   <button className="btn mb-2 felirat gombok" onClick={async () => {
@@ -74,14 +75,14 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                       }
                     });
                     console.log(response.data);
-                    if (response.data.status == 200) {
+                    if (response.data.status === 200) {
                       setIsLoggedIn(false);
                       localStorage.removeItem('token');
                       navigate('/');
                       console.log("Sikeres kijelentkezés");
                     }
                   }}>
-                    {isLoggedIn ? `Kijelentkezés (${tokenData.username})` : "Bejelentkezés"}
+                    {isLoggedIn ? `Log out (${tokenData.username})` : "Log in"}
                   </button>
                   <br />
                   <Link to="/game" className="btn mb-2 gombok felirat">Play</Link>
@@ -98,11 +99,12 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                   {showStats && (
                     <div className="felirat keret transparent-background">
                       <div className="">
-                        <h2>Statisztikák</h2>
+                        <h2>Stats</h2>
                           <p>Highest level reached: {statsData.highestLevel}</p>
                           <p>Times played: {statsData.timesplayed}</p>
                           <p>Kills: {statsData.kills}</p>
                           <p>Deaths: {statsData.deaths}</p>
+                          
                       </div>
                   </div>
                   )}
@@ -110,8 +112,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                   {/* Beállítások megjelenítése */}
                   {showSettings && (
                     <div className="felirat keret transparent-background">
-                      <h2>Beállítások:</h2>
-                      {/* Beállítások megjelenítése */}
+                      <h2>Settings:</h2>
                       <div className="container mt-5">
                         <div className="row">
                           <div className="col-md-6 offset-md-3">

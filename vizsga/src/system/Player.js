@@ -12,6 +12,7 @@ import { DMGpopup } from "../render/DmgPopup";
 import { putStats } from "./Hooks/PutStats";
 import { StatCard } from "./StatCard";
 import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
+import button from '../Assets/buttons/button.png';
 
 class Player {
   ID = 0;
@@ -235,6 +236,24 @@ class Player {
       gameOverText.style.color = 'red';
       document.body.appendChild(gameOverText);
 
+      //restart button
+      let buttonRestart = document.createElement('button');
+      buttonRestart.style.backgroundImage = `url(${button})`;
+      buttonRestart.style.position = 'absolute';
+      buttonRestart.style.top = '60%';
+      buttonRestart.style.left = '50%';
+      buttonRestart.style.transform = 'translate(-50%, -50%)';
+      buttonRestart.style.fontSize = '20px';
+      buttonRestart.style.color = 'white';
+      buttonRestart.textContent = 'Restart';
+      buttonRestart.addEventListener('click', () => {
+        window.location.reload();
+      });
+
+
+      document.body.appendChild(buttonRestart);
+    
+
     }
   }
   keyhandler(e) {
@@ -269,7 +288,20 @@ class Player {
       }
 
     }
-    if (e.type === "") {
+
+    if (e.type === "Escape") {
+      if (e.key === 'Esc') {
+
+        this.SetPause(true);
+        let pauseMenu = document.createElement('div');
+
+        pauseMenu.textContent = 'Pause';
+        pauseMenu.style.position = 'absolute';
+        pauseMenu.style.top = '10%';
+        pauseMenu.style.left = '50%';
+        pauseMenu.style.transform = 'translate(-50%, -50%)';
+        pauseMenu.style.fontSize = '40px';
+      }
       
     }
 
