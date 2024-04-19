@@ -19,7 +19,6 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   console.log(tokenData);
 
-
   const handleStats = async() => {
 
     try {

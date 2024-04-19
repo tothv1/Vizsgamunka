@@ -250,13 +250,11 @@ class Player {
       buttonRestart.addEventListener('click', () => {
         window.location.reload();
       });
-
-
       document.body.appendChild(buttonRestart);
-    
-
+      
     }
   }
+  
   keyhandler(e) {
 
     if (e.type === "mouseup") {
@@ -288,22 +286,6 @@ class Player {
         this.RightState = true;
       }
 
-    }
-
-    if (e.type === "Escape") {
-      if (e.key === 'Esc') {
-
-        this.SetPause(true);
-        let pauseMenu = document.createElement('div');
-
-        pauseMenu.textContent = 'Pause';
-        pauseMenu.style.position = 'absolute';
-        pauseMenu.style.top = '10%';
-        pauseMenu.style.left = '50%';
-        pauseMenu.style.transform = 'translate(-50%, -50%)';
-        pauseMenu.style.fontSize = '40px';
-      }
-      
     }
 
     // felengedésen kinyitja az irány lock-ot, rendereléshez kell

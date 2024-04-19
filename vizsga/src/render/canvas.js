@@ -52,6 +52,7 @@ const Canvas = props => {
 
   let buttons = [];
   let selectedButton = null;
+  
 
   function setPause(state) {
     paused = state;
