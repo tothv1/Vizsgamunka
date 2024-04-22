@@ -4,6 +4,7 @@ import { ItemCard } from "./ItemCard";
 
 class BaseDMGItemCard {
 
+    statCard = true;
     render = render;
     ItemName = "Base ATK Bonus";
     Description = "Increases ATK by 10%.";

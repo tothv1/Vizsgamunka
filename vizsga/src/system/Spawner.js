@@ -15,6 +15,9 @@ class Spawner {
     x = 0;
     y = 0;
 
+    enemyScale = 1;
+    enemyScaleMult = 1;
+
     spawnDistanceAvg = 700;
 
     baseSpawnInterval = 0.05;
@@ -46,6 +49,11 @@ class Spawner {
             spawn.x = this.playerRef.x+(dir[0]*instanceSpawnDistance);
             spawn.y = this.playerRef.y+(dir[1]*instanceSpawnDistance);
 
+            spawn.speed*=(1+(Math.sqrt(this.enemyScale*this.enemyScaleMult)));
+            spawn.maxHealth *=(1+ this.enemyScale*this.enemyScaleMult);
+            spawn.Damage *= (1+this.enemyScale*this.enemyScaleMult);
+
+            spawn.health=spawn.maxHealth;
 
             spawn.entityRef=this.entityRef
 

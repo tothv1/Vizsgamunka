@@ -4,7 +4,8 @@ import { ItemCard } from "./ItemCard";
 
 
 class SpeedItemCard {
-
+    
+    statCard = true;
     render = render;
     ItemName = "comfy boots";
     Description = "Increases Speed by 15.";

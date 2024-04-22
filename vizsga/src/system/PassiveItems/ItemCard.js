@@ -1,5 +1,6 @@
 
 class ItemCard{
+    level=1;
 
     xOffset = 400;
     yOffset = 200;
@@ -13,6 +14,7 @@ class ItemCard{
     icon = new Image();
 
     init(){
+        console.log(this.card);
         this.icon.src = this.card.render;
     }
 
