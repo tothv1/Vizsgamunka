@@ -5,9 +5,10 @@ import { ItemCard } from "./ItemCard";
 
 class CritItemCard {
 
-    render = render;
-    ItemName = "Sharpened projectiles";
-    Description = "Increases Critical chance by 7%.";
+    statCard = true;
+    render= render
+    ItemName= "Sharpened projectiles"
+    Description= "Increases Critical chance by 7%."
 
 }
 
@@ -15,14 +16,14 @@ class CritItem {
     critBonus = 7;
     BaseStatItem = false;
 
-    RecalcStats(owner){
-        owner.StatCard.critChance+=this.critBonus;
+    RecalcStats(owner) {
+        owner.StatCard.critChance += this.critBonus;
     }
 }
 
-class BaseCritCardSelectable extends ItemCard{
-    card=new CritItemCard();
-    item=new CritItem();
+class BaseCritCardSelectable extends ItemCard {
+    card = new CritItemCard();
+    item = new CritItem();
 };
 
-export {BaseCritCardSelectable}
+export { BaseCritCardSelectable }

@@ -1,5 +1,6 @@
 import { Normalise, GetDirection, CreateProjectile, getRandomRange } from "../Math";
 import { Arrow } from "../Projectiles/Arrow";
+import { bowBaseStatcard } from "./BowCard";
 import Render from "../../Assets/weapon/BOW1.png";
 
 class Bow {
@@ -22,22 +23,24 @@ class Bow {
     ycenter = 0;
 
     frame = 0;
-    BaseFirerate = 0.1; //másodperc
-    FireRate = 0;
+
+    statCard = new bowBaseStatcard();
+    
     nextfire = 0;
-    spread = 0.1;
-    projectileSpeed = 1000;
 
     DamageMult = 1;
     Damage = 0;
 
+    Level = 1;
+    MaxLevel = 7;
+
     active = false;
 
-    owner = Object;
+    owner = Object;2
 
     RecalculateStats() {
-        this.Damage = this.owner.StatCard.BaseDamage * this.DamageMult * this.owner.StatCard.DamageMult;
-        this.Firerate = this.BaseFirerate / (1 / this.owner.StatCard.FirerateMult);
+        this.Damage = this.owner.StatCard.BaseDamage * this.statCard.DamageMult * this.owner.StatCard.DamageMult;
+        this.statCard.Firerate = this.statCard.BaseFirerate / (1 / this.owner.StatCard.FirerateMult);
     }
 
     Update(deltaTime, frameCount) {
@@ -45,7 +48,7 @@ class Bow {
         this.nextfire -= deltaTime;
 
         if (this.active && this.nextfire <= 0) {
-            this.nextfire = this.Firerate * getRandomRange(0.9, 1.1);
+            this.nextfire = this.statCard.Firerate * getRandomRange(0.9, 1.1);
 
             this.owner.entityRef.projectileList.push(this.Shoot(this.owner.aimPoint, this.owner, this.owner.windowSize))
         }
@@ -69,7 +72,7 @@ class Bow {
         let direction = [0, 0];
 
         let xd = new Arrow();
-        xd.Damage = this.Damage;
+        xd.Damage = this.statCard.Damage;
 
         if (source.ID === 0) {
             direction = GetDirection([source.x, source.y], [aimPoint[0] - source.renderoffset[0] - aimOffset[0], aimPoint[1] - source.renderoffset[1] - aimOffset[1]])
@@ -78,8 +81,8 @@ class Bow {
         }
 
         let normalised = Normalise(direction);
-        let c = Math.cos(getRandomRange(-this.spread / 2, this.spread));
-        let s = Math.sin(getRandomRange(-this.spread / 2, this.spread));
+        let c = Math.cos(getRandomRange(-this.statCard.spread / 2, this.statCard.spread/2));
+        let s = Math.sin(getRandomRange(-this.statCard.spread / 2, this.statCard.spread/2));
 
         let tempp = normalised;
 
@@ -97,7 +100,7 @@ class Bow {
 
         xd.critLevel = critLevel;
         xd.Damage = xd.Damage * Math.pow(this.owner.StatCard.critDamageMult, critLevel);
-        xd.projectileSpeed = getRandomRange(this.projectileSpeed * 0.9, this.projectileSpeed * 1.1);
+        xd.projectileSpeed = getRandomRange(this.statCard.projectileSpeed * 0.9, this.statCard.projectileSpeed * 1.1);
 
         let temp = CreateProjectile([source.x, source.y], normalised, xd, this.owner);
 

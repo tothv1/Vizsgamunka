@@ -20,12 +20,7 @@ import Bow1 from '../Assets/weapon/BOW1.png';
 import Crossbow from '../Assets/weapon/CROSSBOW.png';
 import Icerod from '../Assets/weapon/ICEROD.png';
 
-import { CritItem, CritItemCard } from '../system/PassiveItems/CritItem';
 import { CButton, QuitButton } from '../system/CButton';
-import { Button } from 'bootstrap';
-
-
-
 
 const Canvas = props => {
   
@@ -53,6 +48,8 @@ const Canvas = props => {
   let buttons = [];
   let selectedButton = null;
   
+
+  let enemyScale = 1;
 
   function setPause(state) {
     paused = state;
@@ -376,6 +373,15 @@ const Canvas = props => {
     playerRef.GameStatCard.userid = props.tokendata.userId;
     playerRef.SetPause = setPause;
 
+    const spawnerRef = new Spawner();
+    spawnerRef.x = 0;
+    spawnerRef.y = 0;
+    spawnerRef.entityRef = entities;
+    spawnerRef.playerRef = playerRef;
+    spawnerRef.windowSize = windowSize;
+
+    entities.entityList.push(spawnerRef);
+
 
     let wep = new Bow();
     wep.owner = playerRef;
@@ -406,18 +412,6 @@ const Canvas = props => {
           temp.y = i * 64;
 
           entities.tileList.push(temp);
-        }
-        if (rawmap[i][j] === 2) {
-
-          const temp = new Spawner();
-
-          temp.x = j * 64;
-          temp.y = i * 64;
-          temp.entityRef = entities;
-          temp.playerRef = playerRef;
-          temp.windowSize = windowSize;
-
-          entities.entityList.push(temp);
         }
       }
     }
@@ -470,6 +464,9 @@ const Canvas = props => {
       clrCanvas(context);
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
+
+      enemyScale=gameTime/100;
+      spawnerRef.enemyScale=enemyScale;
 
       if (playerRef.dead) {
         paused = true;
@@ -595,20 +592,22 @@ const Canvas = props => {
           for (let i = 0; i < 3; i++) {
             let pool = new CardPool().card;
 
-            let roll = Math.floor(Math.random() * 3);
-
+            let roll = Math.floor(Math.random() * pool.length);
 
             let xd = new ItemCard();
             xd = pool[roll];
 
-            console.log(pool)
+            xd.level=2;
 
-
-            xd.yOffset = 200 + (xd.height + 30) * i;
+            if(!xd.card.statcard){
+              xd.initl(2);
+            }
+            
             xd.init();
 
-            console.log(roll);
-            console.log(pool[roll]);
+            console.log(xd)
+
+            xd.yOffset = 200 + (xd.height + 30) * i;
 
             lvlUpCards.push(xd);
           }
