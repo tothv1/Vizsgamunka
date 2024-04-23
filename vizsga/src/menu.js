@@ -136,7 +136,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                       <ol>
                         {leaderboardData.map((player) => (
                           <li key={player.userStatId}>
-                            {player.username}: {player.userStat.kills} kills
+                            {player.username}: {player.userStat.kills} kills | {player.userStat.highestLevel} lvl
                           </li>
                         ))}
                       </ol>
