@@ -39,6 +39,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
     setShowStats(!showStats);
     setShowSettings(false);
+    setShowLeaderboard(false);
   }
 
   const handleLeaderboard = async() => {
@@ -56,6 +57,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
     }
     setShowLeaderboard(!showLeaderboard);
     setShowStats(false);
+    setShowSettings(false);
   }
 
   //a settings jobb oldalon megjelenik
@@ -63,6 +65,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
     setShowSettings(!showSettings);
     setShowStats(false);
+    setShowLeaderboard(false);
   }
 
   //játék hangereje
@@ -133,7 +136,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                       <ol>
                         {leaderboardData.map((player) => (
                           <li key={player.userStatId}>
-                            {player.username}: {player.userStat.highestLevel}
+                            {player.username}: {player.userStat.kills} kills
                           </li>
                         ))}
                       </ol>
