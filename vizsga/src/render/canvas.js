@@ -23,11 +23,11 @@ import Icerod from '../Assets/weapon/ICEROD.png';
 import { CButton, QuitButton } from '../system/CButton';
 
 const Canvas = props => {
-  
+
   let renderOffset = [0, 0]
   let gameSize = [0, 0]
   let windowSize = [0, 0];
-  
+
   let aimpoint = [0, 0];
   let entities = [];
 
@@ -47,7 +47,7 @@ const Canvas = props => {
 
   let buttons = [];
   let selectedButton = null;
-  
+
 
   let enemyScale = 1;
 
@@ -465,8 +465,8 @@ const Canvas = props => {
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
-      enemyScale=gameTime/100;
-      spawnerRef.enemyScale=enemyScale;
+      enemyScale = gameTime / 100;
+      spawnerRef.enemyScale = enemyScale;
 
       if (playerRef.dead) {
         paused = true;
@@ -597,12 +597,19 @@ const Canvas = props => {
             let xd = new ItemCard();
             xd = pool[roll];
 
-            xd.level=2;
 
-            if(!xd.card.statcard){
-              xd.initl(2);
+            if (!xd.card.statCard) {
+              playerRef.weapons.forEach(weapon => {
+                if (weapon.id === xd.id) {
+                  xd.initl(weapon.Level+1);
+                  xd.item.owner=playerRef;
+                  console.log(xd);
+                  
+                }
+              });
+
             }
-            
+
             xd.init();
 
             console.log(xd)

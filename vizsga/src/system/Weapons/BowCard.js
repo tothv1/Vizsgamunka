@@ -3,7 +3,6 @@ import { Bow } from "./Bow";
 import { ItemCard } from "../PassiveItems/ItemCard";
 
 class bowBaseStatcard {
-    level = 1;
     BaseFirerate = 0.15;
     spread = 0.1;
     projectileSpeed = 1000;
@@ -40,6 +39,7 @@ class BowItemCard {
     SetCardDetails = (lv) =>{
         let select = this.levels[lv];
         
+
         this.render = select.render;
         this.ItemName = select.ItemName;
         this.Description = select.Description;
@@ -56,6 +56,7 @@ const ScaleByLevel = (lv) => {
 
     let baseBow = new Bow();
     let statCard = new bowBaseStatcard();
+
 
     let levels = [{
         lvl: () => {
@@ -74,13 +75,11 @@ const ScaleByLevel = (lv) => {
     },
     ];
 
-    for (let i = 0; i < lv; i++) {
+    for (let i = 0; i < lv+1; i++) {
         levels[i].lvl();
     }
     baseBow.statCard = statCard;
-
-    console.log(lv)
-    console.log(baseBow);
+    baseBow.Level=lv;
 
     return baseBow;
 }
