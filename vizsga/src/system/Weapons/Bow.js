@@ -29,14 +29,14 @@ class Bow {
     nextfire = 0;
 
     Level = 0;
-    MaxLevel = 6;
+    MaxLevel = 2;
 
     active = false;
 
     owner = Object;
 
     RecalculateStats() {
-        this.statCard.Damage = this.statCard.Damage * this.statCard.DamageMult * this.owner.StatCard.DamageMult;
+        this.statCard.Damage = this.owner.StatCard.BaseDamage * this.statCard.DamageMult * this.owner.StatCard.DamageMult;
         this.statCard.Firerate = this.statCard.BaseFirerate / (1 / this.owner.StatCard.FirerateMult);
     }
 

@@ -65,7 +65,7 @@ const ScaleByLevel = (lv) => {
     },
     {
         lvl: () => {
-            statCard.Damage += 10;
+            statCard.DamageMult += 1;
         }
     },
     {

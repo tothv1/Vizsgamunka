@@ -597,26 +597,32 @@ const Canvas = props => {
             let xd = new ItemCard();
             xd = pool[roll];
 
+            let flagged=false;
 
             if (!xd.card.statCard) {
               playerRef.weapons.forEach(weapon => {
                 if (weapon.id === xd.id) {
-                  xd.initl(weapon.Level+1);
-                  xd.item.owner=playerRef;
-                  console.log(xd);
-                  
+                  if(weapon.Level==weapon.MaxLevel){
+                    flagged=true;
+                    i--;
+                    
+                  }else{
+                    xd.initl(weapon.Level+1);
+                    xd.item.owner=playerRef;
+                  }
                 }
               });
-
             }
+            if(!flagged){
 
-            xd.init();
+              xd.init();
 
-            console.log(xd)
-
-            xd.yOffset = 200 + (xd.height + 30) * i;
-
-            lvlUpCards.push(xd);
+              console.log(xd)
+  
+              xd.yOffset = 200 + (xd.height + 30) * i;
+  
+              lvlUpCards.push(xd);
+            }
           }
           playerRef.LVLUpCards = lvlUpCards;
         }
