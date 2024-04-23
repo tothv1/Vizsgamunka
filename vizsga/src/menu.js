@@ -14,8 +14,10 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
   const [volume, setVolume] = useState(50);
 
   const [showStats, setShowStats] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [statsData, setStatsData] = useState(null);
+  const [leaderboardData, setLeaderboardData] = useState(null);
 
   console.log(tokenData);
 
@@ -37,6 +39,23 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
     setShowStats(!showStats);
     setShowSettings(false);
+  }
+
+  const handleLeaderboard = async() => {
+    try {
+      const response = await axios.get(`https://localhost:7096/Game/getTopPlayers?statName=kills&limit=10`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setLeaderboardData(response.data);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    }
+    setShowLeaderboard(!showLeaderboard);
+    setShowStats(false);
   }
 
   //a settings jobb oldalon megjelenik
@@ -88,6 +107,8 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                   <br />
                   <button className="btn mb-2 gombok felirat" onClick={handleStats}>Stats</button>
                   <br />
+                  <button className="btn mb-2 gombok felirat" onClick={handleLeaderboard}>Leaderboard</button>
+                  <br />
                   <button className="btn mb-2 gombok felirat" onClick={handleSettings}>Settings</button>
                 </div>
               </div>
@@ -96,21 +117,32 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                 <div className="mb-6">
                   {/* Stat megjelenítése */}
                   {showStats && (
-                    <div className="felirat keret transparent-background">
-                      <div className="">
+                    <div className="felirat keret egyHatter">
                         <h2>Stats</h2>
                           <p>Highest level reached: {statsData.highestLevel}</p>
                           <p>Times played: {statsData.timesplayed}</p>
                           <p>Kills: {statsData.kills}</p>
                           <p>Deaths: {statsData.deaths}</p>
-                          
-                      </div>
                   </div>
+                  )}
+
+                  {/* Leaderboard megjelenítése */}
+                  {showLeaderboard && (
+                    <div className="felirat keret transparent-background egyHatter">
+                      <h2>Leaderboard</h2>
+                      <ol>
+                        {leaderboardData.map((player) => (
+                          <li key={player.userStatId}>
+                            {player.username}: {player.userStat.highestLevel}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
                   )}
 
                   {/* Beállítások megjelenítése */}
                   {showSettings && (
-                    <div className="felirat keret transparent-background">
+                    <div className="felirat keret transparent-background egyHatter">
                       <h2>Settings:</h2>
                       <div className="container mt-5">
                         <div className="row">

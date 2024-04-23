@@ -49,12 +49,19 @@ div {
 }
 
 .keret{
-    background-image: linear-gradient(gray, lightgray);
+    background-color: darkgray;
 }
 
 .transparent-background {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgb(78, 78, 78);
     padding: 20px;
     border-radius: 10px;
     margin-top: 20px;
-  }
+}
+
+.egyHatter{
+    background-image: url('../Assets/buttons/button.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
