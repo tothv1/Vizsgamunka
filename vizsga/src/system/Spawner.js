@@ -51,7 +51,7 @@ class Spawner {
 
             spawn.speed*=(1+(Math.sqrt(this.enemyScale*this.enemyScaleMult)));
             spawn.maxHealth *=(1+ this.enemyScale*this.enemyScaleMult);
-            spawn.Damage *= (1+this.enemyScale*this.enemyScaleMult);
+            spawn.Damage = Math.round(spawn.Damage*(1+this.enemyScale*this.enemyScaleMult));
 
             spawn.health=spawn.maxHealth;
 
