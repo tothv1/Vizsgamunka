@@ -56,7 +56,7 @@ class Player {
   shooting = false;
   aimPoint = [0, 0];
   windowSize = [0, 0];
-  collision=true;
+  collision = true;
 
   weapons = [];
   items = [];
@@ -81,9 +81,9 @@ class Player {
 
   LVLUpCards = [];
 
-  RecalcStats(){
+  RecalcStats() {
 
-    this.StatCard=structuredClone(this.BaseStatCard);
+    this.StatCard = structuredClone(this.BaseStatCard);
 
     console.log(this.BaseStatCard);
 
@@ -91,7 +91,7 @@ class Player {
       item.RecalcStats(this);
     });
 
-    this.weapons.forEach(weapon=>{
+    this.weapons.forEach(weapon => {
       weapon.RecalculateStats(this);
     })
 
@@ -213,13 +213,13 @@ class Player {
     temp.critLevel = source.critLevel;
     this.entityRef.effectList.push(temp);
 
-    
 
-    if (sourceDMG<=0) {
-      sourceDMG*=this.StatCard.HealMult;
-    } 
 
-    this.StatCard.Health=Clamp(this.StatCard.Health-sourceDMG,0,this.StatCard.MaxHealth)
+    if (sourceDMG <= 0) {
+      sourceDMG *= this.StatCard.HealMult;
+    }
+
+    this.StatCard.Health = Clamp(this.StatCard.Health - sourceDMG, 0, this.StatCard.MaxHealth)
 
     if (this.StatCard.Health <= 0) {
 
@@ -251,10 +251,10 @@ class Player {
         window.location.reload();
       });
       document.body.appendChild(buttonRestart);
-      
+
     }
   }
-  
+
   keyhandler(e) {
 
     if (e.type === "mouseup") {
@@ -309,26 +309,42 @@ class Player {
     }
   }
 
-  ItemPick(e,obj){
-    if (this.ItemPicks<=0) {return;}
+  ItemPick(e, obj) {
+    if (this.ItemPicks <= 0) { return; }
 
     let pick;
-    if (obj==undefined) {
-      pick = this.LVLUpCards[e.key-1];
-    }else{
+    if (obj == undefined) {
+      pick = this.LVLUpCards[e.key - 1];
+    } else {
       pick = obj;
     }
 
-    if(pick!=undefined){
-    this.items.push(pick.item);
+    if (pick != undefined) {
 
-    this.ItemPicks--;
-    this.RecalcStats();
-    this.SetPause(false);
-    this.LVLUpCards=[];}
+      if (!pick.card.statCard) {
+        for (let i = 0; i < this.weapons.length; i++) {
+          if (this.weapons[i].id ===pick.item.id) {
+            this.weapons.splice(i,1);
+          }
+        }
+      }
+
+
+      
+
+      this.ItemPicks--;
+      if (pick.card.statCard) {
+        this.items.push(pick.item);
+        this.RecalcStats();
+      }else{
+        this.weapons.push(pick.item)
+      }
+      this.SetPause(false);
+      this.LVLUpCards = [];
+    }
 
   }
-  
+
 }
 
 export { Player };
