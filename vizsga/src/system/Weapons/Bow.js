@@ -36,7 +36,7 @@ class Bow {
     owner = Object;
 
     RecalculateStats() {
-        this.statCard.Damage = this.statCard.Damage * this.statCard.DamageMult * this.owner.StatCard.DamageMult;
+        this.statCard.Damage = this.owner.StatCard.BaseDamage * this.statCard.DamageMult * this.owner.StatCard.DamageMult;
         this.statCard.Firerate = this.statCard.BaseFirerate / (1 / this.owner.StatCard.FirerateMult);
     }
 

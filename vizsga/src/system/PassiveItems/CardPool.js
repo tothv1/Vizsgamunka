@@ -6,7 +6,10 @@ import { BowCardSelectable } from "../Weapons/BowCard";
 class CardPool{
 
     card =[
-    new BowCardSelectable()];
+    new BowCardSelectable(),
+    new BaseCritCardSelectable(),
+    new BaseDMGCardSelectable(),
+    new BaseSpeedCardSelectable()];
 }
 
 
