@@ -313,13 +313,13 @@ class Player {
     if (this.ItemPicks <= 0) { return; }
 
     let pick;
-    if (obj == undefined) {
+    if (obj === undefined) {
       pick = this.LVLUpCards[e.key - 1];
     } else {
       pick = obj;
     }
 
-    if (pick != undefined) {
+    if (pick !== undefined) {
 
       if (!pick.card.statCard) {
         for (let i = 0; i < this.weapons.length; i++) {
@@ -328,9 +328,6 @@ class Player {
           }
         }
       }
-
-
-      
 
       this.ItemPicks--;
       if (pick.card.statCard) {
