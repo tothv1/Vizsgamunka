@@ -29,7 +29,7 @@ class Bow {
     nextfire = 0;
 
     Level = 0;
-    MaxLevel = 6;
+    MaxLevel = 2;
 
     active = false;
 
