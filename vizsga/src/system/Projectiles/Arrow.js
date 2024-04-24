@@ -1,7 +1,7 @@
 import render from "../../Assets/nyil.png"
 
 import "../Math";
-import { Translate, getRandomRange } from "../Math";
+import { Translate } from "../Math";
 
 const getImg = () => {
 

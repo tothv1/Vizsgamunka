@@ -18,6 +18,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   const [menuAudio, setMenuAudio] = useState(new Audio(menuMusicFile));
   const [gameAudio, setGameAudio] = useState(new Audio(gameMusicFile));
+  
 
   const [showStats, setShowStats] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);

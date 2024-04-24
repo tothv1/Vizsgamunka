@@ -1,6 +1,6 @@
 import { Slime } from "./Slime";
 import rightIdle from "../Assets/characters/slime.png"
-import { CreateRandomDirection, GetDirRad, getRandomRange } from "./Math";
+import { CreateRandomDirection, getRandomRange } from "./Math";
 
 const getImg = () =>{
 

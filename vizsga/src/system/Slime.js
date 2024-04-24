@@ -4,11 +4,11 @@ import rightEnemy1 from "../Assets/enemy/enemy1/ENEMY1-spritesheet-right.png";
 import leftEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-left.png";
 import rightEnemy2 from "../Assets/enemy/enemy1/SLIME-spritesheet-right.png";
 
-import { GetDirection, Normalise, Translate, getRandomRange, Distance, CheckCollision } from "./Math";
+import { GetDirection, Normalise, Translate, getRandomRange, Distance} from "./Math";
 import { HPbar } from "../render/HPBar";
 import { DMGpopup } from "../render/DmgPopup";
 import { Potion } from "./Pickups/Potion";
-import { valid } from "semver";
+//import { valid } from "semver";
 
 
 
@@ -74,10 +74,10 @@ class Slime {
     if (this.state === 0) {
       this.state = 1;
 
-      if (this.TextureID == 0) {
+      if (this.TextureID === 0) {
         this.drawing.src = rightEnemy1;
       }
-      if (this.TextureID == 1) {
+      if (this.TextureID === 1) {
         this.drawing.src = rightEnemy2;
       }
     }
@@ -85,10 +85,10 @@ class Slime {
     if (this.state === 1) {
       this.state = 0;
 
-      if (this.TextureID == 0) {
+      if (this.TextureID === 0) {
         this.drawing.src = leftEnemy1;
       }
-      if (this.TextureID == 1) {
+      if (this.TextureID === 1) {
         this.drawing.src = leftEnemy2;
       }
 
@@ -150,10 +150,10 @@ class Slime {
       if (this.state === 0) {
         this.state = 1;
 
-        if (this.TextureID == 0) {
+        if (this.TextureID === 0) {
           this.drawing.src = rightEnemy1;
         }
-        if (this.TextureID == 1) {
+        if (this.TextureID === 1) {
           this.drawing.src = rightEnemy2;
         }
       }
@@ -163,10 +163,10 @@ class Slime {
       if (this.state === 1) {
         this.state = 0;
 
-        if (this.TextureID == 0) {
+        if (this.TextureID === 0) {
           this.drawing.src = leftEnemy1;
         }
-        if (this.TextureID == 1) {
+        if (this.TextureID === 1) {
           this.drawing.src = leftEnemy2;
         }
 

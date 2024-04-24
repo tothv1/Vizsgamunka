@@ -7,11 +7,11 @@ import "../system/Math";
 import { Clamp, getRandomRange } from "../system/Math";
 import { HPbar } from "../render/HPBar";
 import { GameStatCard } from "./GameStatCard";
-import { Bow } from "./Weapons/Bow";
+//import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
 import { putStats } from "./Hooks/PutStats";
 import { StatCard } from "./StatCard";
-import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
+//import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
 import button from '../Assets/buttons/button.png';
 
 class Player {

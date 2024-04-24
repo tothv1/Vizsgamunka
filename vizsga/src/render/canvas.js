@@ -381,6 +381,7 @@ const Canvas = props => {
     let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
 
     const playerRef = new Player();
+    playerRef.health = 1;
     playerRef.x = 600;
     playerRef.y = 600;
     playerRef.mapsize = mapsize;
@@ -391,6 +392,7 @@ const Canvas = props => {
     playerRef.SetPause = setPause;
 
     const spawnerRef = new Spawner();
+    spawnerRef.enemyScaleMult = 2;
     spawnerRef.x = 0;
     spawnerRef.y = 0;
     spawnerRef.entityRef = entities;
