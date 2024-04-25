@@ -14,12 +14,10 @@ import gameMusicFile from './Assets/sound/ingamemusic.mp3';
 const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   const navigate = useNavigate();
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(0);
 
   const [menuAudio, setMenuAudio] = useState(new Audio(menuMusicFile));
-  const [gameAudio, setGameAudio] = useState(new Audio(gameMusicFile));
   
-
   const [showStats, setShowStats] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -31,8 +29,13 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
   useEffect(() => {
     menuAudio.loop = true;
     menuAudio.volume = volume / 100;
-    menuAudio.play();
-  
+
+    if (volume > 0) {
+      menuAudio.play();
+    } else {
+      menuAudio.pause();
+      menuAudio.currentTime = 0;
+    }
     return () => {
       menuAudio.pause();
       menuAudio.currentTime = 0;
