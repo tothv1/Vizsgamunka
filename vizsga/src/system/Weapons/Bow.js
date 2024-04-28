@@ -1,7 +1,7 @@
 import { Normalise, GetDirection, CreateProjectile, getRandomRange } from "../Math";
 import { Arrow } from "../Projectiles/Arrow";
 import { bowBaseStatcard } from "./BowCard";
-import Render from "../../Assets/weapon/BOW1.png";
+//import Render from "../../Assets/weapon/BOW1.png";
 
 class Bow {
 

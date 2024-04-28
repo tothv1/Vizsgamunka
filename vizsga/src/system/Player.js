@@ -7,11 +7,11 @@ import "../system/Math";
 import { Clamp, getRandomRange } from "../system/Math";
 import { HPbar } from "../render/HPBar";
 import { GameStatCard } from "./GameStatCard";
-import { Bow } from "./Weapons/Bow";
+//import { Bow } from "./Weapons/Bow";
 import { DMGpopup } from "../render/DmgPopup";
 import { putStats } from "./Hooks/PutStats";
 import { StatCard } from "./StatCard";
-import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
+//import { BaseDMGItem } from "./PassiveItems/BaseDMGStat";
 import button from '../Assets/buttons/button.png';
 
 class Player {
@@ -313,13 +313,13 @@ class Player {
     if (this.ItemPicks <= 0) { return; }
 
     let pick;
-    if (obj == undefined) {
+    if (obj === undefined) {
       pick = this.LVLUpCards[e.key - 1];
     } else {
       pick = obj;
     }
 
-    if (pick != undefined) {
+    if (pick !== undefined) {
 
       if (!pick.card.statCard) {
         for (let i = 0; i < this.weapons.length; i++) {
@@ -328,9 +328,6 @@ class Player {
           }
         }
       }
-
-
-      
 
       this.ItemPicks--;
       if (pick.card.statCard) {

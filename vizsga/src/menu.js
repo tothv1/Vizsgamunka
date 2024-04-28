@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import Canvas from "./render/canvas";
 import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,11 +8,16 @@ import AuthPage from "./pages/AuthPage";
 import logo1 from './Assets/logo/logo1.png';
 import "./pages/index.css";
 
+import menuMusicFile from './Assets/sound/menumusic.mp3';
+import gameMusicFile from './Assets/sound/ingamemusic.mp3';
+
 const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
   const navigate = useNavigate();
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(0);
 
+  const [menuAudio, setMenuAudio] = useState(new Audio(menuMusicFile));
+  
   const [showStats, setShowStats] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -20,6 +25,22 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
   const [leaderboardData, setLeaderboardData] = useState(null);
 
   console.log(tokenData);
+
+  useEffect(() => {
+    menuAudio.loop = true;
+    menuAudio.volume = volume / 100;
+
+    if (volume > 0) {
+      menuAudio.play();
+    } else {
+      menuAudio.pause();
+      menuAudio.currentTime = 0;
+    }
+    return () => {
+      menuAudio.pause();
+      menuAudio.currentTime = 0;
+    };
+  }, [menuAudio, volume]);
 
   const handleStats = async() => {
 
@@ -39,6 +60,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
     setShowStats(!showStats);
     setShowSettings(false);
+    setShowLeaderboard(false);
   }
 
   const handleLeaderboard = async() => {
@@ -56,6 +78,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
     }
     setShowLeaderboard(!showLeaderboard);
     setShowStats(false);
+    setShowSettings(false);
   }
 
   //a settings jobb oldalon megjelenik
@@ -63,12 +86,14 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
 
     setShowSettings(!showSettings);
     setShowStats(false);
+    setShowLeaderboard(false);
   }
 
   //játék hangereje
   const handleVolumeChange = (event) => {
     setVolume(event.target.value);
   };
+
 
   //style={{ position: 'fixed', top: '50%', right: '10px', transform: 'translateY(-50%)', backgroundColor: 'white', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)', zIndex: 999 }}
 
@@ -133,7 +158,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
                       <ol>
                         {leaderboardData.map((player) => (
                           <li key={player.userStatId}>
-                            {player.username}: {player.userStat.highestLevel}
+                            {player.username}: {player.userStat.kills} kills | {player.userStat.highestLevel} lvl
                           </li>
                         ))}
                       </ol>

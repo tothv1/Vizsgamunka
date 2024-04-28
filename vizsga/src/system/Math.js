@@ -1,4 +1,4 @@
-import { Arrow } from "./Projectiles/Arrow";
+//import { Arrow } from "./Projectiles/Arrow";
 
 export function Clamp(num, min, max) {
     if (num < min) return min;
@@ -49,7 +49,7 @@ export function GetDirectionRadian(direction) {
 
 export function CheckCollision(object1, object2) {
 
-    if (object1.team == object2.team) {
+    if (object1.team === object2.team) {
         return false
     }
 

@@ -20,6 +20,8 @@ import Bow1 from '../Assets/weapon/BOW1.png';
 import Crossbow from '../Assets/weapon/CROSSBOW.png';
 import Icerod from '../Assets/weapon/ICEROD.png';
 
+import gameMusicFile from '../Assets/sound/ingamemusic.mp3';
+
 import { CButton, QuitButton } from '../system/CButton';
 
 const Canvas = props => {
@@ -58,6 +60,21 @@ const Canvas = props => {
   const clrCanvas = (ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   }
+
+  //gameMusic
+  const [gameAudio, setGameAudio] = useState(new Audio(gameMusicFile));
+  const [volume, setVolume] = useState(50);
+
+  useEffect(() => {
+    gameAudio.loop = true;
+    gameAudio.volume = volume / 100;
+    gameAudio.play();
+
+    return () => {
+      gameAudio.pause();
+      gameAudio.currentTime = 0;
+    };
+  }, [gameAudio, volume]);
 
   const draw = (ctx, object, offset) => {
     ctx.save();
@@ -364,6 +381,7 @@ const Canvas = props => {
     let mapsize = [rawMaps[0][0].length * 64, rawMaps[0].length * 64];
 
     const playerRef = new Player();
+    playerRef.health = 1;
     playerRef.x = 600;
     playerRef.y = 600;
     playerRef.mapsize = mapsize;
@@ -374,6 +392,7 @@ const Canvas = props => {
     playerRef.SetPause = setPause;
 
     const spawnerRef = new Spawner();
+    spawnerRef.enemyScaleMult = 2;
     spawnerRef.x = 0;
     spawnerRef.y = 0;
     spawnerRef.entityRef = entities;
@@ -641,6 +660,7 @@ const Canvas = props => {
       }
       animationFrameId = window.requestAnimationFrame(render)
     }
+    
 
     render()
 
