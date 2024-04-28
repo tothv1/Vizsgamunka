@@ -10,6 +10,7 @@ class CardPool{
     new BaseCritCardSelectable(),
     new BaseDMGCardSelectable(),
     new BaseSpeedCardSelectable(),
+    new IceRodCardSelectable(),
    ];
 }
 

@@ -1,4 +1,4 @@
-/*import Render from "../../Assets/weapon/ICEROD.png";
+import Render from "../../Assets/weapon/ICEROD.png";
 import { IceRod } from "./Icerod";
 import { ItemCard } from "../PassiveItems/ItemCard";
 
@@ -76,10 +76,8 @@ const ScaleByLevel = (lv) => {
         levels[i].lvl();
     }
     baseBow.statCard = statCard;
-    baseBow.Level=lv;
+    baseBow.Level = lv;
 
-
-    console.log(baseBow)
     return baseBow;
 }
 
@@ -92,6 +90,7 @@ class IceRodCardSelectable extends ItemCard {
         this.item = ScaleByLevel(lv);
     }
     
+    
 };
 
-export { IceRodCardSelectable, IceRodBaseStatcard }*/
+export { IceRodCardSelectable, IceRodBaseStatcard }

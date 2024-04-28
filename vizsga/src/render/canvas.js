@@ -368,8 +368,6 @@ const Canvas = props => {
     const itemImage = new Image();
     itemImage.src = Bow1;
 
-
-
     // init
 
     entities.projectileList = [];
@@ -446,7 +444,6 @@ const Canvas = props => {
     });
     document.addEventListener("keyup", (event) => {
       playerRef.keyhandler(event)
-      playerRef.ItemPick(event);
     });
     document.addEventListener("mousedown", (event) => {
       playerRef.keyhandler(event)
@@ -481,8 +478,12 @@ const Canvas = props => {
     //Our draw came here
     const render = () => {
       clrCanvas(context);
+
+      //WINDOW PERFORMANCE AZ OLDAL LOADTÓL KEZDŐDIK, NEM CANVAS LOADTÓL
       Runtime = window.performance.now();
       let deltaTime = (Runtime - lastUpdateTime) / 1000
+
+      console.log(Runtime)
 
       enemyScale = gameTime / 100;
       spawnerRef.enemyScale = enemyScale;
@@ -582,7 +583,6 @@ const Canvas = props => {
 
         if (paused) { return; }
 
-
         item.Update(deltaTime, frameCount);
         if (item.frame > item.maxFrame) {
           entities.effectList.splice(item, 1);
@@ -616,30 +616,39 @@ const Canvas = props => {
             let xd = new ItemCard();
             xd = pool[roll];
 
-            let flagged=false;
+            let cardFlag = false;
 
             if (!xd.card.statCard) {
-              playerRef.weapons.forEach(weapon => {
-                if (weapon.id === xd.id) {
-                  if(weapon.Level==weapon.MaxLevel){
-                    flagged=true;
+              xd.initl(0);
+
+              let pWep = undefined;
+
+              for (let j = 0; j < playerRef.weapons.length; j++) {
+
+                if (playerRef.weapons[j].ID === xd.item.ID) {
+                  if (playerRef.weapons[j].Level === playerRef.weapons[j].MaxLevel) {
+                    cardFlag=true;
                     i--;
-                    
-                  }else{
-                    xd.initl(weapon.Level+1);
-                    xd.item.owner=playerRef;
+                    break;
                   }
+                  pWep = playerRef.weapons[j];
+                  xd.initl(pWep.Level + 1);
+                  break;
+
                 }
-              });
+              }
+              console.log(pWep)
+              if (pWep == undefined) {
+                xd.initl(0);
+              }
+
+              xd.item.owner = playerRef;
             }
-            if(!flagged){
+            if (!cardFlag) {
 
               xd.init();
-
               console.log(xd)
-  
               xd.yOffset = 200 + (xd.height + 30) * i;
-  
               lvlUpCards.push(xd);
             }
           }
@@ -660,7 +669,7 @@ const Canvas = props => {
       }
       animationFrameId = window.requestAnimationFrame(render)
     }
-    
+
 
     render()
 
