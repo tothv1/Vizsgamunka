@@ -5,6 +5,8 @@ import { ItemCard } from "./ItemCard";
 
 class SpeedItemCard {
     
+    ID = 700;
+
     statCard = true;
     render = render;
     ItemName = "comfy boots";

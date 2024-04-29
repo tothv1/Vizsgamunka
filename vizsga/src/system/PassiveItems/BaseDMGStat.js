@@ -4,6 +4,8 @@ import { ItemCard } from "./ItemCard";
 
 class BaseDMGItemCard {
 
+    ID = 701;
+
     statCard = true;
     render = render;
     ItemName = "Base ATK Bonus";

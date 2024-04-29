@@ -1,4 +1,4 @@
-/*import render from "../../Assets/weapon/WEAPON-Projectile.png"
+import render from "../../Assets/weapon/WEAPON-Projectile.png"
 
 import "../Math";
 import { Translate, getRandomRange } from "../Math";
@@ -76,4 +76,4 @@ class IcerodProjectile {
     };
 }
 
-export { IcerodProjectile }*/
+export { IcerodProjectile }

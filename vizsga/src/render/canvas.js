@@ -29,6 +29,7 @@ const Canvas = props => {
   let renderOffset = [0, 0]
   let gameSize = [0, 0]
   let windowSize = [0, 0];
+  let startTime = 0;
 
   let aimpoint = [0, 0];
   let entities = [];
@@ -364,11 +365,11 @@ const Canvas = props => {
     var rect = canvas.getBoundingClientRect();
     windowSize = [rect.left, rect.top]
 
+    startTime=window.performance.now();
+
     //item rajzolása az első slotba
     const itemImage = new Image();
     itemImage.src = Bow1;
-
-
 
     // init
 
@@ -453,7 +454,6 @@ const Canvas = props => {
     });
     document.addEventListener("keyup", (event) => {
       playerRef.keyhandler(event)
-      playerRef.ItemPick(event);
     });
     document.addEventListener("mousedown", (event) => {
       playerRef.keyhandler(event)
@@ -488,7 +488,10 @@ const Canvas = props => {
     //Our draw came here
     const render = () => {
       clrCanvas(context);
-      Runtime = window.performance.now();
+
+      //WINDOW PERFORMANCE AZ OLDAL LOADTÓL KEZDŐDIK, NEM CANVAS LOADTÓL
+      Runtime = window.performance.now()-startTime;
+      
       let deltaTime = (Runtime - lastUpdateTime) / 1000
 
       enemyScale = gameTime / 100;
@@ -589,7 +592,6 @@ const Canvas = props => {
 
         if (paused) { return; }
 
-
         item.Update(deltaTime, frameCount);
         if (item.frame > item.maxFrame) {
           entities.effectList.splice(item, 1);
@@ -623,30 +625,48 @@ const Canvas = props => {
             let xd = new ItemCard();
             xd = pool[roll];
 
-            let flagged=false;
+            let cardFlag = false;
+
+            
+
+            lvlUpCards.forEach(card => {
+              if(card.card.ID == xd.card.ID){
+                cardFlag=true;
+                i--;
+              }
+            });
 
             if (!xd.card.statCard) {
-              playerRef.weapons.forEach(weapon => {
-                if (weapon.id === xd.id) {
-                  if(weapon.Level==weapon.MaxLevel){
-                    flagged=true;
+              xd.initl(0);
+
+              let pWep = undefined;
+
+              for (let j = 0; j < playerRef.weapons.length; j++) {
+
+                if (playerRef.weapons[j].ID === xd.item.ID) {
+                  if (playerRef.weapons[j].Level === playerRef.weapons[j].MaxLevel) {
+                    cardFlag=true;
                     i--;
-                    
-                  }else{
-                    xd.initl(weapon.Level+1);
-                    xd.item.owner=playerRef;
+                    break;
                   }
+                  pWep = playerRef.weapons[j];
+                  xd.initl(pWep.Level + 1);
+                  break;
+
                 }
-              });
+              }
+              console.log(pWep)
+              if (pWep == undefined) {
+                xd.initl(0);
+              }
+
+              xd.item.owner = playerRef;
             }
-            if(!flagged){
+            if (!cardFlag) {
 
               xd.init();
-
               console.log(xd)
-  
               xd.yOffset = 200 + (xd.height + 30) * i;
-  
               lvlUpCards.push(xd);
             }
           }
@@ -661,13 +681,13 @@ const Canvas = props => {
         pauseBlock = false;
       }
 
-      lastUpdateTime = window.performance.now();
+      lastUpdateTime = window.performance.now()-startTime;
       if (!paused) {
         frameCount++
       }
       animationFrameId = window.requestAnimationFrame(render)
     }
-    
+
 
     render()
 

@@ -124,7 +124,7 @@ class Slime {
 
     this.entityRef.entityList.forEach(enemy => {
       
-      if (Distance([translation[0], translation[1]], [enemy.x, enemy.y]) < 20 && enemy!==this && enemy.collision) {
+      if (Distance([translation[0], translation[1]], [enemy.x, enemy.y]) < 20 && enemy!==this && enemy.collision && enemy.ID!=0) {
         let bonktempdir = GetDirection([this.x,this.y],[enemy.x,enemy.y]);
         let bonknormdir = Normalise(bonktempdir);
 
