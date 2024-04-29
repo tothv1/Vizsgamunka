@@ -3,7 +3,7 @@ import { rawMaps } from '../Assets/map/maps';
 
 import { Slime, xd } from '../system/Slime';
 import { Wall } from '../system/StoneWall';
-import { Tile } from '../Assets/background/tiletile.jpg'
+import { Tile } from '../system/Tile';
 import { Player } from '../system/Player';
 import { DMGpopup } from './DmgPopup';
 import '../system/Math';
@@ -428,6 +428,13 @@ const Canvas = props => {
       for (let j = 0; j < rawmap[i].length; j++) {
         if (rawmap[i][j] === 1) {
           const temp = Object.create(Wall);
+          temp.x = j * 64;
+          temp.y = i * 64;
+
+          entities.tileList.push(temp);
+        }
+        if (rawmap[i][j] === 0) {
+          const temp = Object.create(Tile);
           temp.x = j * 64;
           temp.y = i * 64;
 
