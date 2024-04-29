@@ -29,6 +29,7 @@ const Canvas = props => {
   let renderOffset = [0, 0]
   let gameSize = [0, 0]
   let windowSize = [0, 0];
+  let startTime = 0;
 
   let aimpoint = [0, 0];
   let entities = [];
@@ -364,6 +365,8 @@ const Canvas = props => {
     var rect = canvas.getBoundingClientRect();
     windowSize = [rect.left, rect.top]
 
+    startTime=window.performance.now();
+
     //item rajzolása az első slotba
     const itemImage = new Image();
     itemImage.src = Bow1;
@@ -480,10 +483,9 @@ const Canvas = props => {
       clrCanvas(context);
 
       //WINDOW PERFORMANCE AZ OLDAL LOADTÓL KEZDŐDIK, NEM CANVAS LOADTÓL
-      Runtime = window.performance.now();
+      Runtime = window.performance.now()-startTime;
+      
       let deltaTime = (Runtime - lastUpdateTime) / 1000
-
-      console.log(Runtime)
 
       enemyScale = gameTime / 100;
       spawnerRef.enemyScale = enemyScale;
@@ -618,6 +620,15 @@ const Canvas = props => {
 
             let cardFlag = false;
 
+            
+
+            lvlUpCards.forEach(card => {
+              if(card.card.ID == xd.card.ID){
+                cardFlag=true;
+                i--;
+              }
+            });
+
             if (!xd.card.statCard) {
               xd.initl(0);
 
@@ -663,7 +674,7 @@ const Canvas = props => {
         pauseBlock = false;
       }
 
-      lastUpdateTime = window.performance.now();
+      lastUpdateTime = window.performance.now()-startTime;
       if (!paused) {
         frameCount++
       }

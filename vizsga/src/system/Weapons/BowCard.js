@@ -13,6 +13,8 @@ class bowBaseStatcard {
 
 class BowItemCard {
 
+    ID = 800;
+
     statCard = false;
 
     render= Render;

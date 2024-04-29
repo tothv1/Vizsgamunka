@@ -21,6 +21,7 @@ class Spawner {
     spawnDistanceAvg = 700;
 
     baseSpawnInterval = 0.05;
+    SpawnInterval = 0;
     nextSpawn = 0;
     aliveTime = 0;
 
@@ -36,9 +37,9 @@ class Spawner {
 
 
     Spawn() {
-        if (this.pool.length*this.baseSpawnInterval<=this.spawnPool) {
+        if (this.pool.length*this.SpawnInterval<=this.spawnPool) {
 
-            this.spawnPool-=this.pool.length*this.baseSpawnInterval;
+            this.spawnPool-=this.pool.length*this.SpawnInterval;
 
             let spawn = new this.obj();
 
@@ -65,6 +66,10 @@ class Spawner {
     }
 
     Update(deltaTime, frameCount) {
+
+        this.SpawnInterval = (this.baseSpawnInterval/(this.baseSpawnInterval*(this.enemyScale+1)))*this.baseSpawnInterval
+        console.log(this.SpawnInterval)
+
         this.spawnPool+=deltaTime;
         this.pool = this.pool.filter((xd) => !xd.dead);
         this.Spawn();

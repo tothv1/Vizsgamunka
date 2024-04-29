@@ -13,6 +13,8 @@ class IceRodBaseStatcard {
 
 class IceRodItemCard {
 
+    ID = 801;
+
     statCard = false;
 
     render= Render;
