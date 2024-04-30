@@ -49,10 +49,8 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData,
           <input id='password' type='password' className='form-control' />
         </div>
         <button type='submit' className='btn btn-primary mt-2'>Bejelentkezés</button>
-        <Link data-bs-toggle="modal" data-bs-target="#forgotModal" className='mt-2 d-block'>Elfelejtette a jelszavát?</Link>
       </form>
     </div>
-    <ForgotPasswordModal />
     </div>
   )
 }
