@@ -1,8 +1,10 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import menuhatter from '../Assets/background/menuhatter.jpg'
 import axios from 'axios'
+import ForgotPasswordModal from './ForgotPasswordModal'
 import "./index.css";
+
 
 import {jwtDecode} from 'jwt-decode'
 
@@ -47,8 +49,10 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setRole, tokenData,
           <input id='password' type='password' className='form-control' />
         </div>
         <button type='submit' className='btn btn-primary mt-2'>Bejelentkezés</button>
+        <Link data-bs-toggle="modal" data-bs-target="#forgotModal" className='mt-2 d-block'>Elfelejtette a jelszavát?</Link>
       </form>
     </div>
+    <ForgotPasswordModal />
     </div>
   )
 }

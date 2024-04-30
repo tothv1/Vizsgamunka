@@ -135,7 +135,6 @@ namespace AuthAPI.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, User")]
         [HttpPut("resetPassword")]
         public async Task<ActionResult> ResetUserPassword([FromQuery] string key)
         {
