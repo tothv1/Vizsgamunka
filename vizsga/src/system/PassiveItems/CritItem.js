@@ -4,6 +4,7 @@ import { ItemCard } from "./ItemCard";
 
 
 class CritItemCard {
+    ID = 702;
 
     statCard = true;
     render= render

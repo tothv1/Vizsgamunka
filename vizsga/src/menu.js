@@ -63,6 +63,7 @@ const Menu = ({ isLoggedIn, setIsLoggedIn, token, role, tokenData }) => {
     setShowLeaderboard(false);
   }
 
+  //lekérjük az adatokat 
   const handleLeaderboard = async() => {
     try {
       const response = await axios.get(`https://localhost:7096/Game/getTopPlayers?statName=kills&limit=10`, {

@@ -85,8 +85,6 @@ class Player {
 
     this.StatCard = structuredClone(this.BaseStatCard);
 
-    console.log(this.BaseStatCard);
-
     this.items.forEach(item => {
       item.RecalcStats(this);
     });
@@ -323,7 +321,7 @@ class Player {
 
       if (!pick.card.statCard) {
         for (let i = 0; i < this.weapons.length; i++) {
-          if (this.weapons[i].id ===pick.item.id) {
+          if (this.weapons[i].ID ===pick.item.ID) {
             this.weapons.splice(i,1);
           }
         }
